@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NEPLE (Nếp Lễ) — Hộp Lễ Tết Tối Giản &amp; Cẩm Nang Văn Hóa Tết Cho Thế Hệ Trẻ</title>
+  <meta name="description" content="NEPLE (Nếp Lễ) — Hệ sinh thái Hộp Lễ Tết khô tinh gọn (Tiễn Táo, Giao Thừa, Khai Xuân, Combo Trọn Tết) kết hợp Cẩm nang văn hóa &amp; Văn khấn hiện đại dành cho GenZ và gia đình trẻ." />
+  <meta name="keywords" content="NEPLE, Nếp Lễ, hộp lễ tết, cúng ông táo chung cư, lễ cúng giao thừa, khai xuân mùng 1, văn khấn hiện đại, combo trọn tết" />
+  <meta property="og:title" content="NEPLE (Nếp Lễ) — Trọn Nếp Lễ Xưa, Tinh Gọn Cho Nay" />
+  <meta property="og:description" content="Đồ lễ khô bảo quản lâu, đóng gói chỉn chu kèm Văn khấn hiện đại. Giao 1 lần duy nhất trước Tết cho gia đình trẻ." />
+  <meta property="og:type" content="website" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            neple: {
+              teal: '#0d2931',
+              burgundy: '#691727',
+              sage: '#72826f',
+              gold: '#f0b45b',
+              taupe: '#ae9984',
+              terracotta: '#a94025',
+              cream: '#faf7f2'
+            }
+          }
+        }
+      }
+    };
+  </script>
+
+  <!-- Custom Design System Styles -->
+  <link rel="stylesheet" href="styles.css" />
+
+  <!-- JSON-LD Structured Data for E-Commerce & Cultural Brand -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Store",
+    "name": "NEPLE (Nếp Lễ)",
+    "description": "Thương hiệu Hộp Lễ Tết tối giản hiện đại & Cẩm nang văn hóa Tết dành cho thế hệ trẻ Việt Nam.",
+    "url": "https://neple.vn",
+    "telephone": "+84901234567",
+    "priceRange": "249000 VND - 649000 VND"
+  }
+  </script>
+</head>
+<body class="min-h-screen flex flex-col selection:bg-[#f0b45b] selection:text-[#0d2931]">
+
+  <!-- Top Announcement Bar (100% Customer-Facing) -->
+  <div class="bg-[#691727] text-[#faf7f2] text-xs py-2 px-4 border-b border-[#f0b45b]/30">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
+      <div class="flex items-center gap-2">
+        <span class="px-2 py-0.5 rounded bg-[#f0b45b] text-[#0d2931] font-extrabold text-[10px] uppercase">Tết Bính Ngọ</span>
+        <span>Đồ lễ khô bảo quản 6 tháng • Đóng gói chỉn chu • Giao 1 lần duy nhất trước Tết</span>
+      </div>
+      <div class="hidden md:flex items-center gap-4 text-[#f0b45b] font-medium">
+        <button onclick="NepleApp.switchView('cam-nang')" class="hover:underline">📖 Cẩm nang Văn khấn hiện đại</button>
+        <span>•</span>
+        <button onclick="NepleApp.switchView('tra-cuu')" class="hover:underline">📍 Tra cứu đơn hàng bằng SĐT</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sticky Header (Customer Storefront Only) -->
+  <header class="sticky top-0 z-40 bg-[#0d2931]/95 backdrop-blur-md text-[#faf7f2] border-b border-[#ae9984]/25 shadow-lg">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3.5 flex items-center justify-between gap-4">
+      <!-- Brand Logo -->
+      <a href="#home" onclick="NepleApp.switchView('home')" class="flex items-center gap-3 group shrink-0">
+        <div class="w-10 h-10 rounded-xl bg-[#691727] border-2 border-[#f0b45b] flex items-center justify-center shadow-md group-hover:scale-105 transition">
+          <span class="font-display text-lg font-bold text-[#f0b45b]">N</span>
+        </div>
+        <div>
+          <span class="font-display text-xl sm:text-2xl font-bold tracking-wider text-[#faf7f2] block leading-none">NEPLE</span>
+          <span class="text-[10px] tracking-widest uppercase text-[#f0b45b] block mt-0.5">Nếp Lễ • Văn Hóa Tết Trẻ</span>
+        </div>
+      </a>
+
+      <!-- Smart Search Bar (Desktop & Tablet) -->
+      <div class="relative flex-1 max-w-md hidden sm:block smart-search-wrapper">
+        <div class="relative">
+          <input
+            type="text"
+            placeholder="Tìm 'cúng ông táo', 'văn khấn', 'chung cư', 'trọn tết'..."
+            oninput="NepleApp.handleSmartSearch(this.value, 'header-search-results')"
+            onfocus="if(this.value) NepleApp.handleSmartSearch(this.value, 'header-search-results')"
+            class="w-full pl-9 pr-4 py-2 rounded-full bg-white/10 border border-[#ae9984]/40 text-xs sm:text-sm text-[#faf7f2] placeholder-[#faf7f2]/55 focus:outline-none focus:bg-white focus:text-[#0d2931] focus:placeholder-[#0d2931]/50 transition"
+          />
+          <svg class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#f0b45b]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+          </svg>
+        </div>
+        <!-- Instant Dropdown Results -->
+        <div id="header-search-results" class="smart-search-results hidden absolute left-0 right-0 mt-2 rounded-2xl bg-[#fffdf9] text-[#0d2931] border-2 border-[#f0b45b] shadow-2xl z-50"></div>
+      </div>
+
+      <!-- Navigation Links (Customer Only) -->
+      <nav class="hidden lg:flex items-center gap-6 text-xs sm:text-sm font-medium">
+        <button data-view="home" onclick="NepleApp.switchView('home')" class="nav-link-item hover:text-[#f0b45b] transition">Trang Chủ</button>
+        <a href="#combo-selector" onclick="NepleApp.switchView('home'); setTimeout(()=>document.getElementById('combo-selector')?.scrollIntoView({behavior:'smooth'}),50)" class="hover:text-[#f0b45b] transition">Chọn Gói Lễ</a>
+        <a href="#so-sanh" onclick="NepleApp.switchView('home'); setTimeout(()=>document.getElementById('so-sanh')?.scrollIntoView({behavior:'smooth'}),50)" class="hover:text-[#f0b45b] transition">So Sánh 3 Cấp</a>
+        <button data-view="cam-nang" onclick="NepleApp.switchView('cam-nang')" class="nav-link-item hover:text-[#f0b45b] transition">Cẩm Nang Tết</button>
+        <button data-view="tra-cuu" onclick="NepleApp.switchView('tra-cuu')" class="nav-link-item hover:text-[#f0b45b] transition">Tra Cứu Đơn</button>
+      </nav>
+
+      <!-- Cart CTA -->
+      <div class="flex items-center gap-2.5 shrink-0">
+        <button onclick="NepleApp.openCheckoutModal()" class="relative px-4 py-2 rounded-xl bg-[#691727] hover:bg-[#821d31] border border-[#f0b45b]/60 text-xs sm:text-sm font-bold flex items-center gap-2 transition">
+          <span>🧺 Giỏ Lễ</span>
+          <span class="cart-count-badge hidden px-1.5 py-0.2 rounded-full bg-[#f0b45b] text-[#0d2931] text-[11px] font-extrabold">0</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Navigation (Customer Only) -->
+    <div class="lg:hidden px-4 pb-3 space-y-2 border-t border-white/10 pt-2">
+      <div class="flex items-center justify-between gap-1.5 text-xs overflow-x-auto pb-1">
+        <button onclick="NepleApp.switchView('home')" class="px-3 py-1.5 rounded-lg bg-white/10 whitespace-nowrap">🏠 Trang chủ</button>
+        <button onclick="NepleApp.switchView('home'); setTimeout(()=>document.getElementById('combo-selector')?.scrollIntoView({behavior:'smooth'}),50)" class="px-3 py-1.5 rounded-lg bg-white/10 whitespace-nowrap">🎯 Chọn Gói Lễ</button>
+        <button onclick="NepleApp.switchView('home'); setTimeout(()=>document.getElementById('so-sanh')?.scrollIntoView({behavior:'smooth'}),50)" class="px-3 py-1.5 rounded-lg bg-white/10 whitespace-nowrap">📊 So Sánh</button>
+        <button onclick="NepleApp.switchView('cam-nang')" class="px-3 py-1.5 rounded-lg bg-white/10 whitespace-nowrap">📖 Cẩm nang</button>
+        <button onclick="NepleApp.switchView('tra-cuu')" class="px-3 py-1.5 rounded-lg bg-white/10 whitespace-nowrap">🔍 Tra cứu đơn</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ====================================================================== -->
+  <!-- VIEW 1: HOMEPAGE (HERO + SPLIT-SCREEN 7-SKU STUDIO + MATRIX + BLOGS)   -->
+  <!-- ====================================================================== -->
+  <main id="view-home" class="view-section flex-1">
+    <!-- HERO SECTION -->
+    <section class="relative overflow-hidden bg-gradient-to-br from-[#0d2931] via-[#12353f] to-[#691727] text-[#faf7f2] py-12 sm:py-16">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+        <div class="lg:col-span-7 space-y-5">
+          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 border border-[#f0b45b]/50 text-[#f0b45b] text-xs font-semibold">
+            <span>🌿 Minimalist Cultural • Thiết Kế Cho Gia Đình Trẻ &amp; GenZ</span>
+          </div>
+          <h1 class="font-display text-3xl sm:text-5xl lg:text-6xl font-bold leading-tight text-[#faf7f2]">
+            Giữ Trọn <span class="text-[#f0b45b]">Nếp Lễ</span> Xưa,<br />
+            Tinh Gọn Cho Tổ Ấm Nay.
+          </h1>
+          <p class="text-sm sm:text-lg text-[#faf7f2]/85 max-w-2xl leading-relaxed">
+            Không còn nỗi lo tất bật chạy chợ hay bối rối trước những nghi thức rườm rà. <strong>NEPLE</strong> gói trọn đồ lễ khô thanh sạch, hương trầm ít khói cùng <strong>Cẩm nang &amp; Văn khấn hiện đại</strong> cho 3 cột mốc Tết: <em>Tiễn Táo (23 Chạp) • Giao Thừa (Đêm 30) • Khai Xuân (Mùng 1)</em>.
+          </p>
+
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-1">
+            <div class="p-3 rounded-xl bg-white/10 border border-white/15">
+              <div class="text-[#f0b45b] font-bold text-xs">100% Đồ Lễ Khô</div>
+              <div class="text-[11px] text-[#faf7f2]/75 mt-0.5">Bảo quản 6 tháng, giao 1 lần trước Tết</div>
+            </div>
+            <div class="p-3 rounded-xl bg-white/10 border border-white/15">
+              <div class="text-[#f0b45b] font-bold text-xs">An Toàn Chung Cư</div>
+              <div class="text-[11px] text-[#faf7f2]/75 mt-0.5">Nhang trầm sạch ít khói &amp; nến bơ thực vật</div>
+            </div>
+            <div class="p-3 rounded-xl bg-white/10 border border-white/15">
+              <div class="text-[#f0b45b] font-bold text-xs">Văn Khấn Hiện Đại</div>
+              <div class="text-[11px] text-[#faf7f2]/75 mt-0.5">Thuần Việt, trang trọng, không mê tín</div>
+            </div>
+            <div class="p-3 rounded-xl bg-white/10 border border-white/15">
+              <div class="text-[#f0b45b] font-bold text-xs">Tiết Kiệm Tới 18%</div>
+              <div class="text-[11px] text-[#faf7f2]/75 mt-0.5">Tặng Lư Gốm Mộc &amp; Mùi Già tất niên</div>
+            </div>
+          </div>
+
+          <div class="pt-2 flex flex-wrap items-center gap-4">
+            <a href="#combo-selector" class="px-7 py-4 rounded-2xl btn-terracotta font-bold text-sm sm:text-base inline-flex items-center gap-2">
+              <span>Khám Phá &amp; Tùy Chỉnh 7 Gói Nếp Lễ</span>
+              <span>↓</span>
+            </a>
+            <button onclick="NepleApp.switchView('cam-nang')" class="px-6 py-4 rounded-2xl bg-white/10 hover:bg-white/20 border border-[#f0b45b]/50 text-[#faf7f2] font-semibold text-sm sm:text-base transition">
+              📖 Đọc Cẩm Nang &amp; Văn Khấn Tết
+            </button>
+          </div>
+        </div>
+
+        <!-- Hero Right Summary Card -->
+        <div class="lg:col-span-5">
+          <div class="rounded-3xl p-6 bg-[#faf7f2]/10 backdrop-blur-md border-2 border-[#f0b45b]/60 shadow-2xl space-y-4">
+            <div class="flex items-center justify-between">
+              <span class="px-3 py-1 rounded-full bg-[#f0b45b] text-[#0d2931] text-xs font-extrabold uppercase">
+                Hành Trình 3 Nghi Lễ Cốt Lõi
+              </span>
+              <span class="text-xs text-[#faf7f2]/80">Giao 1 lần • Dùng trọn Tết</span>
+            </div>
+
+            <div class="space-y-2.5">
+              <div onclick="NepleApp.selectSkuDirectly('pack-tien-tao', true)" class="p-3.5 rounded-2xl bg-[#0d2931]/80 hover:bg-[#0d2931] border border-white/15 flex items-center justify-between cursor-pointer transition">
+                <div>
+                  <div class="font-display text-base font-bold text-[#f0b45b]">01. Lễ Tiễn Táo (23 Tháng Chạp)</div>
+                  <div class="text-xs text-[#faf7f2]/80">Trà Sen Cổ Thụ • Nhang Trầm • Mứt Gừng • Sớ Táo Quân</div>
+                </div>
+                <span class="text-xs font-bold text-[#f0b45b] shrink-0">Xem →</span>
+              </div>
+              <div onclick="NepleApp.selectSkuDirectly('pack-giao-thua', true)" class="p-3.5 rounded-2xl bg-[#691727]/85 hover:bg-[#691727] border border-[#f0b45b]/40 flex items-center justify-between cursor-pointer transition">
+                <div>
+                  <div class="font-display text-base font-bold text-[#f0b45b]">02. Lễ Giao Thừa (Đêm 30 Tết)</div>
+                  <div class="text-xs text-[#faf7f2]/85">Trà Hoa Bưởi • Nến Sen • Hũ Gạo Nếp &amp; Muối Hồng Giữ Lộc</div>
+                </div>
+                <span class="text-xs font-bold text-[#f0b45b] shrink-0">Xem →</span>
+              </div>
+              <div onclick="NepleApp.selectSkuDirectly('pack-khai-xuan', true)" class="p-3.5 rounded-2xl bg-[#0d2931]/80 hover:bg-[#0d2931] border border-white/15 flex items-center justify-between cursor-pointer transition">
+                <div>
+                  <div class="font-display text-base font-bold text-[#f0b45b]">03. Lễ Khai Xuân (Sáng Mùng 1)</div>
+                  <div class="text-xs text-[#faf7f2]/80">Trà Shan Tuyết • Hạt Sen &amp; Táo Đỏ • Bao Lì Xì Giấy Dó</div>
+                </div>
+                <span class="text-xs font-bold text-[#f0b45b] shrink-0">Xem →</span>
+              </div>
+            </div>
+
+            <div class="pt-2 flex items-center justify-between gap-3 border-t border-white/15">
+              <div>
+                <span class="text-[11px] text-[#f0b45b] font-bold uppercase block">★ Tiết kiệm 138.000đ (-18%)</span>
+                <span class="font-display text-lg font-bold text-white">Hộp Đặc Biệt Combo Trọn Tết</span>
+              </div>
+              <button onclick="NepleApp.buyNow('combo-tron-tet')" class="px-4 py-2.5 rounded-xl btn-terracotta text-xs font-bold shrink-0">
+                Đặt Ngay • 649K
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================== -->
+    <!-- 2 & 3.1. SPLIT-SCREEN INTERACTIVE SKU & COMBO STUDIO               -->
+    <!-- Left: Select SKU or Toggle Rituals | Right: Live Pack Stage        -->
+    <!-- ================================================================== -->
+    <section id="combo-selector" class="py-12 sm:py-16 max-w-7xl mx-auto px-4 sm:px-6 scroll-mt-16">
+      <div class="text-center max-w-3xl mx-auto mb-10">
+        <span class="px-3.5 py-1 rounded-full bg-[#691727] text-[#f0b45b] text-xs font-extrabold uppercase tracking-wider">
+          Interactive 7-SKU &amp; Combo Studio
+        </span>
+        <h2 class="font-display text-2xl sm:text-4xl font-bold text-[#0d2931] mt-3">
+          Chọn Gói Nếp Lễ &amp; Xem Hộp Lễ Biến Đổi Trực Quan
+        </h2>
+        <p class="text-sm sm:text-base text-[#0d2931]/75 mt-2">
+          Bấm chọn <strong>bất kỳ SKU nào ở cột bên trái</strong> (hoặc tích chọn các ngày lễ cần cúng), vùng <strong>Mô phỏng Hộp Lễ bên phải</strong> sẽ tự động thay đổi số ngăn hộp, danh mục lễ vật khô, quà tặng đi kèm và mức tiết kiệm ngay lập tức.
+        </p>
+      </div>
+
+      <!-- TWO-COLUMN SPLIT INTERACTIVE LAYOUT -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <!-- LEFT COLUMN (5 cols): Interactive Ritual Filter + 7 SKU List -->
+        <div id="sku-selector-left-mount" class="lg:col-span-5"></div>
+
+        <!-- RIGHT COLUMN (7 cols, Sticky): Live Pack Visualizer Stage -->
+        <div id="live-pack-stage-mount" class="lg:col-span-7 lg:sticky lg:top-24"></div>
+      </div>
+    </section>
+
+    <!-- ================================================================== -->
+    <!-- 3.2. VISUAL COMPARISON MATRIX (Clean Table Without Repetitive Art) -->
+    <!-- ================================================================== -->
+    <section id="so-sanh" class="py-12 sm:py-16 bg-[#f4efe6] border-y border-[#ae9984]/40 scroll-mt-16">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6">
+        <div class="text-center max-w-3xl mx-auto mb-10">
+          <span class="px-3.5 py-1 rounded-full bg-[#0d2931] text-[#f0b45b] text-xs font-bold uppercase tracking-wider">
+            Visual Comparison Matrix
+          </span>
+          <h2 class="font-display text-2xl sm:text-4xl font-bold text-[#0d2931] mt-3">
+            Bảng So Sánh 3 Cấp Độ Đóng Gói (Hộp Đơn • Hộp Đôi • Hộp Trọn Tết)
+          </h2>
+          <p class="text-sm sm:text-base text-[#0d2931]/75 mt-2">
+            Bấm vào bất kỳ cột cấp độ nào trong bảng để nạp cấu hình hộp đó lên vùng mô phỏng trực quan phía trên.
+          </p>
+        </div>
+
+        <div id="comparison-matrix-mount"></div>
+      </div>
+    </section>
+
+    <!-- HOME BLOG PREVIEW SECTION -->
+    <section class="py-14 sm:py-20 bg-[#0d2931] text-[#faf7f2]">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6">
+        <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
+          <div>
+            <span class="px-3 py-1 rounded-full bg-[#f0b45b] text-[#0d2931] text-xs font-extrabold uppercase tracking-wider">
+              Cẩm Nang Nếp Lễ Cho GenZ
+            </span>
+            <h2 class="font-display text-2xl sm:text-4xl font-bold text-[#faf7f2] mt-3">
+              Hiểu Đúng Lễ Tết • Bày Mâm Tối Giản • Văn Khấn Hiện Đại
+            </h2>
+          </div>
+          <button onclick="NepleApp.switchView('cam-nang')" class="px-5 py-3 rounded-xl bg-[#691727] hover:bg-[#821d31] text-[#f0b45b] border border-[#f0b45b]/50 text-xs sm:text-sm font-bold shrink-0 transition">
+            Xem toàn bộ Cẩm Nang Tết →
+          </button>
+        </div>
+
+        <div id="home-blog-preview-mount" class="grid grid-cols-1 md:grid-cols-3 gap-6 text-[#0d2931]"></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ====================================================================== -->
+  <!-- VIEW 2: BLOG & CULTURAL HANDBOOK (/cam-nang)                           -->
+  <!-- ====================================================================== -->
+  <section id="view-cam-nang" class="view-section hidden flex-1 py-10 sm:py-14 max-w-7xl mx-auto px-4 sm:px-6 w-full">
+    <div class="p-6 sm:p-10 rounded-3xl bg-gradient-to-r from-[#0d2931] to-[#691727] text-[#faf7f2] mb-8">
+      <div class="max-w-3xl">
+        <span class="px-3 py-1 rounded-full bg-[#f0b45b] text-[#0d2931] text-xs font-extrabold uppercase">
+          Chuyên Mục Cẩm Nang Văn Hóa Tết Chuẩn SEO
+        </span>
+        <h1 class="font-display text-2xl sm:text-4xl font-bold mt-3">
+          Cẩm Nang Nếp Lễ — Văn Khấn Hiện Đại &amp; Cách Bày Lễ Tối Giản
+        </h1>
+        <p class="text-xs sm:text-base text-[#faf7f2]/85 mt-2">
+          Gõ từ khóa bất kỳ (ví dụ: <em>"cúng ông táo"</em>, <em>"văn khấn giao thừa"</em>, <em>"bày mâm cúng chung cư"</em>, <em>"mùi già"</em>) để tìm ngay bài hướng dẫn kèm hộp lễ tương ứng.
+        </p>
+
+        <div class="relative mt-5 max-w-xl smart-search-wrapper">
+          <input
+            type="text"
+            placeholder="Tìm bài viết cẩm nang, bài văn khấn hoặc gói lễ..."
+            oninput="NepleApp.handleSmartSearch(this.value, 'blog-page-search-results')"
+            onfocus="if(this.value) NepleApp.handleSmartSearch(this.value, 'blog-page-search-results')"
+            class="w-full pl-10 pr-4 py-3 rounded-2xl bg-white text-[#0d2931] text-sm placeholder-[#0d2931]/50 focus:outline-none shadow-lg"
+          />
+          <svg class="w-5 h-5 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#691727]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+          </svg>
+          <div id="blog-page-search-results" class="smart-search-results hidden absolute left-0 right-0 mt-2 rounded-2xl bg-[#fffdf9] text-[#0d2931] border-2 border-[#f0b45b] shadow-2xl z-50"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="blog-category-pills" class="flex flex-wrap gap-2 mb-8"></div>
+    <div id="blog-reader-mount" class="hidden"></div>
+    <div id="blog-list-mount" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+  </section>
+
+  <!-- ====================================================================== -->
+  <!-- VIEW 3: ORDER TRACKING BY PHONE NUMBER (/tra-cuu-don-hang)             -->
+  <!-- ====================================================================== -->
+  <section id="view-tra-cuu" class="view-section hidden flex-1 py-12 sm:py-16 max-w-4xl mx-auto px-4 sm:px-6 w-full">
+    <div class="text-center mb-8">
+      <span class="px-3.5 py-1 rounded-full bg-[#0d2931] text-[#f0b45b] text-xs font-bold uppercase">
+        Tra Cứu Tiến Trình Hộp Lễ (/tra-cuu-don-hang)
+      </span>
+      <h1 class="font-display text-2xl sm:text-4xl font-bold text-[#0d2931] mt-3">
+        Tra Cứu Đơn Hàng Bằng Số Điện Thoại
+      </h1>
+      <p class="text-sm text-[#0d2931]/75 mt-2">
+        Nhập số điện thoại bạn đã dùng khi đặt hàng để theo dõi tiến trình: <strong>Đã tiếp nhận → Đang đóng gói hộp lễ → Đang giao hàng → Hoàn thành</strong>.
+      </p>
+    </div>
+
+    <div class="p-6 rounded-3xl paper-card mb-8">
+      <div class="flex flex-col sm:flex-row gap-3">
+        <input
+          type="tel"
+          id="order-lookup-phone"
+          placeholder="Nhập số điện thoại đặt hàng (VD: 0901234567)..."
+          onkeydown="if(event.key==='Enter') NepleApp.lookupOrderByPhone()"
+          class="flex-1 px-4 py-3.5 rounded-xl bg-white border border-[#ae9984] text-sm font-semibold focus:outline-none focus:border-[#0d2931]"
+        />
+        <button onclick="NepleApp.lookupOrderByPhone()" class="px-7 py-3.5 rounded-xl btn-terracotta font-bold text-sm">
+          🔍 Kiểm Tra Tiến Trình Đơn
+        </button>
+      </div>
+      <div class="mt-3 flex flex-wrap items-center gap-2 text-xs">
+        <span class="text-[#0d2931]/60">Thử nghiệm nhanh với SĐT có sẵn:</span>
+        <div id="lookup-sample-phones" class="flex flex-wrap gap-2"></div>
+      </div>
+    </div>
+
+    <div id="order-lookup-results" class="space-y-4"></div>
+  </section>
+
+  <!-- MODAL 1: PRODUCT DETAIL INSPECTOR -->
+  <div id="product-detail-modal" class="hidden fixed inset-0 z-50 modal-backdrop flex items-center justify-center p-4 overflow-y-auto">
+    <div class="relative w-full max-w-4xl rounded-3xl bg-[#fffdf9] border-2 border-[#f0b45b] shadow-2xl p-5 sm:p-8 my-8 max-h-[92vh] overflow-y-auto">
+      <button onclick="NepleApp.closeProductModal()" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-[#efe9e0] hover:bg-[#0d2931] hover:text-white font-bold text-sm flex items-center justify-center transition">
+        ✕
+      </button>
+      <div id="product-detail-modal-content"></div>
+    </div>
+  </div>
+
+  <!-- MODAL 2: 1-STEP CHECKOUT (VIETQR + MOMO + COD) -->
+  <div id="checkout-modal" class="hidden fixed inset-0 z-50 modal-backdrop flex items-center justify-center p-4 overflow-y-auto">
+    <div class="relative w-full max-w-5xl rounded-3xl bg-[#fffdf9] border-2 border-[#f0b45b] shadow-2xl p-5 sm:p-8 my-8 max-h-[92vh] overflow-y-auto">
+      <div class="flex items-center justify-between pb-4 mb-5 border-b border-[#ae9984]/40">
+        <div>
+          <span class="text-[11px] font-bold uppercase tracking-wider text-[#691727] block">Thanh Toán 1 Bước • Không Cần Đăng Ký Tài Khoản</span>
+          <h3 class="font-display text-xl sm:text-2xl font-bold text-[#0d2931]">Giỏ Lễ &amp; Đặt Hàng Nhanh (VietQR / MoMo / COD)</h3>
+        </div>
+        <button onclick="NepleApp.closeCheckoutModal()" class="w-9 h-9 rounded-full bg-[#efe9e0] hover:bg-[#0d2931] hover:text-white font-bold text-sm flex items-center justify-center transition">
+          ✕
+        </button>
+      </div>
+      <div id="checkout-modal-body"></div>
+    </div>
+  </div>
+
+  <!-- FLOATING CSKH & SOCIAL HUB -->
+  <div id="floating-cskh-mount" class="fixed bottom-5 right-5 z-40 flex flex-col gap-2.5"></div>
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="neple-toast" class="hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-50 px-5 py-3 rounded-2xl bg-[#0d2931] text-[#f0b45b] border-2 border-[#f0b45b] shadow-2xl text-xs sm:text-sm font-bold flex items-center gap-2">
+    <span>✨</span>
+    <span id="neple-toast-text"></span>
+  </div>
+
+  <!-- FOOTER (Customer-Facing Only) -->
+  <footer class="bg-[#0d2931] text-[#faf7f2] border-t-4 border-[#f0b45b] mt-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-12 grid grid-cols-1 md:grid-cols-12 gap-8">
+      <div class="md:col-span-5 space-y-3">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-[#691727] border-2 border-[#f0b45b] flex items-center justify-center font-display font-bold text-[#f0b45b]">N</div>
+          <span class="font-display text-2xl font-bold tracking-wider">NEPLE — Nếp Lễ</span>
+        </div>
+        <p class="text-xs sm:text-sm text-[#faf7f2]/75 leading-relaxed max-w-md">
+          Thương hiệu Hộp Lễ Tết Tối Giản &amp; Cẩm Nang Văn Hóa Tết dành cho thế hệ trẻ Việt Nam. Kết hợp hài hòa giữa lòng thành kính truyền thống và nhịp sống hiện đại.
+        </p>
+        <div class="flex flex-wrap gap-2 pt-2 text-xs">
+          <a href="https://facebook.com" target="_blank" rel="noopener" class="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-[#f0b45b] hover:text-[#0d2931] transition">Facebook</a>
+          <a href="https://instagram.com" target="_blank" rel="noopener" class="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-[#f0b45b] hover:text-[#0d2931] transition">Instagram</a>
+          <a href="https://tiktok.com" target="_blank" rel="noopener" class="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-[#f0b45b] hover:text-[#0d2931] transition">TikTok</a>
+          <a href="https://threads.net" target="_blank" rel="noopener" class="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-[#f0b45b] hover:text-[#0d2931] transition">Threads</a>
+        </div>
+      </div>
+
+      <div class="md:col-span-4 space-y-2 text-xs sm:text-sm">
+        <div class="font-bold text-[#f0b45b] uppercase tracking-wider text-xs mb-2">Hệ Sinh Thái 7 Gói Nếp Lễ</div>
+        <ul class="space-y-1.5 text-[#faf7f2]/80">
+          <li><button onclick="NepleApp.selectSkuDirectly('combo-tron-tet', true)" class="hover:text-[#f0b45b]">★ Combo Trọn Tết (3 Ngày Lễ - Best Seller)</button></li>
+          <li><button onclick="NepleApp.selectSkuDirectly('combo-ven-nep', true)" class="hover:text-[#f0b45b]">• Combo Vẹn Nếp (Tiễn Táo + Giao Thừa)</button></li>
+          <li><button onclick="NepleApp.selectSkuDirectly('combo-song-xuan', true)" class="hover:text-[#f0b45b]">• Combo Song Xuân (Giao Thừa + Khai Xuân)</button></li>
+          <li><button onclick="NepleApp.selectSkuDirectly('combo-mo-tet', true)" class="hover:text-[#f0b45b]">• Combo Mở Tết (Tiễn Táo + Khai Xuân)</button></li>
+          <li><button onclick="NepleApp.selectSkuDirectly('pack-tien-tao', true)" class="hover:text-[#f0b45b]">• Pack Lẻ: Tiễn Táo / Giao Thừa / Khai Xuân</button></li>
+        </ul>
+      </div>
+
+      <div class="md:col-span-3 space-y-2 text-xs sm:text-sm">
+        <div class="font-bold text-[#f0b45b] uppercase tracking-wider text-xs mb-2">Chăm Sóc Khách Hàng</div>
+        <ul class="space-y-1.5 text-[#faf7f2]/80">
+          <li><button onclick="NepleApp.switchView('cam-nang')" class="hover:text-[#f0b45b]">📖 Cẩm Nang Nếp Lễ &amp; Văn Khấn</button></li>
+          <li><button onclick="NepleApp.switchView('tra-cuu')" class="hover:text-[#f0b45b]">🔍 Tra Cứu Đơn Hàng Bằng SĐT</button></li>
+          <li class="pt-2 text-[#f0b45b] font-semibold">Hotline/Zalo: 0901 234 567</li>
+          <li class="text-xs text-[#faf7f2]/60">Email: chao@neple.vn</li>
+        </ul>
+      </div>
+    </div>
+    <div class="border-t border-white/10 py-4 text-center text-xs text-[#faf7f2]/60">
+      © 2026 NEPLE (Nếp Lễ) — Minimalist Cultural E-Commerce &amp; Tết Handbook.
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

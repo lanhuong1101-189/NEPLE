@@ -1,0 +1,9 @@
+{
+  "cleanUrls": true,
+  "rewrites": [
+    { "source": "/cam-nang", "destination": "/index.html#cam-nang" },
+    { "source": "/tra-cuu-don-hang", "destination": "/index.html#tra-cuu" },
+    { "source": "/tra-cuu", "destination": "/index.html#tra-cuu" },
+    { "source": "/admin", "destination": "/admin.html" }
+  ]
+}

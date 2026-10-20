@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NEPLE Internal CMS — Cổng Quản Trị Nội Bộ (Chỉ Dành Cho Nhân Viên)</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="min-h-screen flex flex-col bg-[#f4efe6] text-[#0d2931]">
+
+  <!-- ==================================================================== -->
+  <!-- SCREEN 1: INTERNAL COMPANY LOGIN GATE (Yêu cầu Email & Mật khẩu)     -->
+  <!-- ==================================================================== -->
+  <div id="admin-login-screen" class="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-[#0d2931] via-[#123640] to-[#691727]">
+    <div class="w-full max-w-md rounded-3xl bg-[#fffdf9] border-2 border-[#f0b45b] shadow-2xl p-6 sm:p-8">
+      <div class="text-center mb-6">
+        <div class="w-14 h-14 mx-auto rounded-2xl bg-[#691727] border-2 border-[#f0b45b] flex items-center justify-center shadow-md mb-3">
+          <span class="font-display text-2xl font-bold text-[#f0b45b]">N</span>
+        </div>
+        <span class="px-3 py-1 rounded-full bg-[#0d2931] text-[#f0b45b] text-[11px] font-extrabold uppercase tracking-wider">
+          Internal Staff Portal • Bảo Mật 2 Lớp
+        </span>
+        <h1 class="font-display text-2xl sm:text-3xl font-bold text-[#0d2931] mt-2">
+          Đăng Nhập Quản Trị NEPLE
+        </h1>
+        <p class="text-xs text-[#0d2931]/70 mt-1">
+          Chỉ nhân sự được cấp tài khoản Email nội bộ công ty mới có quyền truy cập hệ thống CMS.
+        </p>
+      </div>
+
+      <form onsubmit="AdminPortal.handleLogin(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-[#0d2931] mb-1">
+            Email Nhân Viên Công Ty *
+          </label>
+          <input
+            type="email"
+            id="login-email"
+            required
+            placeholder="VD: admin@neple.vn"
+            class="w-full px-4 py-3 rounded-xl bg-white border border-[#ae9984] text-sm focus:outline-none focus:border-[#0d2931]"
+          />
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-[#0d2931] mb-1">
+            Mật Khẩu Nội Bộ *
+          </label>
+          <div class="relative">
+            <input
+              type="password"
+              id="login-password"
+              required
+              placeholder="Nhập mật khẩu..."
+              class="w-full px-4 py-3 rounded-xl bg-white border border-[#ae9984] text-sm focus:outline-none focus:border-[#0d2931]"
+            />
+            <button type="button" onclick="AdminPortal.togglePasswordVisibility()"
+              class="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-[#72826f] font-semibold hover:text-[#0d2931]">
+              Hiện/Ẩn
+            </button>
+          </div>
+        </div>
+
+        <div id="login-error-box" class="hidden p-3 rounded-xl bg-[#691727]/10 border border-[#691727] text-xs text-[#691727] font-semibold"></div>
+
+        <button type="submit" class="w-full py-3.5 rounded-xl btn-terracotta font-bold text-sm shadow-lg">
+          🔐 Xác Thực &amp; Truy Cập Quản Trị
+        </button>
+      </form>
+
+      <!-- Quick Demo Role Fillers for Testing -->
+      <div class="mt-6 pt-4 border-t border-[#ae9984]/40">
+        <div class="text-[11px] font-bold uppercase tracking-wider text-[#72826f] mb-2">
+          Điền nhanh tài khoản phân quyền mẫu (Để bạn test nhanh):
+        </div>
+        <div class="grid grid-cols-1 gap-1.5 text-xs">
+          <button type="button" onclick="AdminPortal.fillDemoAccount('admin@neple.vn', 'Neple@2026')"
+            class="p-2 rounded-lg bg-[#f4efe6] hover:bg-[#0d2931] hover:text-[#f0b45b] text-left transition flex items-center justify-between">
+            <span>👑 <strong>Super Admin:</strong> admin@neple.vn</span>
+            <span class="font-mono text-[11px] opacity-80">Neple@2026</span>
+          </button>
+          <button type="button" onclick="AdminPortal.fillDemoAccount('vanhanh@neple.vn', 'Vanhanh@2026')"
+            class="p-2 rounded-lg bg-[#f4efe6] hover:bg-[#0d2931] hover:text-[#f0b45b] text-left transition flex items-center justify-between">
+            <span>📦 <strong>NV Vận hành:</strong> vanhanh@neple.vn</span>
+            <span class="font-mono text-[11px] opacity-80">Vanhanh@2026</span>
+          </button>
+          <button type="button" onclick="AdminPortal.fillDemoAccount('content@neple.vn', 'Content@2026')"
+            class="p-2 rounded-lg bg-[#f4efe6] hover:bg-[#0d2931] hover:text-[#f0b45b] text-left transition flex items-center justify-between">
+            <span>📝 <strong>NV Content SEO:</strong> content@neple.vn</span>
+            <span class="font-mono text-[11px] opacity-80">Content@2026</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="mt-5 text-center">
+        <a href="index.html" class="text-xs font-bold text-[#0d2931]/70 hover:text-[#a94025] underline">
+          ← Quay về Giao diện Khách hàng (index.html)
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================================================================== -->
+  <!-- SCREEN 2: AUTHENTICATED ADMIN DASHBOARD                              -->
+  <!-- ==================================================================== -->
+  <div id="admin-dashboard-screen" class="hidden flex-1 flex flex-col">
+    <!-- Top Admin Bar -->
+    <header class="sticky top-0 z-40 bg-[#0d2931] text-[#faf7f2] border-b-2 border-[#f0b45b] shadow-lg">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3.5 flex flex-wrap items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-[#691727] border-2 border-[#f0b45b] flex items-center justify-center font-display font-bold text-[#f0b45b]">
+            N
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="font-display text-lg sm:text-xl font-bold text-[#faf7f2]">NEPLE ADMIN CMS</span>
+              <span id="current-staff-role-badge" class="px-2.5 py-0.5 rounded-full bg-[#f0b45b] text-[#0d2931] text-[10px] font-extrabold uppercase"></span>
+            </div>
+            <div id="current-staff-email" class="text-xs text-[#faf7f2]/75"></div>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2.5">
+          <a href="index.html" target="_blank" class="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-xs font-bold text-[#f0b45b] transition">
+            🌐 Mở Xem Trang Khách Hàng ↗
+          </a>
+          <button onclick="AdminPortal.exportFullBackupJSON()" class="px-3.5 py-2 rounded-xl bg-[#72826f] text-white text-xs font-bold hover:opacity-90 transition">
+            💾 Xuất Backup (.json)
+          </button>
+          <label class="px-3.5 py-2 rounded-xl bg-white/10 text-[#faf7f2] text-xs font-bold cursor-pointer hover:bg-white/20 transition">
+            📂 Nhập Backup
+            <input type="file" accept=".json" class="hidden" onchange="AdminPortal.importFullBackupJSON(event)" />
+          </label>
+          <button onclick="AdminPortal.logout()" class="px-3.5 py-2 rounded-xl bg-[#691727] hover:bg-[#871f33] border border-[#f0b45b]/50 text-xs font-bold text-white transition">
+            Đăng xuất
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Dashboard Container -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 py-8 w-full flex-1">
+      <div id="admin-cms-mount"></div>
+    </main>
+  </div>
+
+  <!-- TOAST -->
+  <div id="neple-toast" class="hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-50 px-5 py-3 rounded-2xl bg-[#0d2931] text-[#f0b45b] border-2 border-[#f0b45b] shadow-2xl text-xs sm:text-sm font-bold flex items-center gap-2">
+    <span>✨</span>
+    <span id="neple-toast-text"></span>
+  </div>
+
+  <script src="data.js"></script>
+  <script>
+    const STAFF_STORAGE_KEY = 'neple_staff_accounts_v1';
+    const SESSION_STORAGE_KEY = 'neple_admin_session_v1';
+    const AUDIT_STORAGE_KEY = 'neple_admin_audit_v1';
+
+    const DEFAULT_STAFF_ACCOUNTS = [
+      {
+        id: 'staff-1',
+        name: 'Quản Trị Viên Cấp Cao (Owner)',
+        email: 'admin@neple.vn',
+        password: 'Neple@2026',
+        role: 'SUPER_ADMIN',
+        roleLabel: 'Super Admin (Toàn quyền)',
+        allowedTabs: ['orders', 'products', 'blogs', 'settings', 'staff']
+      },
+      {
+        id: 'staff-2',
+        name: 'Chuyên Viên Vận Hành Đơn Hàng',
+        email: 'vanhanh@neple.vn',
+        password: 'Vanhanh@2026',
+        role: 'OPERATIONS',
+        roleLabel: 'Nhân viên Vận hành',
+        allowedTabs: ['orders']
+      },
+      {
+        id: 'staff-3',
+        name: 'Biên Tập Viên Cẩm Nang SEO',
+        email: 'content@neple.vn',
+        password: 'Content@2026',
+        role: 'CONTENT',
+        roleLabel: 'Biên tập viên SEO',
+        allowedTabs: ['blogs']
+      }
+    ];
+
+    const AdminPortal = {
+      state: {
+        currentUser: null,
+        activeTab: 'orders',
+        editingProductId: null,
+        editingBlogId: null,
+        products: [],
+        blogs: [],
+        orders: [],
+        settings: {},
+        staffList: [],
+        auditLogs: []
+      },
+
+      init() {
+        this.loadData();
+        window.addEventListener('storage', () => {
+          this.loadData();
+          if (this.state.currentUser) this.renderDashboard();
+        });
+        this.checkExistingSession();
+      },
+
+      loadData() {
+        try {
+          this.state.products = JSON.parse(localStorage.getItem(NEPLE_STORAGE_KEYS.PRODUCTS)) || JSON.parse(JSON.stringify(DEFAULT_PRODUCTS));
+          this.state.blogs = JSON.parse(localStorage.getItem(NEPLE_STORAGE_KEYS.BLOGS)) || JSON.parse(JSON.stringify(DEFAULT_BLOGS));
+          this.state.orders = JSON.parse(localStorage.getItem(NEPLE_STORAGE_KEYS.ORDERS)) || JSON.parse(JSON.stringify(DEFAULT_ORDERS));
+          this.state.settings = { ...DEFAULT_SETTINGS, ...(JSON.parse(localStorage.getItem(NEPLE_STORAGE_KEYS.SETTINGS)) || {}) };
+          this.state.staffList = JSON.parse(localStorage.getItem(STAFF_STORAGE_KEY)) || JSON.parse(JSON.stringify(DEFAULT_STAFF_ACCOUNTS));
+          this.state.auditLogs = JSON.parse(localStorage.getItem(AUDIT_STORAGE_KEY)) || [
+            { time: new Date().toLocaleString('vi-VN'), actor: 'Hệ thống', action: 'Khởi tạo cổng quản trị nội bộ NEPLE' }
+          ];
+        } catch (e) {
+          this.state.products = JSON.parse(JSON.stringify(DEFAULT_PRODUCTS));
+          this.state.blogs = JSON.parse(JSON.stringify(DEFAULT_BLOGS));
+          this.state.orders = JSON.parse(JSON.stringify(DEFAULT_ORDERS));
+          this.state.settings = JSON.parse(JSON.stringify(DEFAULT_SETTINGS));
+          this.state.staffList = JSON.parse(JSON.stringify(DEFAULT_STAFF_ACCOUNTS));
+          this.state.auditLogs = [];
+        }
+      },
+
+      saveAllToStorage() {
+        localStorage.setItem(NEPLE_STORAGE_KEYS.PRODUCTS, JSON.stringify(this.state.products));
+        localStorage.setItem(NEPLE_STORAGE_KEYS.BLOGS, JSON.stringify(this.state.blogs));
+        localStorage.setItem(NEPLE_STORAGE_KEYS.ORDERS, JSON.stringify(this.state.orders));
+        localStorage.setItem(NEPLE_STORAGE_KEYS.SETTINGS, JSON.stringify(this.state.settings));
+        localStorage.setItem(STAFF_STORAGE_KEY, JSON.stringify(this.state.staffList));
+      },
+
+      logAudit(actionText) {
+        const actor = this.state.currentUser ? `${this.state.currentUser.name} (${this.state.currentUser.email})` : 'Admin';
+        this.state.auditLogs.unshift({
+          time: new Date().toLocaleString('vi-VN'),
+          actor,
+          action: actionText
+        });
+        this.state.auditLogs = this.state.auditLogs.slice(0, 30);
+        localStorage.setItem(AUDIT_STORAGE_KEY, JSON.stringify(this.state.auditLogs));
+      },
+
+      formatVND(amount) {
+        return Number(amount || 0).toLocaleString('vi-VN') + 'đ';
+      },
+
+      fillDemoAccount(email, password) {
+        document.getElementById('login-email').value = email;
+        document.getElementById('login-password').value = password;
+      },
+
+      togglePasswordVisibility() {
+        const inp = document.getElementById('login-password');
+        if (inp) inp.type = inp.type === 'password' ? 'text' : 'password';
+      },
+
+      checkExistingSession() {
+        const saved = sessionStorage.getItem(SESSION_STORAGE_KEY);
+        if (saved) {
+          try {
+            const parsed = JSON.parse(saved);
+            const matched = this.state.staffList.find(s => s.email.toLowerCase() === parsed.email.toLowerCase());
+            if (matched) {
+              this.state.currentUser = matched;
+              this.state.activeTab = matched.allowedTabs[0] || 'orders';
+              this.showDashboardScreen();
+              return;
+            }
+          } catch (e) {}
+        }
+        this.showLoginScreen();
+      },
+
+      handleLogin(e) {
+        e.preventDefault();
+        const email = document.getElementById('login-email').value.trim().toLowerCase();
+        const password = document.getElementById('login-password').value;
+        const errBox = document.getElementById('login-error-box');
+
+        const staff = this.state.staffList.find(
+          s => s.email.toLowerCase() === email && s.password === password
+        );
+
+        if (!staff) {
+          errBox.textContent = '❌ Email công ty hoặc mật khẩu không chính xác! Vui lòng kiểm tra lại.';
+          errBox.classList.remove('hidden');
+          return;
+        }
+
+        errBox.classList.add('hidden');
+        this.state.currentUser = staff;
+        this.state.activeTab = staff.allowedTabs[0] || 'orders';
+        sessionStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify({ email: staff.email }));
+        this.logAudit('Đăng nhập vào hệ thống CMS');
+        this.showDashboardScreen();
+        this.showToast(`Xin chào ${staff.name}!`);
+      },
+
+      logout() {
+        this.logAudit('Đăng xuất khỏi hệ thống');
+        sessionStorage.removeItem(SESSION_STORAGE_KEY);
+        this.state.currentUser = null;
+        this.showLoginScreen();
+      },
+
+      showLoginScreen() {
+        document.getElementById('admin-login-screen').classList.remove('hidden');
+        document.getElementById('admin-dashboard-screen').classList.add('hidden');
+      },
+
+      showDashboardScreen() {
+        document.getElementById('admin-login-screen').classList.add('hidden');
+        document.getElementById('admin-dashboard-screen').classList.remove('hidden');
+        document.getElementById('current-staff-role-badge').textContent = this.state.currentUser.roleLabel;
+        document.getElementById('current-staff-email').textContent = `${this.state.currentUser.name} • ${this.state.currentUser.email}`;
+        this.renderDashboard();
+      },
+
+      setTab(tabId) {
+        if (!this.state.currentUser.allowedTabs.includes(tabId)) {
+          this.showToast('Tài khoản của bạn không có quyền truy cập mục này!');
+          return;
+        }
+        this.state.activeTab = tabId;
+        this.renderDashboard();
+      },
+
+      renderDashboard() {
+        const mount = document.getElementById('admin-cms-mount');
+        if (!mount || !this.state.currentUser) return;
+
+        const allTabs = [
+          { id: 'orders', label: `📦 Đơn Hàng (${this.state.orders.length})` },
+          { id: 'products', label: `🎁 Sản Phẩm & 7 SKU (${this.state.products.length})` },
+          { id: 'blogs', label: `📝 Blog SEO (${this.state.blogs.length})` },
+          { id: 'settings', label: `⚙️ Cài Đặt VietQR / MoMo / GA4` },
+          { id: 'staff', label: `🔐 Phân Quyền Nhân Viên (${this.state.staffList.length})` }
+        ];
+
+        const allowed = this.state.currentUser.allowedTabs || [];
+        const visibleTabs = allTabs.filter(t => allowed.includes(t.id));
+
+        const navHTML = `
+          <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
+            <div class="flex flex-wrap gap-2">
+              ${visibleTabs
+                .map(
+                  t => `
+                <button onclick="AdminPortal.setTab('${t.id}')"
+                  class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition ${
+                    this.state.activeTab === t.id
+                      ? 'bg-[#0d2931] text-[#f0b45b] shadow'
+                      : 'bg-[#efe9e0] text-[#0d2931] hover:bg-[#ae9984]/40'
+                  }">
+                  ${t.label}
+                </button>
+              `
+                )
+                .join('')}
+            </div>
+            ${
+              allowed.includes('settings')
+                ? `<button onclick="AdminPortal.resetAllData()" class="px-3.5 py-2 rounded-xl border border-[#691727]/40 text-[#691727] hover:bg-[#691727] hover:text-white text-xs font-semibold transition">
+                     ↺ Khôi phục dữ liệu mẫu gốc
+                   </button>`
+                : ''
+            }
+          </div>
+        `;
+
+        let bodyHTML = '';
+        if (this.state.activeTab === 'orders') bodyHTML = this.renderOrdersTab();
+        else if (this.state.activeTab === 'products') bodyHTML = this.renderProductsTab();
+        else if (this.state.activeTab === 'blogs') bodyHTML = this.renderBlogsTab();
+        else if (this.state.activeTab === 'settings') bodyHTML = this.renderSettingsTab();
+        else if (this.state.activeTab === 'staff') bodyHTML = this.renderStaffTab();
+
+        mount.innerHTML = navHTML + bodyHTML;
+      },
+
+      renderOrdersTab() {
+        const stages = ['Đã tiếp nhận', 'Đang đóng gói hộp lễ', 'Đang giao hàng', 'Hoàn thành'];
+        const totalRevenue = this.state.orders.reduce((sum, o) => sum + Number(o.total || 0), 0);
+
+        return `
+          <div class="space-y-5">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div class="p-4 rounded-2xl paper-card">
+                <span class="text-xs text-[#72826f] font-bold uppercase">Tổng số đơn hàng</span>
+                <div class="text-2xl font-extrabold text-[#0d2931] mt-1">${this.state.orders.length} đơn</div>
+              </div>
+              <div class="p-4 rounded-2xl paper-card">
+                <span class="text-xs text-[#72826f] font-bold uppercase">Doanh thu ghi nhận</span>
+                <div class="text-2xl font-extrabold text-[#a94025] mt-1">${this.formatVND(totalRevenue)}</div>
+              </div>
+              <div class="p-4 rounded-2xl paper-card flex flex-col justify-between">
+                <span class="text-xs text-[#72826f] font-bold uppercase">Xuất Dữ Liệu &amp; Đồng Bộ</span>
+                <div class="flex flex-wrap gap-2 mt-2">
+                  <button onclick="AdminPortal.exportOrdersCSV()" class="px-3 py-2 rounded-xl bg-[#0d2931] text-[#f0b45b] text-xs font-bold">
+                    ⬇ Xuất File Excel / CSV
+                  </button>
+                  <button onclick="AdminPortal.copyOrdersForGoogleSheets()" class="px-3 py-2 rounded-xl bg-[#72826f] text-white text-xs font-bold">
+                    📋 Copy Dán Google Sheets
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="overflow-x-auto rounded-2xl paper-card">
+              <table class="w-full text-left border-collapse text-xs sm:text-sm">
+                <thead>
+                  <tr class="bg-[#0d2931] text-[#f0b45b]">
+                    <th class="p-3.5">Mã Đơn</th>
+                    <th class="p-3.5">Khách Hàng &amp; SĐT</th>
+                    <th class="p-3.5">Gói Lễ Đặt Mua</th>
+                    <th class="p-3.5">Tổng Tiền / Thanh Toán</th>
+                    <th class="p-3.5">Trạng Thái Tiến Trình</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-[#ae9984]/30">
+                  ${this.state.orders
+                    .map(
+                      o => `
+                    <tr class="hover:bg-[#f4efe6]/70">
+                      <td class="p-3.5 font-bold text-[#0d2931]">
+                        ${o.id}
+                        <div class="text-[11px] font-normal text-[#0d2931]/60">${o.createdAt}</div>
+                      </td>
+                      <td class="p-3.5">
+                        <div class="font-bold text-[#0d2931]">${o.customerName}</div>
+                        <div class="text-xs text-[#691727] font-semibold">${o.phone}</div>
+                        <div class="text-xs text-[#0d2931]/70 max-w-xs truncate">${o.address}</div>
+                      </td>
+                      <td class="p-3.5">
+                        ${(o.items || []).map(i => `<div>• ${i.name} (x${i.qty})</div>`).join('')}
+                      </td>
+                      <td class="p-3.5">
+                        <div class="font-extrabold text-[#a94025]">${this.formatVND(o.total)}</div>
+                        <div class="text-[11px] text-[#0d2931]/70">${o.paymentLabel}</div>
+                      </td>
+                      <td class="p-3.5">
+                        <select onchange="AdminPortal.updateOrderStatus('${o.id}', this.value)"
+                          class="px-3 py-1.5 rounded-lg bg-white border border-[#ae9984] text-xs font-bold text-[#0d2931]">
+                          ${stages
+                            .map(st => `<option value="${st}" ${o.status === st ? 'selected' : ''}>${st}</option>`)
+                            .join('')}
+                        </select>
+                      </td>
+                    </tr>
+                  `
+                    )
+                    .join('')}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        `;
+      },
+
+      updateOrderStatus(orderId, newStatus) {
+        const order = this.state.orders.find(o => o.id === orderId);
+        if (!order) return;
+        order.status = newStatus;
+        this.saveAllToStorage();
+        this.logAudit(`Cập nhật trạng thái đơn ${orderId} sang "${newStatus}"`);
+        this.showToast(`Đã cập nhật đơn ${orderId} → "${newStatus}" (Đã đồng bộ sang trang Khách hàng)`);
+      },
+
+      exportOrdersCSV() {
+        const headers = ['Mã Đơn', 'Ngày Đặt', 'Họ Tên', 'Số Điện Thoại', 'Địa Chỉ', 'Sản Phẩm', 'Tổng Tiền', 'Thanh Toán', 'Trạng Thái', 'Ghi Chú'];
+        const rows = this.state.orders.map(o => [
+          o.id,
+          o.createdAt,
+          `"${(o.customerName || '').replace(/"/g, '""')}"`,
+          `'${o.phone}`,
+          `"${(o.address || '').replace(/"/g, '""')}"`,
+          `"${(o.items || []).map(i => `${i.name} (x${i.qty})`).join('; ')}"`,
+          o.total,
+          `"${o.paymentLabel}"`,
+          `"${o.status}"`,
+          `"${(o.note || '').replace(/"/g, '""')}"`
+        ]);
+        const csvContent = '\uFEFF' + [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `NEPLE-Don-Hang-${new Date().toISOString().slice(0, 10)}.csv`;
+        a.click();
+        this.showToast('Đã xuất danh sách đơn hàng ra file Excel/CSV!');
+      },
+
+      copyOrdersForGoogleSheets() {
+        const headers = ['Mã Đơn', 'Ngày Đặt', 'Họ Tên', 'Số Điện Thoại', 'Địa Chỉ', 'Sản Phẩm', 'Tổng Tiền', 'Thanh Toán', 'Trạng Thái'];
+        const rows = this.state.orders.map(o =>
+          [
+            o.id,
+            o.createdAt,
+            o.customerName,
+            o.phone,
+            o.address,
+            (o.items || []).map(i => `${i.name} (x${i.qty})`).join('; '),
+            o.total,
+            o.paymentLabel,
+            o.status
+          ].join('\t')
+        );
+        navigator.clipboard?.writeText([headers.join('\t'), ...rows].join('\n'));
+        this.showToast('Đã copy bảng! Bạn có thể bấm Ctrl+V trực tiếp vào Google Sheets.');
+      },
+
+      renderProductsTab() {
+        const editingId = this.state.editingProductId || this.state.products[0]?.id;
+        const p = this.state.products.find(item => item.id === editingId) || this.state.products[0];
+
+        return `
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            <div class="lg:col-span-4 space-y-2">
+              <div class="text-xs font-bold uppercase tracking-wider text-[#72826f] mb-2">Chọn 1 trong 7 SKU để chỉnh sửa:</div>
+              ${this.state.products
+                .map(
+                  prod => `
+                <button onclick="AdminPortal.state.editingProductId='${prod.id}'; AdminPortal.renderDashboard();"
+                  class="w-full text-left p-3.5 rounded-xl border transition flex items-center justify-between gap-2 ${
+                    prod.id === p.id
+                      ? 'bg-[#0d2931] text-[#f0b45b] border-[#0d2931] shadow'
+                      : 'paper-card text-[#0d2931]'
+                  }">
+                  <div>
+                    <div class="text-sm font-bold">${prod.name}</div>
+                    <div class="text-[11px] opacity-80">${prod.sku} • ${prod.tierLabel}</div>
+                  </div>
+                  <div class="text-xs font-extrabold">${this.formatVND(prod.price)}</div>
+                </button>
+              `
+                )
+                .join('')}
+            </div>
+
+            <div class="lg:col-span-8 p-6 rounded-2xl paper-card">
+              <h3 class="font-display text-xl font-bold text-[#0d2931] mb-4">
+                Chỉnh sửa gói lễ: ${p.name} (${p.sku})
+              </h3>
+              <form onsubmit="AdminPortal.saveProduct(event, '${p.id}')" class="space-y-4 text-xs sm:text-sm">
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div>
+                    <label class="block font-bold mb-1">Tên gói lễ</label>
+                    <input type="text" id="adm-prod-name" value="${p.name}" required class="w-full px-3 py-2 rounded-xl border border-[#ae9984] bg-white" />
+                  </div>
+                  <div>
+                    <label class="block font-bold mb-1">Giá bán (VNĐ)</label>
+                    <input type="number" id="adm-prod-price" value="${p.price}" required class="w-full px-3 py-2 rounded-xl border border-[#ae9984] bg-white font-bold text-[#a94025]" />
+                  </div>
+                  <div>
+                    <label class="block font-bold mb-1">Giá gốc (VNĐ)</label>
+                    <input type="number" id="adm-prod-orig" value="${p.originalPrice}" required class="w-full px-3 py-2 rounded-xl border border-[#ae9984] bg-white" />
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label class="block font-bold mb-1">Tiêu đề phụ (Dịp lễ)</label>
+                    <input type="text" id="adm-prod-sub" value="${p.subtitle}" class="w-full px-3 py-2 rounded-xl border border-[#ae9984] bg-white" />
+                  </div>
+                  <div>
+                    <label class="block font-bold mb-1">Phần trăm giảm giá (%)</label>
+                    <input type="number" id="adm-prod-disc" value="${p.discountPercent}" class="w-full px-3 py-2 rounded-xl border border-[#ae9984] bg-white" />
+                  </div>
+                </div>
+
+                <div>
+                  <label class="block font-bold mb-1">Mô tả ngắn</label>
+                  <textarea id="adm-prod-desc" rows="2" class="w-full px-3 py-2 rounded-xl border border-[#ae9984] bg-white">${p.shortDesc}</textarea>
+                </div>
+
+                <div>
+                  <label class="block font-bold mb-1">Danh sách vật phẩm bên trong hộp (Mỗi dòng 1 vật phẩm)</label>
+                  <textarea id="adm-prod-items" rows="5" class="w-full px-3 py-2 rounded-xl border border-[#ae9984] bg-white">${(p.items || []).join('\n')}</textarea>
+                </div>
+
+                <div>
+                  <label class="block font-bold mb-1">URL Hình ảnh bao bì (Hoặc tải ảnh từ máy tính)</label>
+                  <div class="flex flex-col sm:flex-row gap-2">
+                    <input type="text" id="adm-prod-img" value="${p.image}" class="flex-1 px-3 py-2 rounded-xl border border-[#ae9984] bg-white text-xs" />
+                    <label class="px-3.5 py-2 rounded-xl bg-[#72826f] text-white text-xs font-bold cursor-pointer shrink-0 text-center">
+                      📷 Tải ảnh lên
+                      <input type="file" accept="image/*" class="hidden" onchange="AdminPortal.uploadProductImage(event)" />
+                    </label>
+                  </div>
+                </div>
+
+                <div class="pt-2 flex justify-end">
+                  <button type="submit" class="px-6 py-3 rounded-xl btn-terracotta font-bold text-sm">
+                    💾 Lưu &amp; Đồng Bộ Ra Trang Khách Hàng
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        `;
+      },
+
+      uploadProductImage(event) {
+        const file = event.target.files?.[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = () => {
+          const input = document.getElementById('adm-prod-img');
+          if (input) input.value = reader.result;
+          this.showToast('Đã nạp ảnh bao bì mới! Hãy bấm Lưu để áp dụng.');
+        };
+        reader.readAsDataURL(file);
+      },
+
+      saveProduct(e, productId) {
+        e.preventDefault();
+        const prod = this.state.products.find(p => p.id === productId);
+        if (!prod) return;
+
+        prod.name = document.getElementById('adm-prod-name').value.trim();
+        prod.price = Number(document.getElementById('adm-prod-price').value) || prod.price;
+        prod.originalPrice = Number(document.getElementById('adm-prod-orig').value) || prod.price;
+        prod.subtitle = document.getElementById('adm-prod-sub').value.trim();
+        prod.discountPercent = Number(document.getElementById('adm-prod-disc').value) || 0;
+        prod.shortDesc = document.getElementById('adm-prod-desc').value.trim();
+        prod.image = document.getElementById('adm-prod-img').value.trim() || prod.image;
+        prod.items = document
+          .getElementById('adm-prod-items')
+          .value.split('\n')
+          .map(s => s.trim())
+          .filter(Boolean);
+
+        this.saveAllToStorage();
+        this.logAudit(`Cập nhật thông tin & giá SKU "${prod.name}" (${this.formatVND(prod.price)})`);
+        this.renderDashboard();
+        this.showToast(`Đã lưu cập nhật "${prod.name}" và đồng bộ sang trang Khách hàng!`);
+      },
+
+      renderBlogsTab() {
+        const editingId = this.state.editingBlogId || this.state.blogs[0]?.id;
+        const blog = this.state.blogs.find(b => b.id === editingId) || this.state.blogs[0];
+
+        return `
+          <div class="space-y-6">
+            <div class="flex flex-wrap items-center justify-between gap-3 p-4 rounded-2xl paper-card">
+              <div>
+                <h4 class="font-bold text-sm text-[#0d2931]">Quản Trị Cẩm Nang Tết Chuẩn SEO</h4>
+                <p class="text-xs text-[#0d2931]/70">Chỉnh sửa bài viết, văn khấn hiện đại và từ khóa SEO Google.</p>
+              </div>
+              <button onclick="AdminPortal.createNewBlogPost()" class="px-4 py-2 rounded-xl btn-terracotta text-xs font-bold">
+                + Viết Bài Cẩm Nang Mới
+              </button>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+              <div class="lg:col-span-4 space-y-2">
+                ${this.state.blogs
+                  .map(
+                    b => `
+                  <div onclick="AdminPortal.state.editingBlogId='${b.id}'; AdminPortal.renderDashboard();"
+                    class="p-3.5 rounded-xl border cursor-pointer transition ${
+                      b.id === blog?.id ? 'bg-[#0d2931] text-[#f0b45b] border-[#0d2931]' : 'paper-card text-[#0d2931]'
+                    }">
+                    <span class="text-[10px] uppercase font-bold opacity-80">${b.category}</span>
+                    <div class="text-xs sm:text-sm font-bold line-clamp-2 mt-0.5">${b.title}</div>
+                  </div>
+                `
+                  )
+                  .join('')}
+              </div>
+
+              <div class="lg:col-span-8 p-6 rounded-2xl paper-card">
+                ${
+                  blog
+                    ? `
+                  <div class="flex items-center justify-between mb-4">
+                    <h3 class="font-display text-xl font-bold text-[#0d2931]">Trình Soạn Thảo Bài Viết &amp; SEO</h3>
+                    <button onclick="AdminPortal.deleteBlogPost('${blog.id}')" class="px-3 py-1.5 rounded-lg bg-[#691727]/15 text-[#691727] text-xs font-bold hover:bg-[#691727] hover:text-white transition">
+                      🗑 Xóa bài viết
+                    </button>
+                  </div>
+                  <form onsubmit="AdminPortal.saveBlog(event, '${blog.id}')" class="space-y-3.5 text-xs sm:text-sm">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div>
+                        <label class="block font-bold mb-1">Tiêu đề bài viết (H1)</label>
+                        <input type="text" id="adm-blog-title" value="${blog.title}" required class="w-full px-3 py-2 rounded-xl border border-[#ae9984] bg-white" />
+                      </div>
+                      <div>
+                        <label class="block font-bold mb-1">Chuyên mục</label>
+                        <select id="adm-blog-cat" class="w-full px-3 py-2 rounded-xl border border-[#ae9984] bg-white">
+                          ${['Ý Nghĩa Lễ Tết', 'Hướng Dẫn Bày Lễ Tối Giản', 'Văn Khấn Hiện Đại', 'Chuyện Nếp Nhà']
+                            .map(c => `<option value="${c}" ${blog.category === c ? 'selected' : ''}>${c}</option>`)
+                            .join('')}
+                        </select>
+                      </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div>
+                        <label class="block font-bold mb-1">Slug URL</label>
+                        <input type="text" id="adm-blog-slug" value="${blog.slug}" required class="w-full px-3 py-2 rounded-xl border border-[#ae9984] bg-white" />
+                      </div>
+                      <div>
+                        <label class="block font-bold mb-1">Gắn thẻ Sản phẩm / Combo trong bài</label>
+                        <select id="adm-blog-prod" class="w-full px-3 py-2 rounded-xl border border-[#ae9984] bg-white">
+                          ${this.state.products
+                            .map(
+                              p =>
+                                `<option value="${p.id}" ${blog.relatedProductId === p.id ? 'selected' : ''}>${p.name} (${this.formatVND(p.price)})</option>`
+                            )
+                            .join('')}
+                        </select>
+                      </div>
+                    </div>
+
+                    <div>
+                      <label class="block font-bold mb-1">Tóm tắt bài viết (Excerpt)</label>
+                      <textarea id="adm-blog-excerpt" rows="2" class="w-full px-3 py-2 rounded-xl border border-[#ae9984] bg-white">${blog.excerpt}</textarea>
+                    </div>
+
+                    <div>
+                      <label class="block font-bold mb-1">Bản Văn Khấn Hiện Đại đi kèm</label>
+                      <textarea id="adm-blog-prayer" rows="4" class="w-full px-3 py-2 rounded-xl border border-[#ae9984] bg-white">${blog.prayerText || ''}</textarea>
+                    </div>
+
+                    <div class="p-4 rounded-xl bg-[#f4efe6] border border-[#ae9984]/60 space-y-3">
+                      <div class="font-bold text-xs uppercase tracking-wider text-[#691727]">Cấu hình SEO Thủ Công</div>
+                      <div>
+                        <label class="block text-xs font-semibold mb-1">Meta Title</label>
+                        <input type="text" id="adm-blog-mtitle" value="${blog.seo?.metaTitle || blog.title}" class="w-full px-3 py-2 rounded-lg border border-[#ae9984] bg-white" />
+                      </div>
+                      <div>
+                        <label class="block text-xs font-semibold mb-1">Meta Description</label>
+                        <textarea id="adm-blog-mdesc" rows="2" class="w-full px-3 py-2 rounded-lg border border-[#ae9984] bg-white">${blog.seo?.metaDescription || blog.excerpt}</textarea>
+                      </div>
+                      <div>
+                        <label class="block text-xs font-semibold mb-1">Từ khóa SEO</label>
+                        <input type="text" id="adm-blog-mkey" value="${blog.seo?.keywords || ''}" class="w-full px-3 py-2 rounded-lg border border-[#ae9984] bg-white" />
+                      </div>
+                    </div>
+
+                    <div class="pt-2 flex justify-end">
+                      <button type="submit" class="px-6 py-3 rounded-xl btn-terracotta font-bold text-sm">
+                        💾 Lưu Bài Viết &amp; Đồng Bộ
+                      </button>
+                    </div>
+                  </form>
+                `
+                    : ''
+                }
+              </div>
+            </div>
+          </div>
+        `;
+      },
+
+      createNewBlogPost() {
+        const newId = 'blog-' + Date.now();
+        const newBlog = {
+          id: newId,
+          slug: 'bai-viet-cam-nang-nep-le-' + Date.now(),
+          title: 'Bài Viết Cẩm Nang Nếp Lễ Mới',
+          category: 'Hướng Dẫn Bày Lễ Tối Giản',
+          readTime: '4 phút đọc',
+          publishedAt: new Date().toISOString().slice(0, 10),
+          author: this.state.currentUser.name,
+          excerpt: 'Hướng dẫn chuẩn bị mâm lễ Tết tinh gọn, hiện đại dành cho gia đình trẻ.',
+          coverImage: generatePackagingSVG('single', 'CẨM NANG NẾP LỄ', 'Bài Viết Văn Hóa Tết Mới', '#0d2931', 'CẨM NANG MỚI', ['Nếp Lễ']),
+          relatedProductId: 'combo-tron-tet',
+          tags: ['nếp lễ', 'cẩm nang tết'],
+          seo: {
+            metaTitle: 'Bài Viết Cẩm Nang Nếp Lễ Mới | NEPLE',
+            metaDescription: 'Hướng dẫn chuẩn bị mâm lễ Tết tinh gọn, hiện đại dành cho gia đình trẻ.',
+            keywords: 'nếp lễ, cẩm nang tết'
+          },
+          sections: [
+            {
+              heading: '1. Tinh thần giữ trọn nếp xưa theo cách tối giản hiện đại',
+              content: 'Nội dung chi tiết hướng dẫn người trẻ chuẩn bị lễ Tết trang trọng, ấm cúng.'
+            }
+          ],
+          prayerTitle: 'Văn Khấn Hiện Đại Tham Khảo',
+          prayerText: 'Nam mô A Di Đà Phật! (3 lần)...'
+        };
+        this.state.blogs.unshift(newBlog);
+        this.state.editingBlogId = newId;
+        this.saveAllToStorage();
+        this.logAudit(`Tạo bài viết Blog mới "${newBlog.title}"`);
+        this.renderDashboard();
+        this.showToast('Đã tạo bài viết mới!');
+      },
+
+      saveBlog(e, blogId) {
+        e.preventDefault();
+        const blog = this.state.blogs.find(b => b.id === blogId);
+        if (!blog) return;
+        blog.title = document.getElementById('adm-blog-title').value.trim();
+        blog.category = document.getElementById('adm-blog-cat').value;
+        blog.slug = document.getElementById('adm-blog-slug').value.trim();
+        blog.relatedProductId = document.getElementById('adm-blog-prod').value;
+        blog.excerpt = document.getElementById('adm-blog-excerpt').value.trim();
+        blog.prayerText = document.getElementById('adm-blog-prayer').value.trim();
+        blog.seo = {
+          metaTitle: document.getElementById('adm-blog-mtitle').value.trim(),
+          metaDescription: document.getElementById('adm-blog-mdesc').value.trim(),
+          keywords: document.getElementById('adm-blog-mkey').value.trim()
+        };
+        this.saveAllToStorage();
+        this.logAudit(`Cập nhật bài viết Blog "${blog.title}"`);
+        this.renderDashboard();
+        this.showToast('Đã lưu bài viết và đồng bộ ra trang Khách hàng!');
+      },
+
+      deleteBlogPost(blogId) {
+        if (this.state.blogs.length <= 1) {
+          this.showToast('Cần giữ lại ít nhất 1 bài viết!');
+          return;
+        }
+        if (!confirm('Bạn có chắc muốn xóa bài viết này?')) return;
+        this.state.blogs = this.state.blogs.filter(b => b.id !== blogId);
+        this.state.editingBlogId = this.state.blogs[0]?.id || null;
+        this.saveAllToStorage();
+        this.logAudit(`Xóa bài viết ID ${blogId}`);
+        this.renderDashboard();
+        this.showToast('Đã xóa bài viết.');
+      },
+
+      renderSettingsTab() {
+        const s = this.state.settings;
+        return `
+          <form onsubmit="AdminPortal.saveSettings(event)" class="grid grid-cols-1 lg:grid-cols-2 gap-6 text-xs sm:text-sm">
+            <div class="p-6 rounded-2xl paper-card space-y-4">
+              <h3 class="font-display text-xl font-bold text-[#0d2931]">1. Cấu Hình Tài Khoản VietQR &amp; Ví MoMo</h3>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label class="block font-bold mb-1">Mã Ngân hàng Napas (MB, VCB, TCB...)</label>
+                  <input type="text" id="adm-set-bankid" value="${s.bankId}" class="w-full px-3 py-2 rounded-xl border border-[#ae9984] bg-white" />
+                </div>
+                <div>
+                  <label class="block font-bold mb-1">Tên hiển thị Ngân hàng</label>
+                  <input type="text" id="adm-set-bankname" value="${s.bankName}" class="w-full px-3 py-2 rounded-xl border border-[#ae9984] bg-white" />
+                </div>
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label class="block font-bold mb-1">Số tài khoản nhận tiền</label>
+                  <input type="text" id="adm-set-accno" value="${s.accountNumber}" class="w-full px-3 py-2 rounded-xl border border-[#ae9984] bg-white font-bold" />
+                </div>
+                <div>
+                  <label class="block font-bold mb-1">Tên chủ tài khoản</label>
+                  <input type="text" id="adm-set-accname" value="${s.accountName}" class="w-full px-3 py-2 rounded-xl border border-[#ae9984] bg-white" />
+                </div>
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 border-t border-[#ae9984]/30">
+                <div>
+                  <label class="block font-bold mb-1">Số điện thoại Ví MoMo</label>
+                  <input type="text" id="adm-set-momo" value="${s.momoPhone}" class="w-full px-3 py-2 rounded-xl border border-[#ae9984] bg-white font-bold" />
+                </div>
+                <div>
+                  <label class="block font-bold mb-1">Chủ Ví MoMo</label>
+                  <input type="text" id="adm-set-momoname" value="${s.momoName}" class="w-full px-3 py-2 rounded-xl border border-[#ae9984] bg-white" />
+                </div>
+              </div>
+            </div>
+
+            <div class="p-6 rounded-2xl paper-card space-y-4">
+              <h3 class="font-display text-xl font-bold text-[#0d2931]">2. Công Cụ Tối Ưu UX (Clarity / GA4) &amp; Liên Hệ</h3>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label class="block font-bold mb-1">Microsoft Clarity Project ID</label>
+                  <input type="text" id="adm-set-clarity" placeholder="VD: lq8xyz1234" value="${s.analytics?.clarityId || ''}" class="w-full px-3 py-2 rounded-xl border border-[#ae9984] bg-white" />
+                </div>
+                <div>
+                  <label class="block font-bold mb-1">Google Analytics 4 ID</label>
+                  <input type="text" id="adm-set-ga4" placeholder="VD: G-XXXXXXXXXX" value="${s.analytics?.ga4Id || ''}" class="w-full px-3 py-2 rounded-xl border border-[#ae9984] bg-white" />
+                </div>
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label class="block font-bold mb-1">Hotline CSKH</label>
+                  <input type="text" id="adm-set-hotline" value="${s.hotline}" class="w-full px-3 py-2 rounded-xl border border-[#ae9984] bg-white" />
+                </div>
+                <div>
+                  <label class="block font-bold mb-1">Link Zalo OA</label>
+                  <input type="text" id="adm-set-zalo" value="${s.socials?.zalo || ''}" class="w-full px-3 py-2 rounded-xl border border-[#ae9984] bg-white" />
+                </div>
+              </div>
+
+              <div class="pt-3 flex justify-end">
+                <button type="submit" class="px-6 py-3 rounded-xl btn-terracotta font-bold text-sm">
+                  💾 Lưu Cài Đặt Hệ Thống
+                </button>
+              </div>
+            </div>
+          </form>
+        `;
+      },
+
+      saveSettings(e) {
+        e.preventDefault();
+        const s = this.state.settings;
+        s.bankId = document.getElementById('adm-set-bankid').value.trim();
+        s.bankName = document.getElementById('adm-set-bankname').value.trim();
+        s.accountNumber = document.getElementById('adm-set-accno').value.trim();
+        s.accountName = document.getElementById('adm-set-accname').value.trim();
+        s.momoPhone = document.getElementById('adm-set-momo').value.trim();
+        s.momoName = document.getElementById('adm-set-momoname').value.trim();
+        s.hotline = document.getElementById('adm-set-hotline').value.trim();
+        s.socials = { ...s.socials, zalo: document.getElementById('adm-set-zalo').value.trim() };
+        s.analytics = {
+          clarityId: document.getElementById('adm-set-clarity').value.trim(),
+          ga4Id: document.getElementById('adm-set-ga4').value.trim()
+        };
+        this.saveAllToStorage();
+        this.logAudit('Cập nhật cấu hình VietQR / MoMo / Analytics');
+        this.showToast('Đã lưu cài đặt hệ thống!');
+      },
+
+      renderStaffTab() {
+        return `
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 text-xs sm:text-sm">
+            <!-- Left: Staff Accounts & Add New Staff -->
+            <div class="lg:col-span-7 space-y-5">
+              <div class="p-6 rounded-2xl paper-card">
+                <h3 class="font-display text-xl font-bold text-[#0d2931] mb-3">
+                  Danh Sách Nhân Sự Được Cấp Quyền Truy Cập
+                </h3>
+                <div class="space-y-2.5">
+                  ${this.state.staffList
+                    .map(
+                      st => `
+                    <div class="p-3.5 rounded-xl bg-white border border-[#ae9984]/50 flex flex-wrap items-center justify-between gap-3">
+                      <div>
+                        <div class="font-bold text-[#0d2931]">${st.name}</div>
+                        <div class="text-xs text-[#691727] font-semibold">${st.email} • <span class="text-[#72826f]">${st.roleLabel}</span></div>
+                      </div>
+                      <div class="flex items-center gap-2">
+                        <span class="px-2.5 py-1 rounded bg-[#f4efe6] font-mono text-xs">MK: ${st.password}</span>
+                        ${
+                          st.role !== 'SUPER_ADMIN'
+                            ? `<button onclick="AdminPortal.removeStaff('${st.id}')" class="px-2.5 py-1 rounded bg-[#691727]/15 text-[#691727] hover:bg-[#691727] hover:text-white text-xs font-bold transition">Thu hồi</button>`
+                            : `<span class="text-[11px] font-bold text-[#0d2931]/50">Mặc định</span>`
+                        }
+                      </div>
+                    </div>
+                  `
+                    )
+                    .join('')}
+                </div>
+              </div>
+
+              <!-- Add New Staff Form -->
+              <form onsubmit="AdminPortal.addNewStaff(event)" class="p-6 rounded-2xl paper-card space-y-3.5">
+                <h4 class="font-display text-lg font-bold text-[#0d2931]">+ Cấp Tài Khoản Mới Cho Nhân Viên Công Ty</h4>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label class="block font-bold mb-1">Họ tên nhân sự *</label>
+                    <input type="text" id="new-staff-name" required placeholder="VD: Lê Thu Hà" class="w-full px-3 py-2 rounded-xl border border-[#ae9984] bg-white" />
+                  </div>
+                  <div>
+                    <label class="block font-bold mb-1">Email công ty *</label>
+                    <input type="email" id="new-staff-email" required placeholder="VD: ha.le@neple.vn" class="w-full px-3 py-2 rounded-xl border border-[#ae9984] bg-white" />
+                  </div>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label class="block font-bold mb-1">Mật khẩu cấp phát *</label>
+                    <input type="text" id="new-staff-pass" required placeholder="VD: NepleStaff@2026" class="w-full px-3 py-2 rounded-xl border border-[#ae9984] bg-white" />
+                  </div>
+                  <div>
+                    <label class="block font-bold mb-1">Vai trò &amp; Phân quyền *</label>
+                    <select id="new-staff-role" class="w-full px-3 py-2 rounded-xl border border-[#ae9984] bg-white">
+                      <option value="OPERATIONS">Nhân viên Vận hành (Chỉ quản lý Đơn hàng)</option>
+                      <option value="CONTENT">Biên tập viên SEO (Chỉ quản lý Blog Cẩm nang)</option>
+                      <option value="SUPER_ADMIN">Quản trị viên Cấp cao (Toàn quyền hệ thống)</option>
+                    </select>
+                  </div>
+                </div>
+                <button type="submit" class="px-5 py-2.5 rounded-xl btn-terracotta font-bold text-xs sm:text-sm">
+                  + Cấp Quyền Truy Cập Nhân Viên
+                </button>
+              </form>
+            </div>
+
+            <!-- Right: Security Audit Log -->
+            <div class="lg:col-span-5 p-6 rounded-2xl paper-card">
+              <h3 class="font-display text-xl font-bold text-[#0d2931] mb-3">
+                🛡️ Nhật Ký Hoạt Động Quản Trị (Audit Log)
+              </h3>
+              <p class="text-xs text-[#0d2931]/70 mb-3">
+                Ghi nhận tự động ai đã đăng nhập và chỉnh sửa dữ liệu để kiểm soát rủi ro nội bộ.
+              </p>
+              <div class="space-y-2 max-h-[420px] overflow-y-auto pr-1">
+                ${this.state.auditLogs
+                  .map(
+                    log => `
+                  <div class="p-3 rounded-xl bg-white border border-[#ae9984]/40 text-xs">
+                    <div class="flex items-center justify-between text-[11px] text-[#72826f] font-bold">
+                      <span>${log.actor}</span>
+                      <span>${log.time}</span>
+                    </div>
+                    <div class="text-[#0d2931] font-medium mt-1">${log.action}</div>
+                  </div>
+                `
+                  )
+                  .join('')}
+              </div>
+            </div>
+          </div>
+        `;
+      },
+
+      addNewStaff(e) {
+        e.preventDefault();
+        const name = document.getElementById('new-staff-name').value.trim();
+        const email = document.getElementById('new-staff-email').value.trim().toLowerCase();
+        const password = document.getElementById('new-staff-pass').value.trim();
+        const role = document.getElementById('new-staff-role').value;
+
+        if (this.state.staffList.some(s => s.email.toLowerCase() === email)) {
+          this.showToast('Email này đã tồn tại trong danh sách nhân viên!');
+          return;
+        }
+
+        const roleConfig = {
+          SUPER_ADMIN: { label: 'Super Admin (Toàn quyền)', tabs: ['orders', 'products', 'blogs', 'settings', 'staff'] },
+          OPERATIONS: { label: 'Nhân viên Vận hành', tabs: ['orders'] },
+          CONTENT: { label: 'Biên tập viên SEO', tabs: ['blogs'] }
+        }[role];
+
+        this.state.staffList.push({
+          id: 'staff-' + Date.now(),
+          name,
+          email,
+          password,
+          role,
+          roleLabel: roleConfig.label,
+          allowedTabs: roleConfig.tabs
+        });
+
+        this.saveAllToStorage();
+        this.logAudit(`Cấp quyền mới cho nhân sự ${name} (${email} - ${roleConfig.label})`);
+        this.renderDashboard();
+        this.showToast(`Đã cấp quyền truy cập cho ${email}!`);
+      },
+
+      removeStaff(staffId) {
+        if (!confirm('Bạn có chắc muốn thu hồi quyền truy cập của nhân sự này?')) return;
+        const target = this.state.staffList.find(s => s.id === staffId);
+        this.state.staffList = this.state.staffList.filter(s => s.id !== staffId);
+        this.saveAllToStorage();
+        this.logAudit(`Thu hồi quyền truy cập của ${target?.email || staffId}`);
+        this.renderDashboard();
+        this.showToast('Đã thu hồi quyền truy cập nhân viên.');
+      },
+
+      exportFullBackupJSON() {
+        const backup = {
+          exportedAt: new Date().toISOString(),
+          products: this.state.products,
+          blogs: this.state.blogs,
+          orders: this.state.orders,
+          settings: this.state.settings,
+          staffList: this.state.staffList
+        };
+        const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `NEPLE-Backup-${new Date().toISOString().slice(0, 10)}.json`;
+        a.click();
+        this.showToast('Đã tải file Backup toàn bộ dữ liệu (.json) về máy!');
+      },
+
+      importFullBackupJSON(event) {
+        const file = event.target.files?.[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = () => {
+          try {
+            const data = JSON.parse(reader.result);
+            if (data.products) this.state.products = data.products;
+            if (data.blogs) this.state.blogs = data.blogs;
+            if (data.orders) this.state.orders = data.orders;
+            if (data.settings) this.state.settings = data.settings;
+            if (data.staffList) this.state.staffList = data.staffList;
+            this.saveAllToStorage();
+            this.logAudit('Khôi phục dữ liệu từ file Backup .json');
+            this.renderDashboard();
+            this.showToast('Đã khôi phục dữ liệu từ file Backup và đồng bộ sang trang Khách!');
+          } catch (err) {
+            this.showToast('File Backup không hợp lệ!');
+          }
+        };
+        reader.readAsText(file);
+      },
+
+      resetAllData() {
+        if (!confirm('Bạn có chắc muốn khôi phục dữ liệu mẫu gốc của NEPLE?')) return;
+        localStorage.removeItem(NEPLE_STORAGE_KEYS.PRODUCTS);
+        localStorage.removeItem(NEPLE_STORAGE_KEYS.BLOGS);
+        localStorage.removeItem(NEPLE_STORAGE_KEYS.ORDERS);
+        localStorage.removeItem(NEPLE_STORAGE_KEYS.SETTINGS);
+        this.loadData();
+        this.logAudit('Khôi phục dữ liệu gốc mặc định');
+        this.renderDashboard();
+        this.showToast('Đã khôi phục dữ liệu mẫu gốc thành công!');
+      },
+
+      showToast(message) {
+        const toast = document.getElementById('neple-toast');
+        const text = document.getElementById('neple-toast-text');
+        if (!toast || !text) return;
+        text.textContent = message;
+        toast.classList.remove('hidden');
+        clearTimeout(this._toastTimer);
+        this._toastTimer = setTimeout(() => {
+          toast.classList.add('hidden');
+        }, 3400);
+      }
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      AdminPortal.init();
+    });
+  </script>
+</body>
+</html>
