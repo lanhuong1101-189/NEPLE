@@ -72,6 +72,43 @@
   font-display: swap;
 }
 
+/* Self-hosted Bellota Font Family */
+@font-face {
+  font-family: 'Bellota';
+  src: url('fonts/Bellota-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Bellota';
+  src: url('fonts/Bellota-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Bellota';
+  src: url('fonts/Bellota-Italic.ttf') format('truetype');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Bellota';
+  src: url('fonts/Bellota-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Bellota';
+  src: url('fonts/Bellota-BoldItalic.ttf') format('truetype');
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
 :root {
   --neple-teal: #0d2931;
   --neple-teal-dark: #07191f;
