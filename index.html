@@ -132,10 +132,10 @@
           Hội nhà Nếp
         </button>
 
-        <!-- 4. Người nhà Nếp -->
-        <button data-view="nguoi-nha-nep" onclick="NepleApp.switchView('cam-nang')" class="nav-link-item text-[#691727] hover:opacity-80 transition py-1">
+        <!-- 4. Người nhà Nếp (Directs to Internal Admin Portal) -->
+        <a href="admin.html" class="nav-link-item text-[#691727] hover:opacity-80 transition py-1">
           Người nhà Nếp
-        </button>
+        </a>
       </nav>
 
       <!-- Cart CTA -->
@@ -155,7 +155,7 @@
         <button onclick="NepleApp.switchView('home'); setTimeout(()=>document.getElementById('so-sanh')?.scrollIntoView({behavior:'smooth'}),50)" class="px-3 py-1.5 rounded-lg bg-[#faf7f2]/80 text-[#691727] whitespace-nowrap">📊 So sánh sản phẩm</button>
         <button onclick="NepleApp.switchView('tra-cuu')" class="px-3 py-1.5 rounded-lg bg-[#faf7f2]/80 text-[#691727] whitespace-nowrap">🔍 Tra cứu đơn</button>
         <button onclick="NepleApp.switchView('cam-nang')" class="px-3 py-1.5 rounded-lg bg-[#faf7f2]/80 text-[#691727] whitespace-nowrap">🌿 Hội nhà Nếp</button>
-        <button onclick="NepleApp.switchView('cam-nang')" class="px-3 py-1.5 rounded-lg bg-[#faf7f2]/80 text-[#691727] whitespace-nowrap">🤝 Người nhà Nếp</button>
+        <a href="admin.html" class="px-3 py-1.5 rounded-lg bg-[#faf7f2]/80 text-[#691727] whitespace-nowrap">🤝 Người nhà Nếp</a>
       </div>
     </div>
   </header>
