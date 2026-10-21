@@ -57,8 +57,8 @@
       <div class="flex items-center gap-3 shrink-0 select-none">
         <img src="logo.png?v=2" alt="NEPLE Logo" class="h-12 sm:h-14 w-auto object-contain" />
         <div>
-          <span style="font-family: 'Be Vietnam Pro', sans-serif;" class="text-sm sm:text-base font-bold tracking-wide text-[#691727] block">
-            Nếp lành hành lễ
+          <span style="font-family: 'Bellota', cursive, sans-serif;" class="text-sm sm:text-base font-bold tracking-wide text-[#691727] uppercase block">
+            NẾP LÀNH HÀNH LỄ
           </span>
         </div>
       </div>
@@ -82,7 +82,7 @@
       </div>
 
       <!-- Navigation Links (4 Main Items: Nhà Nếp | Gói lễ [Dropdown] | Hội nhà Nếp | Người nhà Nếp) -->
-      <nav style="font-family: 'Be Vietnam Pro', sans-serif;" class="hidden lg:flex items-center gap-7 text-xs sm:text-sm font-bold text-[#691727]">
+      <nav style="font-family: 'Bellota', cursive, sans-serif;" class="hidden lg:flex items-center gap-7 text-sm sm:text-base font-bold text-[#691727]">
         <!-- 1. Nhà Nếp -->
         <button data-view="home" onclick="NepleApp.switchView('home')" class="nav-link-item text-[#691727] hover:opacity-80 transition py-1">
           Nhà Nếp
@@ -142,7 +142,7 @@
       </nav>
 
       <!-- Cart CTA -->
-      <div class="flex items-center gap-2.5 shrink-0">
+      <div class="flex items-center gap-2.5 shrink-0" style="font-family: 'Bellota', cursive, sans-serif;">
         <button onclick="NepleApp.openCheckoutModal()" class="relative px-4 py-2 rounded-xl bg-[#faf7f2] hover:bg-white border border-[#691727]/40 text-[#691727] text-xs sm:text-sm font-bold flex items-center gap-2 transition shadow-sm">
           <span>🧺 Giỏ Lễ</span>
           <span class="cart-count-badge hidden px-1.5 py-0.2 rounded-full bg-[#691727] text-[#faf7f2] text-[11px] font-extrabold">0</span>
@@ -151,7 +151,7 @@
     </div>
 
     <!-- Mobile Navigation (Customer Only) -->
-    <div class="lg:hidden px-4 pb-3 space-y-2 border-t border-[#691727]/20 pt-2 text-[#691727] font-semibold">
+    <div style="font-family: 'Bellota', cursive, sans-serif;" class="lg:hidden px-4 pb-3 space-y-2 border-t border-[#691727]/20 pt-2 text-[#691727] font-bold">
       <div class="flex items-center justify-between gap-1.5 text-xs overflow-x-auto pb-1">
         <button onclick="NepleApp.switchView('home')" class="px-3 py-1.5 rounded-lg bg-[#faf7f2]/80 text-[#691727] whitespace-nowrap">🏠 Nhà Nếp</button>
         <button onclick="NepleApp.switchView('home'); setTimeout(()=>document.getElementById('combo-selector')?.scrollIntoView({behavior:'smooth'}),50)" class="px-3 py-1.5 rounded-lg bg-[#faf7f2]/80 text-[#691727] whitespace-nowrap">🎁 Sản phẩm</button>
@@ -175,7 +175,7 @@
             <span class="block whitespace-nowrap">Giữ gìn nếp nhà,</span>
             <span class="block whitespace-nowrap">nhẹ nhàng đón Tết</span>
           </h1>
-          <p class="text-sm sm:text-lg text-[#faf7f2]/85 max-w-2xl leading-relaxed">
+          <p class="text-sm sm:text-lg font-normal text-[#faf7f2]/90 max-w-2xl leading-relaxed" style="font-family: 'Be Vietnam Pro', sans-serif; font-weight: 400;">
             NEPLE hi vọng sẽ là cầu nối giữa nét đẹp lễ nghi truyền thống với nhịp sống hiện đại qua những set lễ vật chỉn chu và hướng dẫn dễ hiểu, giúp mỗi gia đình gìn giữ nếp nhà và đón Tết đủ đầy, an yên.
           </p>
 
