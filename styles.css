@@ -14,8 +14,10 @@
 
 @font-face {
   font-family: 'Barber Fill';
-  src: local('Barber Fill'), local('BarberFill'), local('Barber-Fill');
-  font-weight: 700;
+  src: url('Barber-Fill.otf') format('opentype'),
+       local('Barber Fill'), local('BarberFill'), local('Barber-Fill');
+  font-weight: 100 900;
+  font-style: normal;
   font-display: swap;
 }
 
@@ -65,8 +67,10 @@ body {
   background-position: 0 0, 14px 14px;
 }
 
-.font-display {
-  font-family: var(--font-display);
+h1, h2, h3, .font-display {
+  font-family: var(--font-display) !important;
+  font-weight: normal;
+  font-synthesis: none;
   letter-spacing: 0.02em;
 }
 
