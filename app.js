@@ -232,8 +232,8 @@ const NepleApp = {
     });
     document.querySelectorAll('.nav-link-item').forEach(btn => {
       const isMatch = btn.dataset.view === viewName;
-      btn.classList.toggle('text-[#f0b45b]', isMatch);
-      btn.classList.toggle('font-semibold', isMatch);
+      btn.classList.toggle('underline', isMatch);
+      btn.classList.toggle('underline-offset-4', isMatch);
     });
     window.scrollTo({ top: 0, behavior: 'smooth' });
     this.renderAll();

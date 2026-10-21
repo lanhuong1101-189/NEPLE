@@ -51,16 +51,15 @@
 <body class="min-h-screen flex flex-col selection:bg-[#f0b45b] selection:text-[#0d2931]">
 
   <!-- Sticky Header (Customer Storefront Only) -->
-  <header class="sticky top-0 z-40 bg-[#0d2931]/95 backdrop-blur-md text-[#faf7f2] border-b border-[#ae9984]/25 shadow-lg">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3.5 flex items-center justify-between gap-4">
-      <!-- Brand Logo -->
+  <header class="sticky top-0 z-40 bg-[#a94025] text-[#691727] border-b border-[#691727]/25 shadow-lg">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-4">
+      <!-- Brand Logo & Tagline -->
       <a href="#home" onclick="NepleApp.switchView('home')" class="flex items-center gap-3 group shrink-0">
-        <div class="w-10 h-10 rounded-xl bg-[#691727] border-2 border-[#f0b45b] flex items-center justify-center shadow-md group-hover:scale-105 transition">
-          <span class="font-display text-lg font-bold text-[#f0b45b]">N</span>
-        </div>
+        <img src="logo.png" alt="NEPLE Logo" class="h-12 sm:h-14 w-auto rounded-lg object-contain shadow-sm group-hover:scale-105 transition" />
         <div>
-          <span class="font-display text-xl sm:text-2xl font-bold tracking-wider text-[#faf7f2] block leading-none">NEPLE</span>
-          <span class="text-[10px] tracking-widest uppercase text-[#f0b45b] block mt-0.5">Nếp Lễ • Văn Hóa Tết Trẻ</span>
+          <span style="font-family: 'Be Vietnam Pro', sans-serif;" class="text-sm sm:text-base font-bold tracking-wide text-[#691727] block">
+            Nếp lành hành lễ
+          </span>
         </div>
       </a>
 
@@ -72,9 +71,9 @@
             placeholder="Tìm 'cúng ông táo', 'văn khấn', 'chung cư', 'trọn tết'..."
             oninput="NepleApp.handleSmartSearch(this.value, 'header-search-results')"
             onfocus="if(this.value) NepleApp.handleSmartSearch(this.value, 'header-search-results')"
-            class="w-full pl-9 pr-4 py-2 rounded-full bg-white/10 border border-[#ae9984]/40 text-xs sm:text-sm text-[#faf7f2] placeholder-[#faf7f2]/55 focus:outline-none focus:bg-white focus:text-[#0d2931] focus:placeholder-[#0d2931]/50 transition"
+            class="w-full pl-9 pr-4 py-2 rounded-full bg-[#faf7f2]/90 border border-[#691727]/30 text-xs sm:text-sm text-[#691727] placeholder-[#691727]/60 focus:outline-none focus:bg-white focus:text-[#691727] transition"
           />
-          <svg class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#f0b45b]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <svg class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#691727]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
           </svg>
         </div>
@@ -83,31 +82,31 @@
       </div>
 
       <!-- Navigation Links (Customer Only) -->
-      <nav class="hidden lg:flex items-center gap-6 text-xs sm:text-sm font-medium">
-        <button data-view="home" onclick="NepleApp.switchView('home')" class="nav-link-item hover:text-[#f0b45b] transition">Trang Chủ</button>
-        <a href="#combo-selector" onclick="NepleApp.switchView('home'); setTimeout(()=>document.getElementById('combo-selector')?.scrollIntoView({behavior:'smooth'}),50)" class="hover:text-[#f0b45b] transition">Chọn Gói Lễ</a>
-        <a href="#so-sanh" onclick="NepleApp.switchView('home'); setTimeout(()=>document.getElementById('so-sanh')?.scrollIntoView({behavior:'smooth'}),50)" class="hover:text-[#f0b45b] transition">So Sánh 3 Cấp</a>
-        <button data-view="cam-nang" onclick="NepleApp.switchView('cam-nang')" class="nav-link-item hover:text-[#f0b45b] transition">Cẩm Nang Tết</button>
-        <button data-view="tra-cuu" onclick="NepleApp.switchView('tra-cuu')" class="nav-link-item hover:text-[#f0b45b] transition">Tra Cứu Đơn</button>
+      <nav style="font-family: 'Be Vietnam Pro', sans-serif;" class="hidden lg:flex items-center gap-6 text-xs sm:text-sm font-bold text-[#691727]">
+        <button data-view="home" onclick="NepleApp.switchView('home')" class="nav-link-item text-[#691727] hover:opacity-80 transition">Trang Chủ</button>
+        <a href="#combo-selector" onclick="NepleApp.switchView('home'); setTimeout(()=>document.getElementById('combo-selector')?.scrollIntoView({behavior:'smooth'}),50)" class="text-[#691727] hover:opacity-80 transition">Chọn Gói Lễ</a>
+        <a href="#so-sanh" onclick="NepleApp.switchView('home'); setTimeout(()=>document.getElementById('so-sanh')?.scrollIntoView({behavior:'smooth'}),50)" class="text-[#691727] hover:opacity-80 transition">So Sánh 3 Cấp</a>
+        <button data-view="cam-nang" onclick="NepleApp.switchView('cam-nang')" class="nav-link-item text-[#691727] hover:opacity-80 transition">Cẩm Nang Tết</button>
+        <button data-view="tra-cuu" onclick="NepleApp.switchView('tra-cuu')" class="nav-link-item text-[#691727] hover:opacity-80 transition">Tra Cứu Đơn</button>
       </nav>
 
       <!-- Cart CTA -->
       <div class="flex items-center gap-2.5 shrink-0">
-        <button onclick="NepleApp.openCheckoutModal()" class="relative px-4 py-2 rounded-xl bg-[#691727] hover:bg-[#821d31] border border-[#f0b45b]/60 text-xs sm:text-sm font-bold flex items-center gap-2 transition">
+        <button onclick="NepleApp.openCheckoutModal()" class="relative px-4 py-2 rounded-xl bg-[#faf7f2] hover:bg-white border border-[#691727]/40 text-[#691727] text-xs sm:text-sm font-bold flex items-center gap-2 transition shadow-sm">
           <span>🧺 Giỏ Lễ</span>
-          <span class="cart-count-badge hidden px-1.5 py-0.2 rounded-full bg-[#f0b45b] text-[#0d2931] text-[11px] font-extrabold">0</span>
+          <span class="cart-count-badge hidden px-1.5 py-0.2 rounded-full bg-[#691727] text-[#faf7f2] text-[11px] font-extrabold">0</span>
         </button>
       </div>
     </div>
 
     <!-- Mobile Navigation (Customer Only) -->
-    <div class="lg:hidden px-4 pb-3 space-y-2 border-t border-white/10 pt-2">
+    <div class="lg:hidden px-4 pb-3 space-y-2 border-t border-[#691727]/20 pt-2 text-[#691727] font-semibold">
       <div class="flex items-center justify-between gap-1.5 text-xs overflow-x-auto pb-1">
-        <button onclick="NepleApp.switchView('home')" class="px-3 py-1.5 rounded-lg bg-white/10 whitespace-nowrap">🏠 Trang chủ</button>
-        <button onclick="NepleApp.switchView('home'); setTimeout(()=>document.getElementById('combo-selector')?.scrollIntoView({behavior:'smooth'}),50)" class="px-3 py-1.5 rounded-lg bg-white/10 whitespace-nowrap">🎯 Chọn Gói Lễ</button>
-        <button onclick="NepleApp.switchView('home'); setTimeout(()=>document.getElementById('so-sanh')?.scrollIntoView({behavior:'smooth'}),50)" class="px-3 py-1.5 rounded-lg bg-white/10 whitespace-nowrap">📊 So Sánh</button>
-        <button onclick="NepleApp.switchView('cam-nang')" class="px-3 py-1.5 rounded-lg bg-white/10 whitespace-nowrap">📖 Cẩm nang</button>
-        <button onclick="NepleApp.switchView('tra-cuu')" class="px-3 py-1.5 rounded-lg bg-white/10 whitespace-nowrap">🔍 Tra cứu đơn</button>
+        <button onclick="NepleApp.switchView('home')" class="px-3 py-1.5 rounded-lg bg-[#faf7f2]/80 text-[#691727] whitespace-nowrap">🏠 Trang chủ</button>
+        <button onclick="NepleApp.switchView('home'); setTimeout(()=>document.getElementById('combo-selector')?.scrollIntoView({behavior:'smooth'}),50)" class="px-3 py-1.5 rounded-lg bg-[#faf7f2]/80 text-[#691727] whitespace-nowrap">🎯 Chọn Gói Lễ</button>
+        <button onclick="NepleApp.switchView('home'); setTimeout(()=>document.getElementById('so-sanh')?.scrollIntoView({behavior:'smooth'}),50)" class="px-3 py-1.5 rounded-lg bg-[#faf7f2]/80 text-[#691727] whitespace-nowrap">📊 So Sánh</button>
+        <button onclick="NepleApp.switchView('cam-nang')" class="px-3 py-1.5 rounded-lg bg-[#faf7f2]/80 text-[#691727] whitespace-nowrap">📖 Cẩm nang</button>
+        <button onclick="NepleApp.switchView('tra-cuu')" class="px-3 py-1.5 rounded-lg bg-[#faf7f2]/80 text-[#691727] whitespace-nowrap">🔍 Tra cứu đơn</button>
       </div>
     </div>
   </header>
