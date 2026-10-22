@@ -34,7 +34,7 @@ const NepleApp = {
   loadState() {
     try {
       const savedProducts = localStorage.getItem(NEPLE_STORAGE_KEYS.PRODUCTS);
-      this.state.products = savedProducts ? JSON.parse(savedProducts) : JSON.parse(JSON.stringify(DEFAULT_PRODUCTS));
+      this.state.products = (savedProducts ? JSON.parse(savedProducts) : JSON.parse(JSON.stringify(DEFAULT_PRODUCTS))).map(p => ({ ...p, name: (p.name || '').replace(/^Pack\s+/i, '') }));
 
       const savedBlogs = localStorage.getItem(NEPLE_STORAGE_KEYS.BLOGS);
       this.state.blogs = savedBlogs ? JSON.parse(savedBlogs) : JSON.parse(JSON.stringify(DEFAULT_BLOGS));
@@ -1459,7 +1459,7 @@ const NepleApp = {
         <div class="text-center py-12">
           <div class="text-4xl mb-3">🧺</div>
           <h4 class="font-display text-xl font-bold text-[#0d2931]">Giỏ lễ của bạn đang trống</h4>
-          <p class="text-xs sm:text-sm text-[#0d2931]/70 mt-1">Hãy chọn Pack lẻ hoặc Combo Nếp Lễ phù hợp với gia đình bạn nhé.</p>
+          <p class="text-xs sm:text-sm text-[#0d2931]/70 mt-1">Hãy chọn gói lẻ hoặc Combo Nếp Lễ phù hợp với gia đình bạn nhé.</p>
           <button onclick="NepleApp.closeCheckoutModal()" class="mt-4 px-5 py-2.5 rounded-xl btn-terracotta text-xs font-bold">
             Quay lại chọn gói lễ
           </button>

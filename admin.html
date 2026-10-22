@@ -213,7 +213,7 @@
 
       loadData() {
         try {
-          this.state.products = JSON.parse(localStorage.getItem(NEPLE_STORAGE_KEYS.PRODUCTS)) || JSON.parse(JSON.stringify(DEFAULT_PRODUCTS));
+          this.state.products = (JSON.parse(localStorage.getItem(NEPLE_STORAGE_KEYS.PRODUCTS)) || JSON.parse(JSON.stringify(DEFAULT_PRODUCTS))).map(p => ({ ...p, name: (p.name || '').replace(/^Pack\s+/i, '') }));
           this.state.blogs = JSON.parse(localStorage.getItem(NEPLE_STORAGE_KEYS.BLOGS)) || JSON.parse(JSON.stringify(DEFAULT_BLOGS));
           this.state.orders = JSON.parse(localStorage.getItem(NEPLE_STORAGE_KEYS.ORDERS)) || JSON.parse(JSON.stringify(DEFAULT_ORDERS));
           this.state.settings = { ...DEFAULT_SETTINGS, ...(JSON.parse(localStorage.getItem(NEPLE_STORAGE_KEYS.SETTINGS)) || {}) };

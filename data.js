@@ -203,7 +203,7 @@ const DEFAULT_PRODUCTS = [
   {
     id: 'pack-tien-tao',
     sku: 'NEPLE-SINGLE-01',
-    name: 'Pack Tiễn Táo',
+    name: 'Tiễn Táo',
     subtitle: 'Lễ Cúng Ông Công Ông Táo (23 Tháng Chạp)',
     tier: 'single',
     tierLabel: 'Hộp Đơn Mua Lẻ (1 Dịp)',
@@ -217,7 +217,7 @@ const DEFAULT_PRODUCTS = [
     packagingSpec: 'Hộp Đơn giấy mỹ thuật bồi cứng tông Kem Giấy Dó, đai quấn Xanh Cổ Vịt, chống ẩm 100%.',
     suitableFor: 'Bạn trẻ ở trọ, căn hộ studio hoặc gia đình chỉ cúng 23 tháng Chạp tại thành phố trước khi về quê.',
     shortDesc: 'Trọn bộ lễ vật khô tinh gọn, thanh sạch để tiễn Ông Công Ông Táo về trời ngày 23 tháng Chạp mà không cần tất bật chạy chợ sớm.',
-    image: generatePackagingSVG('single', 'PACK TIỄN TÁO', 'Lễ Ông Công Ông Táo • 23 Tháng Chạp', '#0d2931', 'HỘP ĐƠN • 23 CHẠP', ['Tiễn Táo']),
+    image: generatePackagingSVG('single', 'TIỄN TÁO', 'Lễ Ông Công Ông Táo • 23 Tháng Chạp', '#0d2931', 'HỘP ĐƠN • 23 CHẠP', ['Tiễn Táo']),
     items: [
       '01 Hộp nhang trầm hương sạch ít khói (20 nén, an toàn cho chung cư)',
       '01 Đôi nến bơ thực vật nguyên chất cháy êm (không khói đen)',
@@ -238,7 +238,7 @@ const DEFAULT_PRODUCTS = [
   {
     id: 'pack-giao-thua',
     sku: 'NEPLE-SINGLE-02',
-    name: 'Pack Giao Thừa',
+    name: 'Giao Thừa',
     subtitle: 'Lễ Cúng Đêm 30 Tết (Trừ Tịch Đón Năm Mới)',
     tier: 'single',
     tierLabel: 'Hộp Đơn Mua Lẻ (1 Dịp)',
@@ -252,7 +252,7 @@ const DEFAULT_PRODUCTS = [
     packagingSpec: 'Hộp Đơn giấy mỹ thuật bồi cứng tông Kem Giấy Dó, đai quấn Đỏ Rượu Vang (#691727).',
     suitableFor: 'Gia đình trẻ đón khoảnh khắc Giao Thừa tại nhà riêng hoặc căn hộ chung cư.',
     shortDesc: 'Gói gọn nghi thức tiễn năm cũ, đón tân niên lúc chuyển giao đất trời với hương trầm ấm và hũ gạo muối giữ lộc đầu năm.',
-    image: generatePackagingSVG('single', 'PACK GIAO THỪA', 'Lễ Trừ Tịch Đón Lộc • Đêm 30 Tết', '#691727', 'HỘP ĐƠN • ĐÊM 30', ['Giao Thừa']),
+    image: generatePackagingSVG('single', 'GIAO THỪA', 'Lễ Trừ Tịch Đón Lộc • Đêm 30 Tết', '#691727', 'HỘP ĐƠN • ĐÊM 30', ['Giao Thừa']),
     items: [
       '01 Hộp nhang trầm hương & 05 nụ trầm xông nhà đêm Trừ Tịch',
       '01 Đôi nến bơ hoa sen ấm áp đón giao thời',
@@ -273,7 +273,7 @@ const DEFAULT_PRODUCTS = [
   {
     id: 'pack-khai-xuan',
     sku: 'NEPLE-SINGLE-03',
-    name: 'Pack Khai Xuân',
+    name: 'Khai Xuân',
     subtitle: 'Lễ Cúng Mùng 1 Tết & Khai Xuân Đầu Năm',
     tier: 'single',
     tierLabel: 'Hộp Đơn Mua Lẻ (1 Dịp)',
@@ -287,7 +287,7 @@ const DEFAULT_PRODUCTS = [
     packagingSpec: 'Hộp Đơn giấy mỹ thuật bồi cứng tông Kem Giấy Dó, đai quấn Xanh Rêu Mộc (#72826f).',
     suitableFor: 'Gia đình trẻ cúng sáng Mùng 1 hoặc cúng mở hàng, khai bút đầu xuân.',
     shortDesc: 'Khởi đầu năm mới thanh lành với trà Shan Tuyết cổ thụ, hạt sen, táo đỏ và bộ bao lì xì giấy dó mang đậm hơi thở văn hóa Việt.',
-    image: generatePackagingSVG('single', 'PACK KHAI XUÂN', 'Lễ Tân Niên Đắc Lộc • Sáng Mùng 1', '#72826f', 'HỘP ĐƠN • MÙNG 1', ['Khai Xuân']),
+    image: generatePackagingSVG('single', 'KHAI XUÂN', 'Lễ Tân Niên Đắc Lộc • Sáng Mùng 1', '#72826f', 'HỘP ĐƠN • MÙNG 1', ['Khai Xuân']),
     items: [
       '01 Hộp nhang trầm hương thanh khiết khởi đầu năm mới',
       '01 Đôi nến bơ thực vật sắc vàng ấm sung túc',
@@ -566,7 +566,7 @@ Nam mô A Di Đà Phật! (3 lần)`
       },
       {
         heading: '2. Nghi thức Hũ Gạo Nếp & Muối Hồng giữ lộc đêm 30 Tết',
-        content: 'Ông bà xưa có câu "Đầu năm mua muối, cuối năm mua vôi". Trong Pack Giao Thừa của NEPLE, hũ gạo nếp cái hoa vàng và muối hồng được gói trong giấy dó mộc mạc. Khi cúng Giao Thừa xong, gia chủ giữ lại hũ gạo muối này nơi góc bếp hoặc bàn thờ để biểu trưng cho sự no ấm, đậm đà tình thân suốt cả năm.'
+        content: 'Ông bà xưa có câu "Đầu năm mua muối, cuối năm mua vôi". Trong gói Giao Thừa của NEPLE, hũ gạo nếp cái hoa vàng và muối hồng được gói trong giấy dó mộc mạc. Khi cúng Giao Thừa xong, gia chủ giữ lại hũ gạo muối này nơi góc bếp hoặc bàn thờ để biểu trưng cho sự no ấm, đậm đà tình thân suốt cả năm.'
       },
       {
         heading: '3. Ở chung cư không có sân thượng thì cúng Giao Thừa ngoài trời thế nào?',
