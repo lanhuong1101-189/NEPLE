@@ -1693,11 +1693,10 @@ const NepleApp = {
             <h4 class="text-xs font-extrabold uppercase tracking-wider text-[#0d2931] mb-3">
               3. Chọn Phương Thức Thanh Toán
             </h4>
-            <div class="grid grid-cols-3 gap-2.5 mb-4" id="payment-method-tabs"></div>
-            <div id="payment-method-box"></div>
+            <div class="grid grid-cols-3 gap-2.5" id="payment-method-tabs"></div>
           </div>
 
-          <div class="mt-5 pt-4 border-t border-[#ae9984]/60 space-y-2">
+          <div class="mt-6 pt-4 border-t border-[#ae9984]/60 space-y-2">
             <div class="flex items-center justify-between text-xs sm:text-sm text-[#0d2931]/80">
               <span>Phí vận chuyển:</span>
               <span class="font-bold text-[#72826f]">Miễn phí (0đ)</span>
@@ -1721,16 +1720,9 @@ const NepleApp = {
 
   renderPaymentMethodDetails() {
     const tabsEl = document.getElementById('payment-method-tabs');
-    const boxEl = document.getElementById('payment-method-box');
-    if (!tabsEl || !boxEl) return;
+    if (!tabsEl) return;
 
     const method = this.state.paymentMethod;
-    const total = this.getCartTotal();
-    const rawPhone = (this.state.checkoutForm?.phone || this.state.checkoutPhonePreview || '').trim();
-    const hasValidPhone = this.isValidVNPhone(rawPhone);
-    const transferContent = hasValidPhone ? `NEPLE ${rawPhone}` : 'NEPLE {SĐT của bạn}';
-    const s = this.state.settings;
-
     const methods = [
       { id: 'VIETQR', label: 'VietQR' },
       { id: 'MOMO', label: 'Ví MoMo' },
@@ -1742,7 +1734,7 @@ const NepleApp = {
         const isActive = method === m.id;
         return `
       <button type="button" onclick="NepleApp.setPaymentMethod('${m.id}')"
-        class="relative py-2.5 px-3 rounded-xl text-xs sm:text-sm font-bold border-2 transition flex items-center justify-center gap-1.5 ${
+        class="relative py-3 px-2.5 rounded-xl text-xs sm:text-sm font-bold border-2 whitespace-nowrap transition flex items-center justify-center gap-1.5 ${
           isActive
             ? 'bg-[#fffdf9] text-[#691727] border-[#BA3820] shadow-sm'
             : 'bg-white text-[#0d2931]/80 border-[#ae9984]/50 hover:border-[#ae9984]'
@@ -1757,107 +1749,6 @@ const NepleApp = {
     `;
       })
       .join('');
-
-    if (method === 'VIETQR') {
-      if (!hasValidPhone) {
-        boxEl.innerHTML = `
-          <div class="p-4 rounded-xl bg-white border border-[#ae9984]/60 space-y-3 text-xs text-[#0d2931]">
-            <div class="p-3.5 rounded-xl bg-[#fdf3e1] border border-[#f0b45b] text-[#691727] font-semibold leading-relaxed text-center">
-              Mã QR thanh toán chính xác sẽ được tạo tự động sau khi bạn bấm <strong>Xác nhận đặt hàng</strong> (hoặc ngay khi bạn nhập Số điện thoại hợp lệ ở bên trái).
-            </div>
-            <div class="text-left space-y-1.5 bg-[#faf7f2] p-3 rounded-lg border border-[#ae9984]/30">
-              <div><span class="text-[#0d2931]/60">Ngân hàng:</span> <strong>${s.bankName}</strong></div>
-              <div><span class="text-[#0d2931]/60">Số TK:</span> <strong>${s.accountNumber}</strong></div>
-              <div><span class="text-[#0d2931]/60">Chủ TK:</span> <strong>${s.accountName}</strong></div>
-              <div><span class="text-[#0d2931]/60">Số tiền:</span> <strong class="text-[#BA3820]">${this.formatVND(total)}</strong></div>
-              <div><span class="text-[#0d2931]/60">Nội dung CK:</span> <strong class="text-[#691727] bg-[#f0b45b]/30 px-1.5 py-0.5 rounded">${transferContent}</strong></div>
-            </div>
-          </div>
-        `;
-      } else {
-        const vietQrUrl = `https://img.vietqr.io/image/${encodeURIComponent(s.bankId)}-${encodeURIComponent(
-          s.accountNumber
-        )}-compact2.png?amount=${total}&addInfo=${encodeURIComponent(transferContent)}&accountName=${encodeURIComponent(
-          s.accountName
-        )}`;
-
-        boxEl.innerHTML = `
-          <div class="p-3.5 rounded-xl bg-white border border-[#ae9984]/60 text-center">
-            <div class="text-xs font-bold text-[#0d2931] mb-2">Mã QR Ngân Hàng Tự Động (Chuẩn Napas VietQR)</div>
-            <div class="w-44 h-44 mx-auto rounded-xl overflow-hidden border border-[#ae9984]/40 bg-[#faf7f2] flex items-center justify-center p-1">
-              <img src="${vietQrUrl}" alt="VietQR NEPLE" class="w-full h-full object-contain"
-                   onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,'+encodeURIComponent('<svg xmlns=\\'http://www.w3.org/2000/svg\\' viewBox=\\'0 0 200 200\\'><rect width=\\'200\\' height=\\'200\\' fill=\\'#faf7f2\\'/><rect x=\\'20\\' y=\\'20\\' width=\\'50\\' height=\\'50\\' fill=\\'#0d2931\\'/><rect x=\\'130\\' y=\\'20\\' width=\\'50\\' height=\\'50\\' fill=\\'#0d2931\\'/><rect x=\\'20\\' y=\\'130\\' width=\\'50\\' height=\\'50\\' fill=\\'#0d2931\\'/><rect x=\\'80\\' y=\\'80\\' width=\\'40\\' height=\\'40\\' fill=\\'#691727\\'/><text x=\\'100\\' y=\\'192\\' text-anchor=\\'middle\\' font-size=\\'11\\' font-family=\\'sans-serif\\' fill=\\'#0d2931\\'>VIETQR NAPAS</text></svg>');" />
-            </div>
-            <div class="mt-2.5 text-left text-xs space-y-1 bg-[#faf7f2] p-2.5 rounded-lg border border-[#ae9984]/30">
-              <div><span class="text-[#0d2931]/60">Ngân hàng:</span> <strong>${s.bankName}</strong></div>
-              <div><span class="text-[#0d2931]/60">Số TK:</span> <strong>${s.accountNumber}</strong></div>
-              <div><span class="text-[#0d2931]/60">Chủ TK:</span> <strong>${s.accountName}</strong></div>
-              <div><span class="text-[#0d2931]/60">Số tiền:</span> <strong class="text-[#BA3820]">${this.formatVND(total)}</strong></div>
-              <div><span class="text-[#0d2931]/60">Nội dung CK:</span> <strong class="text-[#691727] bg-[#f0b45b]/30 px-1.5 py-0.5 rounded">${transferContent}</strong></div>
-            </div>
-          </div>
-        `;
-      }
-    } else if (method === 'MOMO') {
-      if (!hasValidPhone) {
-        boxEl.innerHTML = `
-          <div class="p-4 rounded-xl bg-white border border-[#ae9984]/60 space-y-3 text-xs text-[#0d2931]">
-            <div class="p-3.5 rounded-xl bg-[#fdf3e1] border border-[#f0b45b] text-[#691727] font-semibold leading-relaxed text-center">
-              Mã QR Ví MoMo kèm nội dung chuyển khoản sẽ được tạo tự động ngay khi bạn nhập Số điện thoại hợp lệ ở bên trái.
-            </div>
-            <div class="text-left space-y-1.5 bg-[#faf7f2] p-3 rounded-lg border border-[#ae9984]/30">
-              <div><span class="text-[#0d2931]/60">SĐT Ví MoMo:</span> <strong>${s.momoPhone}</strong></div>
-              <div><span class="text-[#0d2931]/60">Tên người nhận:</span> <strong>${s.momoName}</strong></div>
-              <div><span class="text-[#0d2931]/60">Số tiền:</span> <strong class="text-[#BA3820]">${this.formatVND(total)}</strong></div>
-              <div><span class="text-[#0d2931]/60">Lời nhắn:</span> <strong class="text-[#691727] bg-[#f0b45b]/30 px-1.5 py-0.5 rounded">${transferContent}</strong></div>
-            </div>
-          </div>
-        `;
-      } else {
-        const momoQrSvg =
-          `data:image/svg+xml;utf8,` +
-          encodeURIComponent(`
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 220">
-            <rect width="220" height="220" rx="16" fill="#a50064"/>
-            <rect x="14" y="14" width="192" height="192" rx="12" fill="#ffffff"/>
-            <rect x="28" y="28" width="46" height="46" rx="6" fill="#a50064"/>
-            <rect x="146" y="28" width="46" height="46" rx="6" fill="#a50064"/>
-            <rect x="28" y="146" width="46" height="46" rx="6" fill="#a50064"/>
-            <rect x="85" y="85" width="50" height="50" rx="8" fill="#a50064"/>
-            <text x="110" y="115" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="bold" fill="#ffffff">MoMo</text>
-            <text x="110" y="176" text-anchor="middle" font-family="sans-serif" font-size="10" font-weight="bold" fill="#a50064">${s.momoPhone}</text>
-          </svg>
-        `);
-        boxEl.innerHTML = `
-          <div class="p-3.5 rounded-xl bg-white border border-[#ae9984]/60 text-center">
-            <div class="text-xs font-bold text-[#a50064] mb-2">Quét Mã QR Ví Điện Tử MoMo</div>
-            <div class="w-40 h-40 mx-auto rounded-xl overflow-hidden border border-[#ae9984]/40">
-              <img src="${momoQrSvg}" alt="MoMo QR" class="w-full h-full object-contain" />
-            </div>
-            <div class="mt-2.5 text-left text-xs space-y-1 bg-[#faf7f2] p-2.5 rounded-lg border border-[#ae9984]/30">
-              <div><span class="text-[#0d2931]/60">SĐT Ví MoMo:</span> <strong>${s.momoPhone}</strong></div>
-              <div><span class="text-[#0d2931]/60">Tên người nhận:</span> <strong>${s.momoName}</strong></div>
-              <div><span class="text-[#0d2931]/60">Số tiền:</span> <strong class="text-[#BA3820]">${this.formatVND(total)}</strong></div>
-              <div><span class="text-[#0d2931]/60">Lời nhắn:</span> <strong class="text-[#691727] bg-[#f0b45b]/30 px-1.5 py-0.5 rounded">${transferContent}</strong></div>
-            </div>
-          </div>
-        `;
-      }
-    } else {
-      boxEl.innerHTML = `
-        <div class="p-4 rounded-xl bg-white border border-[#ae9984]/60 space-y-2 text-xs text-[#0d2931]">
-          <div class="font-bold text-sm text-[#0d2931]">
-            Thanh toán khi nhận hàng (COD)
-          </div>
-          <p class="leading-relaxed text-[#0d2931]/80">
-            Bạn được mở hộp kiểm tra quy cách đóng gói và ấn phẩm trước khi thanh toán tiền mặt hoặc quét mã với shipper.
-          </p>
-          <div class="p-2.5 rounded-lg bg-[#72826f]/15 text-[#72826f] font-semibold">
-            ✓ Xác nhận đơn tức thì • Giao 1 lần duy nhất trước Tết.
-          </div>
-        </div>
-      `;
-    }
   },
 
   submitOrder(e) {
