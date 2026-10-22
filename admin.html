@@ -216,7 +216,15 @@
           this.state.products = (JSON.parse(localStorage.getItem(NEPLE_STORAGE_KEYS.PRODUCTS)) || JSON.parse(JSON.stringify(DEFAULT_PRODUCTS))).map(p => ({ ...p, name: (p.name || '').replace(/^Pack\s+/i, '') }));
           this.state.blogs = JSON.parse(localStorage.getItem(NEPLE_STORAGE_KEYS.BLOGS)) || JSON.parse(JSON.stringify(DEFAULT_BLOGS));
           this.state.orders = JSON.parse(localStorage.getItem(NEPLE_STORAGE_KEYS.ORDERS)) || JSON.parse(JSON.stringify(DEFAULT_ORDERS));
-          this.state.settings = { ...DEFAULT_SETTINGS, ...(JSON.parse(localStorage.getItem(NEPLE_STORAGE_KEYS.SETTINGS)) || {}) };
+          const parsedSettings = JSON.parse(localStorage.getItem(NEPLE_STORAGE_KEYS.SETTINGS)) || {};
+          this.state.settings = {
+            ...DEFAULT_SETTINGS,
+            ...parsedSettings,
+            shipping: {
+              ...DEFAULT_SETTINGS.shipping,
+              ...(parsedSettings.shipping || {})
+            }
+          };
           this.state.staffList = JSON.parse(localStorage.getItem(STAFF_STORAGE_KEY)) || JSON.parse(JSON.stringify(DEFAULT_STAFF_ACCOUNTS));
           this.state.auditLogs = JSON.parse(localStorage.getItem(AUDIT_STORAGE_KEY)) || [
             { time: new Date().toLocaleString('vi-VN'), actor: 'Hệ thống', action: 'Khởi tạo cổng quản trị nội bộ NEPLE' }
@@ -447,6 +455,9 @@
                       <td class="p-3.5">
                         <div class="font-extrabold text-[#a94025]">${this.formatVND(o.total)}</div>
                         <div class="text-[11px] text-[#0d2931]/70">${o.paymentLabel}</div>
+                        <div class="text-[11px] text-[#72826f] mt-0.5">
+                          Ship: <strong>${o.shippingLabel || (o.shippingFee ? this.formatVND(o.shippingFee) : 'Miễn phí')}</strong>
+                        </div>
                       </td>
                       <td class="p-3.5">
                         <select onchange="AdminPortal.updateOrderStatus('${o.id}', this.value)"
@@ -477,7 +488,7 @@
       },
 
       exportOrdersCSV() {
-        const headers = ['Mã Đơn', 'Ngày Đặt', 'Họ Tên', 'Số Điện Thoại', 'Địa Chỉ', 'Sản Phẩm', 'Tổng Tiền', 'Thanh Toán', 'Trạng Thái', 'Ghi Chú'];
+        const headers = ['Mã Đơn', 'Ngày Đặt', 'Họ Tên', 'Số Điện Thoại', 'Địa Chỉ', 'Sản Phẩm', 'Tiền Hàng', 'Phí Vận Chuyển', 'Tổng Tiền', 'Thanh Toán', 'Trạng Thái', 'Ghi Chú'];
         const rows = this.state.orders.map(o => [
           o.id,
           o.createdAt,
@@ -485,6 +496,8 @@
           `'${o.phone}`,
           `"${(o.address || '').replace(/"/g, '""')}"`,
           `"${(o.items || []).map(i => `${i.name} (x${i.qty})`).join('; ')}"`,
+          o.subtotal || o.total,
+          `"${o.shippingLabel || (o.shippingFee ? o.shippingFee : '0')}"`,
           o.total,
           `"${o.paymentLabel}"`,
           `"${o.status}"`,
@@ -500,7 +513,7 @@
       },
 
       copyOrdersForGoogleSheets() {
-        const headers = ['Mã Đơn', 'Ngày Đặt', 'Họ Tên', 'Số Điện Thoại', 'Địa Chỉ', 'Sản Phẩm', 'Tổng Tiền', 'Thanh Toán', 'Trạng Thái'];
+        const headers = ['Mã Đơn', 'Ngày Đặt', 'Họ Tên', 'Số Điện Thoại', 'Địa Chỉ', 'Sản Phẩm', 'Tiền Hàng', 'Phí Vận Chuyển', 'Tổng Tiền', 'Thanh Toán', 'Trạng Thái'];
         const rows = this.state.orders.map(o =>
           [
             o.id,
@@ -509,6 +522,8 @@
             o.phone,
             o.address,
             (o.items || []).map(i => `${i.name} (x${i.qty})`).join('; '),
+            o.subtotal || o.total,
+            o.shippingLabel || (o.shippingFee ? o.shippingFee : '0'),
             o.total,
             o.paymentLabel,
             o.status
@@ -907,10 +922,56 @@
                   <input type="text" id="adm-set-zalo" value="${s.socials?.zalo || ''}" class="w-full px-3 py-2 rounded-xl border border-[#ae9984] bg-white" />
                 </div>
               </div>
+            </div>
+
+            <!-- 3. Cấu Hình Phí Vận Chuyển (Cách 3: Theo Vị Trí & Freeship) -->
+            <div class="p-6 rounded-2xl paper-card space-y-4 lg:col-span-2">
+              <div class="flex flex-wrap items-center justify-between gap-2 border-b border-[#ae9984]/30 pb-3">
+                <div>
+                  <h3 class="font-display text-xl font-bold text-[#0d2931]">3. Cấu Hình Phí Vận Chuyển (Cách 3: Theo Vị Trí &amp; Freeship)</h3>
+                  <p class="text-xs text-[#0d2931]/70 mt-0.5">Tự động tính phí theo địa chỉ khách và miễn phí ship khi giỏ hàng có Combo Trọn Tết hoặc đạt ngưỡng giá trị đơn hàng.</p>
+                </div>
+                <span class="px-3 py-1 rounded-full bg-[#72826f]/15 text-[#72826f] text-xs font-bold">Cách 3 Đang Bật</span>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div>
+                  <label class="block font-bold mb-1">Phí Nội thành TP.HCM / Hà Nội (VNĐ)</label>
+                  <input type="number" id="adm-set-innerfee" value="${s.shipping?.innerCityFee ?? 25000}" step="1000" min="0" class="w-full px-3 py-2 rounded-xl border border-[#ae9984] bg-white font-bold text-[#0d2931]" />
+                  <p class="text-[11px] text-[#0d2931]/60 mt-1">Các quận trung tâm TP.HCM và Hà Nội</p>
+                </div>
+                <div>
+                  <label class="block font-bold mb-1">Phí Ngoại thành TP.HCM / Hà Nội (VNĐ)</label>
+                  <input type="number" id="adm-set-suburbanfee" value="${s.shipping?.suburbanFee ?? 30000}" step="1000" min="0" class="w-full px-3 py-2 rounded-xl border border-[#ae9984] bg-white font-bold text-[#0d2931]" />
+                  <p class="text-[11px] text-[#0d2931]/60 mt-1">Bình Chánh, Hóc Môn, Củ Chi, Gia Lâm, Đông Anh...</p>
+                </div>
+                <div>
+                  <label class="block font-bold mb-1">Phí Liên Tỉnh / Toàn Quốc (VNĐ)</label>
+                  <input type="number" id="adm-set-interfee" value="${s.shipping?.interprovincialFee ?? 35000}" step="1000" min="0" class="w-full px-3 py-2 rounded-xl border border-[#ae9984] bg-white font-bold text-[#0d2931]" />
+                  <p class="text-[11px] text-[#0d2931]/60 mt-1">Các tỉnh thành khác ngoài HN &amp; TP.HCM</p>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-3 border-t border-[#ae9984]/30">
+                <div>
+                  <label class="block font-bold mb-1">Ngưỡng Miễn Phí Vận Chuyển Theo Giá Trị Đơn (VNĐ)</label>
+                  <input type="number" id="adm-set-freeship-thresh" value="${s.shipping?.freeShipThreshold ?? 250000}" step="5000" min="0" class="w-full px-3 py-2 rounded-xl border border-[#ae9984] bg-white font-bold text-[#72826f]" />
+                  <p class="text-[11px] text-[#0d2931]/60 mt-1">Đơn hàng có tổng tiền sản phẩm &ge; số tiền này sẽ được tự động Freeship 0đ (Nhập 0 để tắt)</p>
+                </div>
+                <div class="flex items-center pt-2 sm:pt-6">
+                  <label class="inline-flex items-center gap-3 p-3 rounded-xl bg-[#faf7f2] border border-[#ae9984]/50 cursor-pointer hover:bg-[#efe9e0]/60 transition w-full">
+                    <input type="checkbox" id="adm-set-freeship-combo" ${(s.shipping?.freeShipCombo !== false) ? 'checked' : ''} class="w-5 h-5 rounded text-[#BA3820] focus:ring-[#BA3820]" />
+                    <span class="text-xs sm:text-sm font-bold text-[#0d2931]">
+                      Tự động Miễn Phí Vận Chuyển khi giỏ có Combo Trọn Tết
+                      <span class="block text-[11px] font-normal text-[#0d2931]/70">Khách đặt Combo Trọn Tết được freeship toàn quốc mà không phụ thuộc ngưỡng tiền</span>
+                    </span>
+                  </label>
+                </div>
+              </div>
 
               <div class="pt-3 flex justify-end">
-                <button type="submit" class="px-6 py-3 rounded-xl btn-terracotta font-bold text-sm">
-                  💾 Lưu Cài Đặt Hệ Thống
+                <button type="submit" class="px-6 py-3 rounded-xl btn-terracotta font-bold text-sm shadow-md">
+                  💾 Lưu Toàn Bộ Cài Đặt Hệ Thống
                 </button>
               </div>
             </div>
@@ -933,9 +994,16 @@
           clarityId: document.getElementById('adm-set-clarity').value.trim(),
           ga4Id: document.getElementById('adm-set-ga4').value.trim()
         };
+        s.shipping = {
+          innerCityFee: Number(document.getElementById('adm-set-innerfee').value) || 0,
+          suburbanFee: Number(document.getElementById('adm-set-suburbanfee').value) || 0,
+          interprovincialFee: Number(document.getElementById('adm-set-interfee').value) || 0,
+          freeShipThreshold: Number(document.getElementById('adm-set-freeship-thresh').value) || 0,
+          freeShipCombo: document.getElementById('adm-set-freeship-combo').checked
+        };
         this.saveAllToStorage();
-        this.logAudit('Cập nhật cấu hình VietQR / MoMo / Analytics');
-        this.showToast('Đã lưu cài đặt hệ thống!');
+        this.logAudit('Cập nhật cấu hình VietQR / MoMo / Analytics / Phí Vận Chuyển');
+        this.showToast('Đã lưu cài đặt hệ thống & Phí vận chuyển!');
       },
 
       renderStaffTab() {

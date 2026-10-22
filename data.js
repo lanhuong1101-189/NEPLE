@@ -691,6 +691,13 @@ const DEFAULT_SETTINGS = {
   analytics: {
     ga4Id: '',
     clarityId: ''
+  },
+  shipping: {
+    innerCityFee: 25000,
+    suburbanFee: 30000,
+    interprovincialFee: 35000,
+    freeShipThreshold: 250000,
+    freeShipCombo: true
   }
 };
 
@@ -706,6 +713,9 @@ const DEFAULT_ORDERS = [
     paymentLabel: 'Chuyển khoản VietQR Ngân hàng',
     status: 'Đang đóng gói hộp lễ',
     createdAt: '2026-10-19 14:20',
+    subtotal: 219000,
+    shippingFee: 0,
+    shippingLabel: 'Miễn phí (0đ) — Ưu đãi Combo Trọn Tết',
     total: 219000,
     items: [
       { id: 'combo-tron-tet', name: 'Combo Trọn Tết (Hộp Đặc Biệt 3 Ngày)', price: 219000, qty: 1 }
@@ -721,6 +731,9 @@ const DEFAULT_ORDERS = [
     paymentLabel: 'Thanh toán khi nhận hàng (COD)',
     status: 'Đang giao hàng',
     createdAt: '2026-10-20 09:15',
+    subtotal: 439000,
+    shippingFee: 0,
+    shippingLabel: 'Miễn phí (0đ) — Đơn từ 250.000đ',
     total: 439000,
     items: [
       { id: 'combo-mo-tet', name: 'Combo Mở Tết (Tiễn Táo + Khai Xuân)', price: 439000, qty: 1 }

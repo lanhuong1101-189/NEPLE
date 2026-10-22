@@ -56,9 +56,15 @@ const NepleApp = {
       this.state.orders = savedOrders ? JSON.parse(savedOrders) : JSON.parse(JSON.stringify(DEFAULT_ORDERS));
 
       const savedSettings = localStorage.getItem(NEPLE_STORAGE_KEYS.SETTINGS);
-      this.state.settings = savedSettings
-        ? { ...DEFAULT_SETTINGS, ...JSON.parse(savedSettings) }
-        : JSON.parse(JSON.stringify(DEFAULT_SETTINGS));
+      const parsedSettings = savedSettings ? JSON.parse(savedSettings) : {};
+      this.state.settings = {
+        ...DEFAULT_SETTINGS,
+        ...parsedSettings,
+        shipping: {
+          ...DEFAULT_SETTINGS.shipping,
+          ...(parsedSettings.shipping || {})
+        }
+      };
 
       const savedCart = localStorage.getItem(NEPLE_STORAGE_KEYS.CART);
       const parsedCart = savedCart ? JSON.parse(savedCart) : [];
@@ -1426,6 +1432,122 @@ const NepleApp = {
     return /^(03|05|07|08|09)\d{8}$/.test(clean);
   },
 
+  calculateShippingFee() {
+    const f = this.state.checkoutForm || {};
+    const subtotal = this.getCartTotal();
+    const s = this.state.settings?.shipping || DEFAULT_SETTINGS.shipping;
+    const hasComboTronTet = this.state.cart.some(item => item.id === 'combo-tron-tet');
+
+    const isComboFreeship = (s.freeShipCombo !== false) && hasComboTronTet;
+    const isThresholdFreeship = (Number(s.freeShipThreshold) > 0) && (subtotal >= Number(s.freeShipThreshold));
+
+    let baseFee = Number(s.innerCityFee) || 25000;
+    let locationType = 'none';
+
+    if (!f.province) {
+      locationType = 'none';
+      baseFee = Number(s.innerCityFee) || 25000;
+    } else if (f.province === 'TP. Hồ Chí Minh') {
+      const suburbanDistricts = ['Huyện Bình Chánh', 'Huyện Hóc Môn', 'Huyện Nhà Bè', 'Huyện Củ Chi', 'Huyện Cần Giờ'];
+      if (f.district && suburbanDistricts.includes(f.district)) {
+        locationType = 'suburban';
+        baseFee = Number(s.suburbanFee) || 30000;
+      } else {
+        locationType = 'inner';
+        baseFee = Number(s.innerCityFee) || 25000;
+      }
+    } else if (f.province === 'Hà Nội') {
+      const suburbanDistricts = ['Huyện Gia Lâm', 'Huyện Đông Anh', 'Huyện Thanh Trì', 'Huyện Hoài Đức', 'Thị xã Sơn Tây'];
+      if (f.district && suburbanDistricts.includes(f.district)) {
+        locationType = 'suburban';
+        baseFee = Number(s.suburbanFee) || 30000;
+      } else {
+        locationType = 'inner';
+        baseFee = Number(s.innerCityFee) || 25000;
+      }
+    } else {
+      locationType = 'interprovincial';
+      baseFee = Number(s.interprovincialFee) || 35000;
+    }
+
+    if (isComboFreeship || isThresholdFreeship) {
+      const reason = isComboFreeship ? 'Ưu đãi Combo Trọn Tết' : `Đơn từ ${this.formatVND(s.freeShipThreshold)}`;
+      return {
+        fee: 0,
+        originalFee: baseFee,
+        isFree: true,
+        reason,
+        label: `Miễn phí (0đ) — ${reason}`,
+        locationType,
+        hasLocation: Boolean(f.province)
+      };
+    }
+
+    if (!f.province) {
+      return {
+        fee: 0,
+        originalFee: baseFee,
+        isFree: false,
+        reason: 'Chọn Tỉnh / Thành để tính',
+        label: 'Chọn Tỉnh / Thành để tính',
+        locationType,
+        hasLocation: false
+      };
+    }
+
+    const typeLabel = locationType === 'inner' ? 'Nội thành' : locationType === 'suburban' ? 'Ngoại thành' : 'Liên tỉnh / Toàn quốc';
+    return {
+      fee: baseFee,
+      originalFee: baseFee,
+      isFree: false,
+      reason: typeLabel,
+      label: `${this.formatVND(baseFee)} (${typeLabel})`,
+      locationType,
+      hasLocation: true
+    };
+  },
+
+  updateCheckoutPricingLive() {
+    const shippingInfo = this.calculateShippingFee();
+    const subtotal = this.getCartTotal();
+    const finalTotal = subtotal + shippingInfo.fee;
+
+    const shipFeeEl = document.getElementById('chk-shipping-fee-display');
+    const totalEl = document.getElementById('chk-total-display');
+    const submitBtn = document.getElementById('chk-submit-btn');
+
+    if (shipFeeEl) {
+      if (shippingInfo.isFree) {
+        shipFeeEl.innerHTML = `
+          <div class="flex flex-col items-end">
+            <div>
+              <span class="text-xs text-[#0d2931]/40 line-through mr-1">${this.formatVND(shippingInfo.originalFee)}</span>
+              <span class="font-bold text-[#72826f]">Miễn phí (0đ)</span>
+            </div>
+            <span class="text-[11px] text-[#72826f] font-medium">${shippingInfo.reason}</span>
+          </div>
+        `;
+      } else if (!shippingInfo.hasLocation) {
+        shipFeeEl.innerHTML = `<span class="text-xs text-[#0d2931]/60 italic">Chọn Tỉnh / Thành để tính</span>`;
+      } else {
+        shipFeeEl.innerHTML = `
+          <div class="flex flex-col items-end">
+            <span class="font-bold text-[#0d2931]">${this.formatVND(shippingInfo.fee)}</span>
+            <span class="text-[11px] text-[#0d2931]/60">(${shippingInfo.reason})</span>
+          </div>
+        `;
+      }
+    }
+
+    if (totalEl) {
+      totalEl.textContent = this.formatVND(finalTotal);
+    }
+
+    if (submitBtn) {
+      submitBtn.textContent = `XÁC NHẬN ĐẶT HÀNG • ${this.formatVND(finalTotal)}`;
+    }
+  },
+
   syncCheckoutFormFromDOM() {
     if (!this.state.checkoutForm) {
       this.state.checkoutForm = { name: '', phone: '', province: '', district: '', addressDetail: '', note: '' };
@@ -1556,6 +1678,7 @@ const NepleApp = {
     if (submitBtn) {
       submitBtn.disabled = !isFormComplete;
     }
+    this.updateCheckoutPricingLive();
     return isFormComplete;
   },
 
@@ -1699,11 +1822,13 @@ const NepleApp = {
           <div class="mt-6 pt-4 border-t border-[#ae9984]/60 space-y-2">
             <div class="flex items-center justify-between text-xs sm:text-sm text-[#0d2931]/80">
               <span>Phí vận chuyển:</span>
-              <span class="font-bold text-[#72826f]">Miễn phí (0đ)</span>
+              <div id="chk-shipping-fee-display">
+                <span class="text-xs text-[#0d2931]/60 italic">Chọn Tỉnh / Thành để tính</span>
+              </div>
             </div>
             <div class="flex items-baseline justify-between pt-0.5">
               <span class="text-sm sm:text-base font-bold text-[#0d2931]">Tổng thanh toán:</span>
-              <span class="text-2xl font-extrabold text-[#BA3820]">${this.formatVND(total)}</span>
+              <span id="chk-total-display" class="text-2xl font-extrabold text-[#BA3820]">${this.formatVND(total)}</span>
             </div>
 
             <button type="submit" id="chk-submit-btn" form="neple-checkout-form" disabled
@@ -1815,7 +1940,13 @@ const NepleApp = {
 
     const cleanPhone = phone.replace(/\s+/g, '');
     const fullAddress = `${addressDetail}, ${district}, ${province}`;
-    const total = this.getCartTotal();
+    const subtotal = this.getCartTotal();
+    const shippingInfo = this.calculateShippingFee();
+    const shippingFee = shippingInfo.fee;
+    const finalTotal = subtotal + shippingFee;
+    const shippingLabel = shippingInfo.isFree
+      ? `Miễn phí (0đ) — ${shippingInfo.reason}`
+      : `${this.formatVND(shippingFee)} (${shippingInfo.reason})`;
     const orderId = 'NP-' + Math.floor(100000 + Math.random() * 900000);
 
     const paymentLabels = {
@@ -1824,7 +1955,7 @@ const NepleApp = {
       COD: 'Thanh toán khi nhận hàng (COD)'
     };
 
-    const paymentDetails = this.buildOrderPaymentData(this.state.paymentMethod, cleanPhone, total, orderId);
+    const paymentDetails = this.buildOrderPaymentData(this.state.paymentMethod, cleanPhone, finalTotal, orderId);
 
     const newOrder = {
       id: orderId,
@@ -1840,7 +1971,10 @@ const NepleApp = {
       paymentDetails,
       status: 'Đã tiếp nhận',
       createdAt: new Date().toLocaleString('vi-VN'),
-      total,
+      subtotal,
+      shippingFee,
+      shippingLabel,
+      total: finalTotal,
       items: this.state.cart.map(i => ({ id: i.id, name: i.name, price: i.price, qty: i.qty, image: i.image }))
     };
 
@@ -1937,7 +2071,15 @@ const NepleApp = {
               `
               }
               <div class="flex justify-between gap-2 py-1 border-b border-[#ae9984]/25">
-                <span class="text-[#0d2931]/65">Số tiền thanh toán:</span>
+                <span class="text-[#0d2931]/65">Tiền hàng:</span>
+                <span class="text-[#0d2931] font-semibold">${this.formatVND(order.subtotal || order.total)}</span>
+              </div>
+              <div class="flex justify-between gap-2 py-1 border-b border-[#ae9984]/25">
+                <span class="text-[#0d2931]/65">Phí vận chuyển:</span>
+                <span class="${order.shippingFee === 0 ? 'text-[#72826f] font-bold' : 'text-[#0d2931] font-semibold'}">${order.shippingLabel || (order.shippingFee ? this.formatVND(order.shippingFee) : 'Miễn phí (0đ)')}</span>
+              </div>
+              <div class="flex justify-between gap-2 py-1 border-b border-[#ae9984]/25">
+                <span class="text-[#0d2931]/65">Tổng thanh toán:</span>
                 <strong class="text-[#BA3820] text-base sm:text-lg font-extrabold">${this.formatVND(order.total)}</strong>
               </div>
               <div class="flex justify-between items-center gap-2 pt-1">
@@ -2060,7 +2202,8 @@ const NepleApp = {
             <div class="space-y-1">
               <div><strong>Người nhận:</strong> ${order.customerName} (${order.phone})</div>
               <div><strong>Địa chỉ nhận lễ:</strong> ${order.address}</div>
-              <div><strong>Ghi chú:</strong> ${order.note}</div>
+              <div><strong>Ghi chú:</strong> ${order.note || 'Không có'}</div>
+              <div><strong>Phương thức:</strong> ${order.paymentLabel || order.paymentMethod}</div>
             </div>
             <div>
               <div class="font-bold text-[#0d2931] mb-1">Chi tiết hộp lễ:</div>
@@ -2074,6 +2217,20 @@ const NepleApp = {
               `
                 )
                 .join('')}
+              <div class="pt-2 mt-2 border-t border-[#ae9984]/30 space-y-1 text-xs">
+                <div class="flex justify-between text-[#0d2931]/70">
+                  <span>Tiền hàng:</span>
+                  <span>${this.formatVND(order.subtotal || order.total)}</span>
+                </div>
+                <div class="flex justify-between text-[#0d2931]/70">
+                  <span>Phí vận chuyển:</span>
+                  <span class="font-medium text-[#72826f]">${order.shippingLabel || (order.shippingFee ? this.formatVND(order.shippingFee) : 'Miễn phí (0đ)')}</span>
+                </div>
+                <div class="flex justify-between text-sm font-bold text-[#a94025] pt-1 border-t border-dashed border-[#ae9984]/40">
+                  <span>Tổng thanh toán:</span>
+                  <span>${this.formatVND(order.total)}</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -2207,6 +2364,9 @@ const NepleApp = {
                   <td class="p-3.5">
                     <div class="font-extrabold text-[#a94025]">${this.formatVND(o.total)}</div>
                     <div class="text-[11px] font-semibold text-[#0d2931]/80">${o.paymentLabel}</div>
+                    <div class="text-[11px] text-[#72826f] mt-0.5">
+                      Ship: <strong>${o.shippingLabel || (o.shippingFee ? this.formatVND(o.shippingFee) : 'Miễn phí')}</strong>
+                    </div>
                     ${
                       isQRMethod && p.transferContent
                         ? `
@@ -2263,7 +2423,7 @@ const NepleApp = {
   },
 
   exportOrdersCSV() {
-    const headers = ['Mã Đơn', 'Ngày Đặt', 'Họ Tên', 'Số Điện Thoại', 'Địa Chỉ', 'Sản Phẩm', 'Tổng Tiền', 'Thanh Toán', 'Trạng Thái', 'Ghi Chú'];
+    const headers = ['Mã Đơn', 'Ngày Đặt', 'Họ Tên', 'Số Điện Thoại', 'Địa Chỉ', 'Sản Phẩm', 'Tiền Hàng', 'Phí Vận Chuyển', 'Tổng Tiền', 'Thanh Toán', 'Trạng Thái', 'Ghi Chú'];
     const rows = this.state.orders.map(o => [
       o.id,
       o.createdAt,
@@ -2271,6 +2431,8 @@ const NepleApp = {
       `'${o.phone}`,
       `"${(o.address || '').replace(/"/g, '""')}"`,
       `"${(o.items || []).map(i => `${i.name} (x${i.qty})`).join('; ')}"`,
+      o.subtotal || o.total,
+      `"${o.shippingLabel || (o.shippingFee ? o.shippingFee : '0')}"`,
       o.total,
       `"${o.paymentLabel}"`,
       `"${o.status}"`,
@@ -2289,7 +2451,7 @@ const NepleApp = {
   },
 
   copyOrdersForGoogleSheets() {
-    const headers = ['Mã Đơn', 'Ngày Đặt', 'Họ Tên', 'Số Điện Thoại', 'Địa Chỉ', 'Sản Phẩm', 'Tổng Tiền', 'Thanh Toán', 'Trạng Thái'];
+    const headers = ['Mã Đơn', 'Ngày Đặt', 'Họ Tên', 'Số Điện Thoại', 'Địa Chỉ', 'Sản Phẩm', 'Tiền Hàng', 'Phí Vận Chuyển', 'Tổng Tiền', 'Thanh Toán', 'Trạng Thái'];
     const rows = this.state.orders.map(o =>
       [
         o.id,
@@ -2298,6 +2460,8 @@ const NepleApp = {
         o.phone,
         o.address,
         (o.items || []).map(i => `${i.name} (x${i.qty})`).join('; '),
+        o.subtotal || o.total,
+        o.shippingLabel || (o.shippingFee ? o.shippingFee : '0'),
         o.total,
         o.paymentLabel,
         o.status
@@ -2733,9 +2897,55 @@ const NepleApp = {
               <input type="text" id="adm-set-tiktok" value="${s.socials?.tiktok || ''}" class="w-full px-3 py-2 rounded-xl border border-[#ae9984] bg-white" />
             </div>
           </div>
+        </div>
+
+        <!-- 3. Cấu Hình Phí Vận Chuyển (Cách 3: Linh Hoạt Theo Vị Trí & Freeship) -->
+        <div class="p-6 rounded-2xl paper-card space-y-4 lg:col-span-2">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-[#ae9984]/30 pb-3">
+            <div>
+              <h3 class="font-display text-xl font-bold text-[#0d2931]">3. Cấu Hình Phí Vận Chuyển (Cách 3: Theo Vị Trí &amp; Freeship)</h3>
+              <p class="text-xs text-[#0d2931]/70 mt-0.5">Tự động tính phí theo địa chỉ khách và miễn phí ship khi giỏ hàng có Combo Trọn Tết hoặc đạt ngưỡng giá trị đơn hàng.</p>
+            </div>
+            <span class="px-3 py-1 rounded-full bg-[#72826f]/15 text-[#72826f] text-xs font-bold">Cách 3 Đang Bật</span>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div>
+              <label class="block font-bold mb-1">Phí Nội thành TP.HCM / Hà Nội (VNĐ)</label>
+              <input type="number" id="adm-set-innerfee" value="${s.shipping?.innerCityFee ?? 25000}" step="1000" min="0" class="w-full px-3 py-2 rounded-xl border border-[#ae9984] bg-white font-bold text-[#0d2931]" />
+              <p class="text-[11px] text-[#0d2931]/60 mt-1">Các quận trung tâm TP.HCM và Hà Nội</p>
+            </div>
+            <div>
+              <label class="block font-bold mb-1">Phí Ngoại thành TP.HCM / Hà Nội (VNĐ)</label>
+              <input type="number" id="adm-set-suburbanfee" value="${s.shipping?.suburbanFee ?? 30000}" step="1000" min="0" class="w-full px-3 py-2 rounded-xl border border-[#ae9984] bg-white font-bold text-[#0d2931]" />
+              <p class="text-[11px] text-[#0d2931]/60 mt-1">Bình Chánh, Hóc Môn, Củ Chi, Gia Lâm, Đông Anh...</p>
+            </div>
+            <div>
+              <label class="block font-bold mb-1">Phí Liên Tỉnh / Toàn Quốc (VNĐ)</label>
+              <input type="number" id="adm-set-interfee" value="${s.shipping?.interprovincialFee ?? 35000}" step="1000" min="0" class="w-full px-3 py-2 rounded-xl border border-[#ae9984] bg-white font-bold text-[#0d2931]" />
+              <p class="text-[11px] text-[#0d2931]/60 mt-1">Các tỉnh thành khác ngoài HN &amp; TP.HCM</p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-3 border-t border-[#ae9984]/30">
+            <div>
+              <label class="block font-bold mb-1">Ngưỡng Miễn Phí Vận Chuyển Theo Giá Trị Đơn (VNĐ)</label>
+              <input type="number" id="adm-set-freeship-thresh" value="${s.shipping?.freeShipThreshold ?? 250000}" step="5000" min="0" class="w-full px-3 py-2 rounded-xl border border-[#ae9984] bg-white font-bold text-[#72826f]" />
+              <p class="text-[11px] text-[#0d2931]/60 mt-1">Đơn hàng có tổng tiền sản phẩm &ge; số tiền này sẽ được tự động Freeship 0đ (Nhập 0 để tắt)</p>
+            </div>
+            <div class="flex items-center pt-2 sm:pt-6">
+              <label class="inline-flex items-center gap-3 p-3 rounded-xl bg-[#faf7f2] border border-[#ae9984]/50 cursor-pointer hover:bg-[#efe9e0]/60 transition w-full">
+                <input type="checkbox" id="adm-set-freeship-combo" ${(s.shipping?.freeShipCombo !== false) ? 'checked' : ''} class="w-5 h-5 rounded text-[#BA3820] focus:ring-[#BA3820]" />
+                <span class="text-xs sm:text-sm font-bold text-[#0d2931]">
+                  Tự động Miễn Phí Vận Chuyển khi giỏ có Combo Trọn Tết
+                  <span class="block text-[11px] font-normal text-[#0d2931]/70">Khách đặt Combo Trọn Tết được freeship toàn quốc mà không phụ thuộc ngưỡng tiền</span>
+                </span>
+              </label>
+            </div>
+          </div>
 
           <div class="pt-3 flex justify-end">
-            <button type="submit" class="px-6 py-3 rounded-xl btn-terracotta font-bold text-sm">
+            <button type="submit" class="px-6 py-3 rounded-xl btn-terracotta font-bold text-sm shadow-md">
               💾 Lưu Toàn Bộ Cài Đặt Hệ Thống
             </button>
           </div>
@@ -2764,10 +2974,17 @@ const NepleApp = {
       clarityId: document.getElementById('adm-set-clarity').value.trim(),
       ga4Id: document.getElementById('adm-set-ga4').value.trim()
     };
+    s.shipping = {
+      innerCityFee: Number(document.getElementById('adm-set-innerfee').value) || 0,
+      suburbanFee: Number(document.getElementById('adm-set-suburbanfee').value) || 0,
+      interprovincialFee: Number(document.getElementById('adm-set-interfee').value) || 0,
+      freeShipThreshold: Number(document.getElementById('adm-set-freeship-thresh').value) || 0,
+      freeShipCombo: document.getElementById('adm-set-freeship-combo').checked
+    };
     this.saveSettings();
     this.injectAnalytics();
     this.renderFloatingSocials();
-    this.showToast('Đã lưu cài đặt Thanh toán VietQR, MoMo & Analytics!');
+    this.showToast('Đã lưu cài đặt Thanh toán VietQR, MoMo & Phí Vận Chuyển!');
   },
 
   renderFloatingSocials() {
