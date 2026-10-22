@@ -687,7 +687,7 @@ const NepleApp = {
           <!-- Exterior / Interior Single Active Showcase -->
           <div class="p-4 rounded-2xl bg-[#f4efe6] border-2 ${
             matched.tier === 'triple' ? 'border-[#f0b45b]' : 'border-[#ae9984]'
-          } space-y-3">
+          } space-y-3.5">
             ${
               activeGalleryView === 'exterior'
                 ? `
@@ -695,9 +695,27 @@ const NepleApp = {
                 <div class="aspect-[16/10] w-full rounded-xl overflow-hidden bg-[#faf7f2] flex items-center justify-center">
                   <img src="${matched.image}" alt="${matched.name} - Bên ngoài" class="w-full h-full object-contain" />
                 </div>
-                <p class="text-xs text-[#0d2931]/80 mt-2.5">
-                  <strong>Quy cách vỏ hộp:</strong> ${matched.packagingSpec}
-                </p>
+              </div>
+
+              <!-- Packaging Features Only (Exterior Tab) -->
+              <div class="p-4 rounded-2xl bg-[#faf7f2] border border-[#ae9984]/50 space-y-2.5">
+                <div class="text-xs font-extrabold uppercase tracking-wider text-[#0d2931]">
+                  Đặc điểm thiết kế &amp; quy cách bao bì:
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-[#0d2931]">
+                  <div class="flex items-start gap-2 bg-white p-2.5 rounded-xl border border-[#ae9984]/30 sm:col-span-2">
+                    <span class="w-4 h-4 rounded-full bg-[#0d2931] text-[#f0b45b] flex items-center justify-center text-[10px] shrink-0 mt-0.5">✓</span>
+                    <span><strong>Quy cách vỏ hộp:</strong> ${matched.packagingSpec}</span>
+                  </div>
+                  <div class="flex items-start gap-2 bg-white p-2.5 rounded-xl border border-[#ae9984]/30">
+                    <span class="w-4 h-4 rounded-full bg-[#72826f] text-white flex items-center justify-center text-[10px] shrink-0 mt-0.5">✓</span>
+                    <span>Giấy mỹ thuật bồi cứng cáp, chống ẩm &amp; giữ form sang trọng</span>
+                  </div>
+                  <div class="flex items-start gap-2 bg-white p-2.5 rounded-xl border border-[#ae9984]/30">
+                    <span class="w-4 h-4 rounded-full bg-[#72826f] text-white flex items-center justify-center text-[10px] shrink-0 mt-0.5">✓</span>
+                    <span>Đóng gói chống sốc kỹ lưỡng, chỉn chu để dâng lễ hoặc biếu tặng</span>
+                  </div>
+                </div>
               </div>
             `
                 : `
@@ -705,48 +723,45 @@ const NepleApp = {
                 <div class="aspect-[16/10] w-full rounded-xl overflow-hidden bg-[#faf7f2] flex items-center justify-center">
                   <img src="${interiorImgSrc}" alt="${matched.name} - Bên trong set" class="w-full h-full object-contain" />
                 </div>
-                <p class="text-xs text-[#0d2931]/80 mt-2.5">
-                  <strong>Cách sắp xếp bên trong:</strong> Các vật phẩm lễ khô được cố định trong khay giấy mỹ thuật riêng biệt, kèm ấn phẩm Văn khấn &amp; Cẩm nang bày mâm lễ.
-                </p>
+              </div>
+
+              <!-- Detailed Checklist Inside Selected SKU (Only visible in Interior Tab) -->
+              <div class="p-4 rounded-2xl bg-[#faf7f2] border border-[#ae9984]/50">
+                <div class="flex items-center justify-between mb-2">
+                  <h4 class="text-xs font-extrabold uppercase tracking-wider text-[#0d2931]">
+                    Danh mục vật phẩm đóng gói trong ${matched.name}:
+                  </h4>
+                  <span class="text-xs font-semibold text-[#72826f]">✓ Đồ lễ khô bảo quản 6 tháng</span>
+                </div>
+                <ul class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  ${matched.items
+                    .map(
+                      item => `
+                    <li class="flex items-start gap-2 text-xs text-[#0d2931] bg-white p-2.5 rounded-xl border border-[#ae9984]/30">
+                      <span class="w-4 h-4 rounded-full bg-[#72826f] text-white flex items-center justify-center text-[10px] shrink-0 mt-0.5">✓</span>
+                      <span class="leading-snug">${item}</span>
+                    </li>`
+                    )
+                    .join('')}
+                </ul>
+              </div>
+
+              <!-- Dynamic Bonus Gift & Publication Tray (Only visible in Interior Tab) -->
+              <div class="p-3.5 rounded-xl bg-[#fdf3e1] border border-[#f0b45b] flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div>
+                  <span class="text-[11px] font-extrabold uppercase tracking-wider text-[#691727] block">
+                    🎁 Ấn Phẩm &amp; Quà Tặng Đi Kèm Trong Set:
+                  </span>
+                  <div class="text-xs sm:text-sm text-[#0d2931] font-semibold mt-0.5">
+                    ${(matched.gifts || []).join(' • ')}
+                  </div>
+                </div>
+                <button onclick="NepleApp.openProductModal('${matched.id}')" class="shrink-0 text-xs font-bold text-[#a94025] underline hover:text-[#691727]">
+                  Xem đầy đủ định lượng →
+                </button>
               </div>
             `
             }
-
-            <!-- Dynamic Bonus Gift & Publication Tray -->
-            <div class="p-3.5 rounded-xl bg-[#fdf3e1] border border-[#f0b45b] flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-              <div>
-                <span class="text-[11px] font-extrabold uppercase tracking-wider text-[#691727] block">
-                  🎁 Ấn Phẩm &amp; Quà Tặng Đi Kèm Trong Set:
-                </span>
-                <div class="text-xs sm:text-sm text-[#0d2931] font-semibold mt-0.5">
-                  ${(matched.gifts || []).join(' • ')}
-                </div>
-              </div>
-              <button onclick="NepleApp.openProductModal('${matched.id}')" class="shrink-0 text-xs font-bold text-[#a94025] underline hover:text-[#691727]">
-                Xem đầy đủ định lượng →
-              </button>
-            </div>
-          </div>
-
-          <!-- Detailed Checklist Inside Selected SKU -->
-          <div class="p-4 rounded-2xl bg-[#faf7f2] border border-[#ae9984]/50">
-            <div class="flex items-center justify-between mb-2">
-              <h4 class="text-xs font-extrabold uppercase tracking-wider text-[#0d2931]">
-                Danh mục vật phẩm đóng gói trong ${matched.name}:
-              </h4>
-              <span class="text-xs font-semibold text-[#72826f]">✓ Đồ lễ khô bảo quản 6 tháng</span>
-            </div>
-            <ul class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-              ${matched.items
-                .map(
-                  item => `
-                <li class="flex items-start gap-2 text-xs text-[#0d2931] bg-white p-2.5 rounded-xl border border-[#ae9984]/30">
-                  <span class="w-4 h-4 rounded-full bg-[#72826f] text-white flex items-center justify-center text-[10px] shrink-0 mt-0.5">✓</span>
-                  <span class="leading-snug">${item}</span>
-                </li>`
-                )
-                .join('')}
-            </ul>
           </div>
 
           <!-- Smart Upsell Banner -->
