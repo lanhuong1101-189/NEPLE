@@ -3,7 +3,7 @@
 // ==========================================================================
 
 const NEPLE_STORAGE_KEYS = {
-  PRODUCTS: 'neple_products_v3',
+  PRODUCTS: 'neple_products_v5',
   BLOGS: 'neple_blogs_v1',
   ORDERS: 'neple_orders_v1',
   SETTINGS: 'neple_settings_v1',
@@ -232,7 +232,7 @@ const DEFAULT_PRODUCTS = [
     upsellHint: {
       addRitual: 'giao-thua',
       targetComboId: 'combo-ven-nep',
-      message: 'Thêm lễ Giao Thừa để nâng cấp lên Hộp Combo Vẹn Nếp và tiết kiệm ngay 69.000đ!'
+      message: 'Thêm lễ Giao Thừa để nâng cấp lên Hộp Combo Vạn Nếp [1+2] và tiết kiệm ngay 109.000đ!'
     }
   },
   {
@@ -267,7 +267,7 @@ const DEFAULT_PRODUCTS = [
     upsellHint: {
       addRitual: 'tien-tao',
       targetComboId: 'combo-ven-nep',
-      message: 'Thêm lễ Tiễn Táo để nâng cấp lên Hộp Combo Vẹn Nếp và tiết kiệm ngay 69.000đ!'
+      message: 'Thêm lễ Tiễn Táo để nâng cấp lên Hộp Combo Vạn Nếp [1+2] và tiết kiệm ngay 109.000đ!'
     }
   },
   {
@@ -302,27 +302,27 @@ const DEFAULT_PRODUCTS = [
     upsellHint: {
       addRitual: 'giao-thua',
       targetComboId: 'combo-song-xuan',
-      message: 'Thêm lễ Giao Thừa để nâng cấp lên Hộp Combo Song Xuân và tiết kiệm ngay 69.000đ!'
+      message: 'Thêm lễ Giao Thừa để nâng cấp lên Hộp Combo Song Xuân [2+3] và tiết kiệm ngay 109.000đ!'
     }
   },
   {
     id: 'combo-ven-nep',
     sku: 'NEPLE-COMBO-01',
-    name: 'Combo Vẹn Nếp',
+    name: 'Combo Vạn Nếp [1+2]',
     subtitle: 'Trọn Lễ Tiễn Táo (23 Chạp) + Giao Thừa (Đêm 30)',
     tier: 'double',
     tierLabel: 'Hộp Đôi Combo 2 Ngày',
     rituals: ['tien-tao', 'giao-thua'],
     ritualNames: ['Tiễn Táo (23 Chạp)', 'Giao Thừa (Đêm 30)'],
-    price: 199000,
+    price: 209000,
     originalPrice: 318000,
-    discountPercent: 37,
-    badge: 'TIẾT KIỆM 119.000đ (37%)',
+    discountPercent: 34,
+    badge: 'TIẾT KIỆM 109.000đ (34%)',
     bestSeller: false,
     packagingSpec: 'Hộp Đôi Cứng 2 Ngăn Độc Lập (Ngăn 01: Tiễn Táo • Ngăn 02: Giao Thừa), đóng gói phân tầng giúp lấy từng lễ dễ dàng.',
     suitableFor: 'Gia đình trẻ đón tất niên & Giao Thừa tại nhà riêng trước khi đi chúc Tết nội ngoại sáng Mùng 1.',
     shortDesc: 'Thiết kế Hộp Đôi 2 ngăn thông minh: cúng xong ngày 23 Chạp vẫn giữ nguyên vẹn ngăn lễ Giao Thừa sạch sẽ, trang trọng cho đêm 30.',
-    image: generatePackagingSVG('double', 'COMBO VẸN NẾP', 'Hộp Đôi 2 Ngăn: Tiễn Táo (23 Chạp) + Giao Thừa (Đêm 30)', '#0d2931', 'TIẾT KIỆM 69.000đ (-13%)', ['Tiễn Táo', 'Giao Thừa']),
+    image: generatePackagingSVG('double', 'COMBO VẠN NẾP', 'Hộp Đôi 2 Ngăn: Tiễn Táo (23 Chạp) + Giao Thừa (Đêm 30)', '#0d2931', 'TIẾT KIỆM 109.000đ (-34%)', ['Tiễn Táo', 'Giao Thừa']),
     items: [
       'Ngăn 01 (Tiễn Táo): Nhang trầm sạch, Nến bơ, Trà Sen Cổ Thụ, Kẹo lạc & Mứt gừng, Lễ giấy 23 Chạp',
       'Ngăn 02 (Giao Thừa): Nhang trầm & Nụ trầm xông nhà, Nến sen, Trà Ô Long Hoa Bưởi, Hũ Gạo & Muối lộc, Lễ giấy 30 Tết',
@@ -331,7 +331,7 @@ const DEFAULT_PRODUCTS = [
     ],
     gifts: [
       'Tặng Túi thảo mộc Mùi Già tất niên trị giá 45.000đ',
-      'Tiết kiệm ngay 69.000đ so với mua 2 hộp lẻ'
+      'Tiết kiệm ngay 109.000đ so với mua 2 hộp lẻ'
     ],
     upsellHint: {
       addRitual: 'khai-xuan',
@@ -342,21 +342,21 @@ const DEFAULT_PRODUCTS = [
   {
     id: 'combo-song-xuan',
     sku: 'NEPLE-COMBO-02',
-    name: 'Combo Song Xuân',
+    name: 'Combo Song Xuân [2+3]',
     subtitle: 'Trọn Lễ Giao Thừa (Đêm 30) + Khai Xuân (Mùng 1)',
     tier: 'double',
     tierLabel: 'Hộp Đôi Combo 2 Ngày',
     rituals: ['giao-thua', 'khai-xuan'],
     ritualNames: ['Giao Thừa (Đêm 30)', 'Khai Xuân (Mùng 1)'],
-    price: 189000,
+    price: 159000,
     originalPrice: 268000,
-    discountPercent: 29,
-    badge: 'TIẾT KIỆM 79.000đ (29%)',
+    discountPercent: 41,
+    badge: 'TIẾT KIỆM 109.000đ (41%)',
     bestSeller: false,
     packagingSpec: 'Hộp Đôi Cứng 2 Ngăn Độc Lập (Ngăn 01: Giao Thừa • Ngăn 02: Khai Xuân), bọc đai Đỏ Rượu Vang mạ kim.',
     suitableFor: 'Gia đình trẻ bận rộn dịp 23 Chạp nhưng muốn chuẩn bị chu toàn cho đêm Giao Thừa và sáng Mùng 1 Tết.',
     shortDesc: 'Kết nối liền mạch nghi thức đón Giao Thừa đêm 30 và dâng trà Khai Xuân sáng Mùng 1 trong một Hộp Đôi chỉn chu.',
-    image: generatePackagingSVG('double', 'COMBO SONG XUÂN', 'Hộp Đôi 2 Ngăn: Giao Thừa (Đêm 30) + Khai Xuân (Mùng 1)', '#691727', 'TIẾT KIỆM 69.000đ (-13%)', ['Giao Thừa', 'Khai Xuân']),
+    image: generatePackagingSVG('double', 'COMBO SONG XUÂN', 'Hộp Đôi 2 Ngăn: Giao Thừa (Đêm 30) + Khai Xuân (Mùng 1)', '#691727', 'TIẾT KIỆM 109.000đ (-41%)', ['Giao Thừa', 'Khai Xuân']),
     items: [
       'Ngăn 01 (Giao Thừa): Nhang trầm & Nụ trầm, Đôi nến sen, Trà Ô Long Hoa Bưởi, Hũ Gạo Muối giữ lộc',
       'Ngăn 02 (Khai Xuân): Nhang trầm thanh khiết, Nến bơ, Trà Shan Tuyết Cổ Thụ, Hạt sen sấy & Táo đỏ',
@@ -365,7 +365,7 @@ const DEFAULT_PRODUCTS = [
     ],
     gifts: [
       'Tặng Bộ 06 Bao lì xì giấy dó + Túi thơm thảo mộc',
-      'Tiết kiệm ngay 69.000đ so với mua 2 hộp lẻ'
+      'Tiết kiệm ngay 109.000đ so với mua 2 hộp lẻ'
     ],
     upsellHint: {
       addRitual: 'tien-tao',
@@ -376,21 +376,21 @@ const DEFAULT_PRODUCTS = [
   {
     id: 'combo-mo-tet',
     sku: 'NEPLE-COMBO-03',
-    name: 'Combo Mở Tết',
+    name: 'Combo Mở Tết [1+3]',
     subtitle: 'Trọn Lễ Tiễn Táo (23 Chạp) + Khai Xuân (Mùng 1)',
     tier: 'double',
     tierLabel: 'Hộp Đôi Combo 2 Ngày',
     rituals: ['tien-tao', 'khai-xuan'],
     ritualNames: ['Tiễn Táo (23 Chạp)', 'Khai Xuân (Mùng 1)'],
-    price: 195000,
+    price: 189000,
     originalPrice: 308000,
-    discountPercent: 37,
-    badge: 'TIẾT KIỆM 113.000đ (37%)',
+    discountPercent: 39,
+    badge: 'TIẾT KIỆM 119.000đ (39%)',
     bestSeller: false,
     packagingSpec: 'Hộp Đôi Cứng 2 Ngăn Độc Lập (Ngăn 01: Tiễn Táo • Ngăn 02: Khai Xuân), bảo quản khô ráo suốt kỳ nghỉ Tết.',
     suitableFor: 'Gia đình trẻ, vợ chồng trẻ về quê ăn Giao Thừa cùng bố mẹ: cúng Ông Táo trước khi về quê và cúng Khai Xuân khi quay lại thành phố!',
     shortDesc: 'Giải pháp "đo ni đóng giày" cho người trẻ xa quê: cúng Tiễn Táo ngày 23 trước khi khóa cửa về quê, và cúng Khai Xuân ấm cúng khi trở lại nhà.',
-    image: generatePackagingSVG('double', 'COMBO MỞ TẾT', 'Hộp Đôi 2 Ngăn: Tiễn Táo (23 Chạp) + Khai Xuân (Tân Niên)', '#0d2931', 'TIẾT KIỆM 69.000đ (-14%)', ['Tiễn Táo', 'Khai Xuân']),
+    image: generatePackagingSVG('double', 'COMBO MỞ TẾT', 'Hộp Đôi 2 Ngăn: Tiễn Táo (23 Chạp) + Khai Xuân (Tân Niên)', '#0d2931', 'TIẾT KIỆM 119.000đ (-39%)', ['Tiễn Táo', 'Khai Xuân']),
     items: [
       'Ngăn 01 (Tiễn Táo): Nhang trầm ít khói, Nến bơ, Trà Sen Cổ Thụ, Kẹo lạc & Mứt gừng, Lễ giấy Ông Táo',
       'Ngăn 02 (Khai Xuân): Nhang trầm hương, Nến bơ, Trà Shan Tuyết Cổ Thụ, Hạt sen sấy & Táo đỏ',
@@ -399,7 +399,7 @@ const DEFAULT_PRODUCTS = [
     ],
     gifts: [
       'Tặng Bộ 06 Bao lì xì giấy dó + Túi Mùi Già khô',
-      'Tiết kiệm ngay 69.000đ so với mua 2 hộp lẻ'
+      'Tiết kiệm ngay 119.000đ so với mua 2 hộp lẻ'
     ],
     upsellHint: {
       addRitual: 'giao-thua',
@@ -424,7 +424,7 @@ const DEFAULT_PRODUCTS = [
     packagingSpec: 'Hộp Quà Lớn Đặc Biệt 3 Ngăn Độc Lập viền nhũ Vàng Ấm (#f0b45b), có quai xách sang trọng dùng làm quà biếu Tết hoặc giữ trọn nếp nhà.',
     suitableFor: 'Gia đình trẻ muốn chuẩn bị trọn vẹn cả mùa Tết chỉ trong 1 lần đặt hàng, hoặc làm quà biếu tân gia / biếu bố mẹ hai bên cực kỳ ý nghĩa.',
     shortDesc: 'Phiên bản cao cấp và tiết kiệm nhất của NEPLE: 3 ngăn lễ độc lập cho 23 Chạp, Đêm 30 và Mùng 1 Tết, tặng kèm Lư cắm nhang gốm mộc Bát Tràng & ấn phẩm Cẩm Nang Nếp Lễ.',
-    image: generatePackagingSVG('triple', 'COMBO TRỌN TẾT', '3 Ngăn Lễ Độc Lập: Tiễn Táo • Giao Thừa • Khai Xuân', '#691727', 'BEST SELLER • TIẾT KIỆM 158.000đ', ['Tiễn Táo', 'Giao Thừa', 'Khai Xuân']),
+    image: 'hop-combo-tron-tet.jpg',
     items: [
       'Ngăn 01 (23 Chạp - Tiễn Táo): Nhang trầm sạch, Nến bơ, Trà Sen Cổ Thụ, Kẹo lạc & Mứt gừng, Bộ lễ giấy Ông Táo',
       'Ngăn 02 (Đêm 30 - Giao Thừa): Nhang trầm & Nụ trầm xông nhà, Nến sen, Trà Ô Long Hoa Bưởi, Hũ Gạo Nếp & Muối Hồng giữ lộc',
@@ -462,16 +462,16 @@ const COMPARISON_TIERS = [
   {
     tier: 'double',
     title: 'Hộp Đôi Combo 2 Ngày',
-    subtitle: 'Vẹn Nếp • Song Xuân • Mở Tết',
-    badge: 'Tiết kiệm 69.000đ (13% - 14%)',
+    subtitle: 'Vạn Nếp [1+2] • Song Xuân [2+3] • Mở Tết [1+3]',
+    badge: 'Tiết kiệm từ 109.000đ – 119.000đ',
     accentColor: '#691727',
-    image: generatePackagingSVG('double', 'HỘP ĐÔI 2 NGĂN', '2 Khay Lễ Riêng Biệt • Tiện Lợi Bảo Quản', '#691727', 'TIẾT KIỆM 69.000đ', ['Lễ 01', 'Lễ 02']),
+    image: generatePackagingSVG('double', 'HỘP ĐÔI 2 NGĂN', '2 Khay Lễ Riêng Biệt • Tiện Lợi Bảo Quản', '#691727', 'TIẾT KIỆM ĐẾN 119.000đ', ['Lễ 01', 'Lễ 02']),
     packaging: 'Hộp cứng 2 ngăn kéo/khay độc lập, giúp lấy đồ lễ ngày đầu mà không làm xáo trộn ngày lễ sau.',
     components: 'Trọn bộ 2 khay lễ vật khô riêng biệt (Trà, Nhang trầm, Nến bơ, Mứt/Hạt, Gạo muối lộc tùy cặp lễ).',
     publications: 'Sổ tay Cẩm Nang Nếp Lễ thu gọn + Bộ Thiệp Văn Khấn cho 2 dịp lễ đã chọn.',
     exclusiveGifts: 'Tặng Túi thảo mộc Mùi Già tất niên + Bộ 06 Bao lì xì giấy dó.',
-    priceRange: '189.000đ – 199.000đ / hộp đôi',
-    savings: 'Tiết kiệm ngay 69.000đ (13% - 14%)',
+    priceRange: '159.000đ – 209.000đ / hộp đôi',
+    savings: 'Tiết kiệm từ 109.000đ – 119.000đ',
     bestFor: 'Vợ chồng trẻ ở chung cư về quê nửa kỳ nghỉ Tết (chỉ cúng 2 trên 3 dịp lễ tại nhà riêng).',
     ctaRituals: ['tien-tao', 'giao-thua']
   },
@@ -482,7 +482,7 @@ const COMPARISON_TIERS = [
     badge: 'BEST SELLER • Tiết kiệm 158.000đ (35%)',
     accentColor: '#f0b45b',
     featured: true,
-    image: generatePackagingSVG('triple', 'HỘP QUÀ TRỌN TẾT', '3 Ngăn Lễ Độc Lập • Quà Tặng Gốm Mộc', '#691727', 'ƯU ĐÃI CAO NHẤT -35%', ['Tiễn Táo', 'Giao Thừa', 'Khai Xuân']),
+    image: 'hop-combo-tron-tet.jpg',
     packaging: 'Hộp Quà Lớn Đặc Biệt 3 ngăn đánh số thứ tự (01 - 02 - 03), ép kim Vàng Ấm (#f0b45b) sang trọng.',
     components: 'Đầy đủ 100% lễ vật khô thượng hạng cho cả 3 dịp lễ lớn nhất Tết Nguyên Đán (Giao 1 lần dùng trọn Tết).',
     publications: 'Ấn phẩm "Cẩm Nang Nếp Lễ Cổ Truyền Cho Người Trẻ" + Trọn bộ 04 Thiệp Văn Khấn Hiện Đại.',
@@ -696,7 +696,7 @@ const DEFAULT_SETTINGS = {
     innerCityFee: 25000,
     suburbanFee: 30000,
     interprovincialFee: 35000,
-    freeShipThreshold: 250000,
+    freeShipThreshold: 200000,
     freeShipCombo: true
   }
 };
@@ -713,12 +713,12 @@ const DEFAULT_ORDERS = [
     paymentLabel: 'Chuyển khoản VietQR Ngân hàng',
     status: 'Đang đóng gói hộp lễ',
     createdAt: '2026-10-19 14:20',
-    subtotal: 219000,
+    subtotal: 289000,
     shippingFee: 0,
     shippingLabel: 'Miễn phí (0đ) — Ưu đãi Combo Trọn Tết',
-    total: 219000,
+    total: 289000,
     items: [
-      { id: 'combo-tron-tet', name: 'Combo Trọn Tết (Hộp Đặc Biệt 3 Ngày)', price: 219000, qty: 1 }
+      { id: 'combo-tron-tet', name: 'Combo Trọn Tết (Hộp Đặc Biệt 3 Ngày)', price: 289000, qty: 1 }
     ]
   },
   {
@@ -731,12 +731,12 @@ const DEFAULT_ORDERS = [
     paymentLabel: 'Thanh toán khi nhận hàng (COD)',
     status: 'Đang giao hàng',
     createdAt: '2026-10-20 09:15',
-    subtotal: 439000,
+    subtotal: 378000,
     shippingFee: 0,
-    shippingLabel: 'Miễn phí (0đ) — Đơn từ 250.000đ',
-    total: 439000,
+    shippingLabel: 'Miễn phí (0đ) — Đơn từ 200.000đ',
+    total: 378000,
     items: [
-      { id: 'combo-mo-tet', name: 'Combo Mở Tết (Tiễn Táo + Khai Xuân)', price: 439000, qty: 1 }
+      { id: 'combo-mo-tet', name: 'Combo Mở Tết [1+3] (Tiễn Táo + Khai Xuân)', price: 189000, qty: 2 }
     ]
   }
 ];

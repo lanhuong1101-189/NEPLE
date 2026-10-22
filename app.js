@@ -65,6 +65,10 @@ const NepleApp = {
           ...(parsedSettings.shipping || {})
         }
       };
+      if (this.state.settings.shipping.freeShipThreshold === 250000 || this.state.settings.shipping.freeShipThreshold === 180000) {
+        this.state.settings.shipping.freeShipThreshold = 200000;
+        this.saveSettings();
+      }
 
       const savedCart = localStorage.getItem(NEPLE_STORAGE_KEYS.CART);
       const parsedCart = savedCart ? JSON.parse(savedCart) : [];
@@ -2930,7 +2934,7 @@ const NepleApp = {
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-3 border-t border-[#ae9984]/30">
             <div>
               <label class="block font-bold mb-1">Ngưỡng Miễn Phí Vận Chuyển Theo Giá Trị Đơn (VNĐ)</label>
-              <input type="number" id="adm-set-freeship-thresh" value="${s.shipping?.freeShipThreshold ?? 250000}" step="5000" min="0" class="w-full px-3 py-2 rounded-xl border border-[#ae9984] bg-white font-bold text-[#72826f]" />
+              <input type="number" id="adm-set-freeship-thresh" value="${s.shipping?.freeShipThreshold ?? 200000}" step="5000" min="0" class="w-full px-3 py-2 rounded-xl border border-[#ae9984] bg-white font-bold text-[#72826f]" />
               <p class="text-[11px] text-[#0d2931]/60 mt-1">Đơn hàng có tổng tiền sản phẩm &ge; số tiền này sẽ được tự động Freeship 0đ (Nhập 0 để tắt)</p>
             </div>
             <div class="flex items-center pt-2 sm:pt-6">
