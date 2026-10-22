@@ -572,7 +572,7 @@ const NepleApp = {
               ? `
             <button type="button" onclick="NepleApp.setRitualsPreset(['tien-tao', 'giao-thua', 'khai-xuan'])"
               class="w-full py-2.5 px-4 rounded-xl bg-[#691727] hover:bg-[#4d0f1b] text-[#f0b45b] text-xs font-bold transition flex items-center justify-center gap-1.5 shadow-sm">
-              <span>Chọn đủ 3 dịp lễ (Combo Trọn Tết • 219.000đ)</span>
+              <span>Chọn đủ 3 dịp lễ (Combo Trọn Tết • 289.000đ)</span>
             </button>
           `
               : `
