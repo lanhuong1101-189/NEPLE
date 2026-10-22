@@ -37,7 +37,8 @@ const NepleApp = {
       this.state.products = (savedProducts ? JSON.parse(savedProducts) : JSON.parse(JSON.stringify(DEFAULT_PRODUCTS))).map(p => ({
         ...p,
         name: (p.name || '').replace(/^Pack\s+/i, ''),
-        image: typeof p.image === 'string' && p.image.startsWith('data:image/svg+xml') ? p.image.replace(/PACK%20/gi, '') : p.image
+        image: typeof p.image === 'string' && p.image.startsWith('data:image/svg+xml') ? p.image.replace(/PACK%20/gi, '') : p.image,
+        gifts: (p.gifts || []).map(g => g.replace(/^[🎁✨💡👑★•\s]+/u, ''))
       }));
 
       const savedBlogs = localStorage.getItem(NEPLE_STORAGE_KEYS.BLOGS);
@@ -310,7 +311,6 @@ const NepleApp = {
   getInteriorPreviewSVG(product) {
     const tier = product?.tier || 'single';
     const title = product?.name || 'Set Lễ NEPLE';
-    const sub = product?.subtitle || '';
 
     if (tier === 'single') {
       return `data:image/svg+xml;utf8,` + encodeURIComponent(`
@@ -344,7 +344,7 @@ const NepleApp = {
 
           <!-- Compartment 4: Incense Tube (Long Horizontal) -->
           <rect x="102" y="256" width="270" height="54" rx="10" fill="#0d2931" stroke="#f0b45b" stroke-width="1.5"/>
-          <text x="237" y="287" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="bold" fill="#f0b45b">🌿 ỐNG NHANG TRẦM HƯƠNG SẠCH ÍT KHÓI</text>
+          <text x="237" y="287" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="bold" fill="#f0b45b">ỐNG NHANG TRẦM HƯƠNG SẠCH ÍT KHÓI</text>
 
           <!-- Compartment 5: Prayer Card & Handbook -->
           <rect x="386" y="256" width="112" height="122" rx="10" fill="#691727" stroke="#f0b45b" stroke-width="1.5"/>
@@ -353,7 +353,7 @@ const NepleApp = {
 
           <!-- Compartment 6: Minimalist Paper Offerings -->
           <rect x="102" y="322" width="270" height="56" rx="10" fill="#efe9e0" stroke="#ae9984" stroke-width="1.5"/>
-          <text x="237" y="354" text-anchor="middle" font-family="sans-serif" font-size="10.5" font-weight="bold" fill="#691727">📜 Bộ Sớ &amp; Lễ Giấy Tối Giản Chuẩn Nếp</text>
+          <text x="237" y="354" text-anchor="middle" font-family="sans-serif" font-size="10.5" font-weight="bold" fill="#691727">Bộ Sớ &amp; Lễ Giấy Tối Giản Chuẩn Nếp</text>
         </svg>
       `);
     }
@@ -371,30 +371,30 @@ const NepleApp = {
           <rect x="84" y="102" width="192" height="28" rx="6" fill="#0d2931"/>
           <text x="180" y="120" text-anchor="middle" font-family="sans-serif" font-size="10.5" font-weight="bold" fill="#f0b45b">KHAY LỄ 01 • ĐÓNG GÓI RIÊNG</text>
           <rect x="84" y="140" width="90" height="72" rx="8" fill="#f4ebd0" stroke="#ae9984"/>
-          <text x="129" y="180" text-anchor="middle" font-family="sans-serif" font-size="9.5" font-weight="bold" fill="#0d2931">🍵 Trà &amp; Nến</text>
+          <text x="129" y="180" text-anchor="middle" font-family="sans-serif" font-size="9.5" font-weight="bold" fill="#0d2931">Trà &amp; Nến</text>
           <rect x="186" y="140" width="90" height="72" rx="8" fill="#f4ebd0" stroke="#ae9984"/>
-          <text x="231" y="180" text-anchor="middle" font-family="sans-serif" font-size="9.5" font-weight="bold" fill="#691727">🍬 Lễ Vật Khô</text>
+          <text x="231" y="180" text-anchor="middle" font-family="sans-serif" font-size="9.5" font-weight="bold" fill="#691727">Lễ Vật Khô</text>
           <rect x="84" y="222" width="192" height="44" rx="8" fill="#163d48"/>
-          <text x="180" y="248" text-anchor="middle" font-family="sans-serif" font-size="9.5" font-weight="bold" fill="#f0b45b">🌿 Nhang Trầm &amp; Lễ Giấy</text>
+          <text x="180" y="248" text-anchor="middle" font-family="sans-serif" font-size="9.5" font-weight="bold" fill="#f0b45b">Nhang Trầm &amp; Lễ Giấy</text>
           <rect x="84" y="276" width="192" height="44" rx="8" fill="#efe9e0" stroke="#ae9984"/>
-          <text x="180" y="302" text-anchor="middle" font-family="sans-serif" font-size="9.5" font-weight="bold" fill="#0d2931">📜 Thiệp Văn Khấn Dịp 1</text>
+          <text x="180" y="302" text-anchor="middle" font-family="sans-serif" font-size="9.5" font-weight="bold" fill="#0d2931">Thiệp Văn Khấn Dịp 1</text>
 
           <!-- Right Tray (Ritual 2) -->
           <rect x="308" y="88" width="224" height="248" rx="12" fill="#faf7f2" stroke="#f0b45b" stroke-width="1.5"/>
           <rect x="324" y="102" width="192" height="28" rx="6" fill="#691727"/>
           <text x="420" y="120" text-anchor="middle" font-family="sans-serif" font-size="10.5" font-weight="bold" fill="#f0b45b">KHAY LỄ 02 • ĐÓNG GÓI RIÊNG</text>
           <rect x="324" y="140" width="90" height="72" rx="8" fill="#f4ebd0" stroke="#ae9984"/>
-          <text x="369" y="180" text-anchor="middle" font-family="sans-serif" font-size="9.5" font-weight="bold" fill="#0d2931">🍵 Trà &amp; Nến</text>
+          <text x="369" y="180" text-anchor="middle" font-family="sans-serif" font-size="9.5" font-weight="bold" fill="#0d2931">Trà &amp; Nến</text>
           <rect x="426" y="140" width="90" height="72" rx="8" fill="#f4ebd0" stroke="#ae9984"/>
-          <text x="471" y="180" text-anchor="middle" font-family="sans-serif" font-size="9.5" font-weight="bold" fill="#691727">🏺 Lộc / Hạt</text>
+          <text x="471" y="180" text-anchor="middle" font-family="sans-serif" font-size="9.5" font-weight="bold" fill="#691727">Lộc / Hạt</text>
           <rect x="324" y="222" width="192" height="44" rx="8" fill="#691727"/>
-          <text x="420" y="248" text-anchor="middle" font-family="sans-serif" font-size="9.5" font-weight="bold" fill="#f0b45b">🔥 Nhang Trầm &amp; Nụ Trầm</text>
+          <text x="420" y="248" text-anchor="middle" font-family="sans-serif" font-size="9.5" font-weight="bold" fill="#f0b45b">Nhang Trầm &amp; Nụ Trầm</text>
           <rect x="324" y="276" width="192" height="44" rx="8" fill="#efe9e0" stroke="#ae9984"/>
-          <text x="420" y="302" text-anchor="middle" font-family="sans-serif" font-size="9.5" font-weight="bold" fill="#0d2931">📜 Thiệp Văn Khấn Dịp 2</text>
+          <text x="420" y="302" text-anchor="middle" font-family="sans-serif" font-size="9.5" font-weight="bold" fill="#0d2931">Thiệp Văn Khấn Dịp 2</text>
 
           <!-- Bottom Gift Tray -->
           <rect x="68" y="348" width="464" height="52" rx="10" fill="#fdf3e1" stroke="#f0b45b" stroke-width="2"/>
-          <text x="300" y="379" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="bold" fill="#691727">🎁 NGĂN QUÀ TẶNG: Túi Thảo Mộc Mùi Già Tất Niên &amp; Sổ Tay Cẩm Nang Nếp Lễ</text>
+          <text x="300" y="379" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="bold" fill="#691727">NGĂN QUÀ TẶNG: Túi Thảo Mộc Mùi Già Tất Niên &amp; Sổ Tay Cẩm Nang Nếp Lễ</text>
         </svg>
       `);
     }
@@ -412,44 +412,44 @@ const NepleApp = {
         <rect x="66" y="92" width="130" height="26" rx="6" fill="#0d2931"/>
         <text x="131" y="109" text-anchor="middle" font-family="sans-serif" font-size="10" font-weight="bold" fill="#f0b45b">KHAY 1 • TIỄN TÁO</text>
         <rect x="66" y="128" width="130" height="42" rx="6" fill="#f4ebd0"/>
-        <text x="131" y="153" text-anchor="middle" font-family="sans-serif" font-size="9.5" font-weight="bold" fill="#0d2931">🍵 Trà Sen Cổ Thụ</text>
+        <text x="131" y="153" text-anchor="middle" font-family="sans-serif" font-size="9.5" font-weight="bold" fill="#0d2931">Trà Sen Cổ Thụ</text>
         <rect x="66" y="178" width="130" height="42" rx="6" fill="#f4ebd0"/>
-        <text x="131" y="203" text-anchor="middle" font-family="sans-serif" font-size="9.5" font-weight="bold" fill="#691727">🍬 Kẹo Lạc &amp; Mứt Gừng</text>
+        <text x="131" y="203" text-anchor="middle" font-family="sans-serif" font-size="9.5" font-weight="bold" fill="#691727">Kẹo Lạc &amp; Mứt Gừng</text>
         <rect x="66" y="228" width="130" height="40" rx="6" fill="#163d48"/>
-        <text x="131" y="252" text-anchor="middle" font-family="sans-serif" font-size="9" font-weight="bold" fill="#f0b45b">🌿 Nhang • Nến • Sớ Táo</text>
+        <text x="131" y="252" text-anchor="middle" font-family="sans-serif" font-size="9" font-weight="bold" fill="#f0b45b">Nhang • Nến • Sớ Táo</text>
         <rect x="66" y="276" width="130" height="38" rx="6" fill="#efe9e0"/>
-        <text x="131" y="299" text-anchor="middle" font-family="sans-serif" font-size="9" font-weight="bold" fill="#0d2931">📜 Văn Khấn 23 Chạp</text>
+        <text x="131" y="299" text-anchor="middle" font-family="sans-serif" font-size="9" font-weight="bold" fill="#0d2931">Văn Khấn 23 Chạp</text>
 
         <!-- Tray 2: Giao Thừa -->
         <rect x="223" y="80" width="154" height="248" rx="12" fill="#faf7f2" stroke="#f0b45b" stroke-width="2"/>
         <rect x="235" y="92" width="130" height="26" rx="6" fill="#691727"/>
         <text x="300" y="109" text-anchor="middle" font-family="sans-serif" font-size="10" font-weight="bold" fill="#f0b45b">KHAY 2 • GIAO THỪA</text>
         <rect x="235" y="128" width="130" height="42" rx="6" fill="#f4ebd0"/>
-        <text x="300" y="153" text-anchor="middle" font-family="sans-serif" font-size="9.5" font-weight="bold" fill="#0d2931">🍵 Trà Hoa Bưởi</text>
+        <text x="300" y="153" text-anchor="middle" font-family="sans-serif" font-size="9.5" font-weight="bold" fill="#0d2931">Trà Hoa Bưởi</text>
         <rect x="235" y="178" width="130" height="42" rx="6" fill="#f4ebd0"/>
-        <text x="300" y="203" text-anchor="middle" font-family="sans-serif" font-size="9.5" font-weight="bold" fill="#691727">🏺 Hũ Gạo &amp; Muối Lộc</text>
+        <text x="300" y="203" text-anchor="middle" font-family="sans-serif" font-size="9.5" font-weight="bold" fill="#691727">Hũ Gạo &amp; Muối Lộc</text>
         <rect x="235" y="228" width="130" height="40" rx="6" fill="#691727"/>
-        <text x="300" y="252" text-anchor="middle" font-family="sans-serif" font-size="9" font-weight="bold" fill="#f0b45b">🪷 Nến Sen &amp; 5 Nụ Trầm</text>
+        <text x="300" y="252" text-anchor="middle" font-family="sans-serif" font-size="9" font-weight="bold" fill="#f0b45b">Nến Sen &amp; 5 Nụ Trầm</text>
         <rect x="235" y="276" width="130" height="38" rx="6" fill="#efe9e0"/>
-        <text x="300" y="299" text-anchor="middle" font-family="sans-serif" font-size="9" font-weight="bold" fill="#0d2931">📜 2 Văn Khấn Đêm 30</text>
+        <text x="300" y="299" text-anchor="middle" font-family="sans-serif" font-size="9" font-weight="bold" fill="#0d2931">2 Văn Khấn Đêm 30</text>
 
         <!-- Tray 3: Khai Xuân -->
         <rect x="392" y="80" width="154" height="248" rx="12" fill="#faf7f2" stroke="#f0b45b" stroke-width="1.5"/>
         <rect x="404" y="92" width="130" height="26" rx="6" fill="#72826f"/>
         <text x="469" y="109" text-anchor="middle" font-family="sans-serif" font-size="10" font-weight="bold" fill="#faf7f2">KHAY 3 • KHAI XUÂN</text>
         <rect x="404" y="128" width="130" height="42" rx="6" fill="#f4ebd0"/>
-        <text x="469" y="153" text-anchor="middle" font-family="sans-serif" font-size="9.5" font-weight="bold" fill="#0d2931">🍵 Trà Shan Tuyết</text>
+        <text x="469" y="153" text-anchor="middle" font-family="sans-serif" font-size="9.5" font-weight="bold" fill="#0d2931">Trà Shan Tuyết</text>
         <rect x="404" y="178" width="130" height="42" rx="6" fill="#f4ebd0"/>
-        <text x="469" y="203" text-anchor="middle" font-family="sans-serif" font-size="9.5" font-weight="bold" fill="#691727">🌰 Hạt Sen &amp; Táo Đỏ</text>
+        <text x="469" y="203" text-anchor="middle" font-family="sans-serif" font-size="9.5" font-weight="bold" fill="#691727">Hạt Sen &amp; Táo Đỏ</text>
         <rect x="404" y="228" width="130" height="40" rx="6" fill="#163d48"/>
-        <text x="469" y="252" text-anchor="middle" font-family="sans-serif" font-size="9" font-weight="bold" fill="#f0b45b">🕯️ Nhang Trầm &amp; Nến Bơ</text>
+        <text x="469" y="252" text-anchor="middle" font-family="sans-serif" font-size="9" font-weight="bold" fill="#f0b45b">Nhang Trầm &amp; Nến Bơ</text>
         <rect x="404" y="276" width="130" height="38" rx="6" fill="#efe9e0"/>
-        <text x="469" y="299" text-anchor="middle" font-family="sans-serif" font-size="9" font-weight="bold" fill="#0d2931">📜 Văn Khấn Mùng 1</text>
+        <text x="469" y="299" text-anchor="middle" font-family="sans-serif" font-size="9" font-weight="bold" fill="#0d2931">Văn Khấn Mùng 1</text>
 
         <!-- Bottom Royal Gift Tray -->
         <rect x="54" y="340" width="492" height="66" rx="12" fill="#fdf3e1" stroke="#f0b45b" stroke-width="2"/>
-        <text x="300" y="366" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="bold" fill="#691727">🎁 KHAY QUÀ TẶNG ĐẶC BIỆT TRONG HỘP TRỌN TẾT:</text>
-        <text x="300" y="388" text-anchor="middle" font-family="sans-serif" font-size="10.5" font-weight="bold" fill="#0d2931">🏺 Lư Gốm Mộc Bát Tràng • 🌿 Túi Mùi Già Tất Niên • 🧧 10 Bao Lì Xì Giấy Dó</text>
+        <text x="300" y="366" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="bold" fill="#691727">KHAY QUÀ TẶNG ĐẶC BIỆT TRONG HỘP TRỌN TẾT:</text>
+        <text x="300" y="388" text-anchor="middle" font-family="sans-serif" font-size="10.5" font-weight="bold" fill="#0d2931">Lư Gốm Mộc Bát Tràng • Túi Mùi Già Tất Niên • 10 Bao Lì Xì Giấy Dó</text>
       </svg>
     `);
   },
@@ -577,7 +577,7 @@ const NepleApp = {
               ? `
             <button type="button" onclick="NepleApp.setRitualsPreset(['tien-tao', 'giao-thua', 'khai-xuan'])"
               class="w-full py-2.5 px-4 rounded-xl bg-[#691727] hover:bg-[#4d0f1b] text-[#f0b45b] text-xs font-bold transition flex items-center justify-center gap-1.5 shadow-sm">
-              <span>★ Chọn đủ 3 dịp lễ (Combo Trọn Tết • Tiết kiệm 18%)</span>
+              <span>Chọn đủ 3 dịp lễ (Combo Trọn Tết • Tiết kiệm 18%)</span>
             </button>
           `
               : `
@@ -600,12 +600,9 @@ const NepleApp = {
       const addKey = matched.upsellHint.addRitual;
       upsellBannerHTML = `
         <div class="p-3.5 rounded-2xl bg-[#691727]/10 border border-[#691727]/35 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <div class="flex items-start gap-2.5">
-            <span class="text-lg leading-none mt-0.5">💡</span>
-            <p class="text-xs sm:text-sm text-[#691727] font-semibold leading-snug">
-              ${matched.upsellHint.message}
-            </p>
-          </div>
+          <p class="text-xs sm:text-sm text-[#691727] font-semibold leading-snug">
+            ${matched.upsellHint.message}
+          </p>
           <button onclick="NepleApp.toggleRitual('${addKey}')" 
             class="shrink-0 px-3.5 py-2 rounded-xl bg-[#691727] text-[#f0b45b] hover:bg-[#4d0f1b] text-xs font-bold transition shadow-sm">
             + Nâng cấp hộp ngay
@@ -614,8 +611,7 @@ const NepleApp = {
       `;
     } else {
       upsellBannerHTML = `
-        <div class="p-3.5 rounded-2xl bg-[#f0b45b]/25 border border-[#f0b45b] flex items-center gap-2.5">
-          <span class="text-lg">👑</span>
+        <div class="p-3.5 rounded-2xl bg-[#f0b45b]/25 border border-[#f0b45b]">
           <p class="text-xs sm:text-sm text-[#0d2931] font-semibold">
             Bạn đang chọn <strong>Hộp Quà Lớn Combo Trọn Tết (Đủ 3 Ngăn Lễ)</strong> — Tiết kiệm cao nhất <strong>${this.formatVND(savings)} (-18%)</strong> + Tặng kèm <strong>Lư Gốm Mộc Bát Tràng</strong>!
           </p>
@@ -673,13 +669,13 @@ const NepleApp = {
                 class="px-4 py-2 rounded-lg transition ${
                   activeGalleryView === 'exterior' ? 'bg-[#0d2931] text-[#f0b45b] shadow' : 'text-[#0d2931]'
                 }">
-                📦 Bên ngoài hộp
+                Bên ngoài hộp
               </button>
               <button onclick="NepleApp.setStageTab('interior')"
                 class="px-4 py-2 rounded-lg transition ${
                   activeGalleryView === 'interior' ? 'bg-[#0d2931] text-[#f0b45b] shadow' : 'text-[#0d2931]'
                 }">
-                ✨ Bên trong set lễ
+                Bên trong set lễ
               </button>
             </div>
           </div>
@@ -703,17 +699,14 @@ const NepleApp = {
                   Đặc điểm thiết kế &amp; quy cách bao bì:
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-[#0d2931]">
-                  <div class="flex items-start gap-2 bg-white p-2.5 rounded-xl border border-[#ae9984]/30 sm:col-span-2">
-                    <span class="w-4 h-4 rounded-full bg-[#0d2931] text-[#f0b45b] flex items-center justify-center text-[10px] shrink-0 mt-0.5">✓</span>
-                    <span><strong>Quy cách vỏ hộp:</strong> ${matched.packagingSpec}</span>
+                  <div class="bg-white p-2.5 rounded-xl border border-[#ae9984]/30 sm:col-span-2">
+                    <strong>Quy cách vỏ hộp:</strong> ${matched.packagingSpec}
                   </div>
-                  <div class="flex items-start gap-2 bg-white p-2.5 rounded-xl border border-[#ae9984]/30">
-                    <span class="w-4 h-4 rounded-full bg-[#72826f] text-white flex items-center justify-center text-[10px] shrink-0 mt-0.5">✓</span>
-                    <span>Giấy mỹ thuật bồi cứng cáp, chống ẩm &amp; giữ form sang trọng</span>
+                  <div class="bg-white p-2.5 rounded-xl border border-[#ae9984]/30">
+                    Giấy mỹ thuật bồi cứng cáp, chống ẩm &amp; giữ form sang trọng
                   </div>
-                  <div class="flex items-start gap-2 bg-white p-2.5 rounded-xl border border-[#ae9984]/30">
-                    <span class="w-4 h-4 rounded-full bg-[#72826f] text-white flex items-center justify-center text-[10px] shrink-0 mt-0.5">✓</span>
-                    <span>Đóng gói chống sốc kỹ lưỡng, chỉn chu để dâng lễ hoặc biếu tặng</span>
+                  <div class="bg-white p-2.5 rounded-xl border border-[#ae9984]/30">
+                    Đóng gói chống sốc kỹ lưỡng, chỉn chu để dâng lễ hoặc biếu tặng
                   </div>
                 </div>
               </div>
@@ -731,15 +724,14 @@ const NepleApp = {
                   <h4 class="text-xs font-extrabold uppercase tracking-wider text-[#0d2931]">
                     Danh mục vật phẩm đóng gói trong ${matched.name}:
                   </h4>
-                  <span class="text-xs font-semibold text-[#72826f]">✓ Đồ lễ khô bảo quản 6 tháng</span>
+                  <span class="text-xs font-semibold text-[#72826f]">Đồ lễ khô bảo quản 6 tháng</span>
                 </div>
                 <ul class="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   ${matched.items
                     .map(
                       item => `
-                    <li class="flex items-start gap-2 text-xs text-[#0d2931] bg-white p-2.5 rounded-xl border border-[#ae9984]/30">
-                      <span class="w-4 h-4 rounded-full bg-[#72826f] text-white flex items-center justify-center text-[10px] shrink-0 mt-0.5">✓</span>
-                      <span class="leading-snug">${item}</span>
+                    <li class="text-xs text-[#0d2931] bg-white p-2.5 rounded-xl border border-[#ae9984]/30 leading-snug">
+                      ${item}
                     </li>`
                     )
                     .join('')}
@@ -750,7 +742,7 @@ const NepleApp = {
               <div class="p-3.5 rounded-xl bg-[#fdf3e1] border border-[#f0b45b] flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                 <div>
                   <span class="text-[11px] font-extrabold uppercase tracking-wider text-[#691727] block">
-                    🎁 Ấn Phẩm &amp; Quà Tặng Đi Kèm Trong Set:
+                    Ấn Phẩm &amp; Quà Tặng Đi Kèm Trong Set:
                   </span>
                   <div class="text-xs sm:text-sm text-[#0d2931] font-semibold mt-0.5">
                     ${(matched.gifts || []).join(' • ')}

@@ -188,7 +188,7 @@ function generatePackagingSVG(type, title, subtitle, accentColor, badgeText, rit
         <rect x="64" y="276" width="472" height="86" rx="12" fill="#691727" stroke="url(#goldGrad)" stroke-width="3"/>
         <text x="300" y="308" text-anchor="middle" font-family="Georgia, serif" font-size="23" font-weight="bold" fill="#f0b45b" letter-spacing="2">${title}</text>
         <text x="300" y="330" text-anchor="middle" font-family="sans-serif" font-size="11.5" fill="#faf7f2">${subtitle}</text>
-        <text x="300" y="349" text-anchor="middle" font-family="sans-serif" font-size="10.5" fill="#f0b45b" font-weight="bold">🎁 TẶNG KÈM: Lư Cắm Nhang Gốm Mộc + Túi Mùi Già + 10 Bao Lì Xì Giấy Dó</text>
+        <text x="300" y="349" text-anchor="middle" font-family="sans-serif" font-size="10.5" fill="#f0b45b" font-weight="bold">TẶNG KÈM: Lư Cắm Nhang Gốm Mộc + Túi Mùi Già + 10 Bao Lì Xì Giấy Dó</text>
       </g>
 
       <!-- Top Gold Badge -->
@@ -433,9 +433,9 @@ const DEFAULT_PRODUCTS = [
       'Đầy đủ 04 Thiệp Văn Khấn Hiện Đại (Tiễn Táo, Giao Thừa Ngoài Trời, Giao Thừa Gia Tiên, Mùng 1 Khai Xuân)'
     ],
     gifts: [
-      '🎁 Tặng 01 Đế/Lư cắm nhang Gốm Mộc Bát Tràng trị giá 85.000đ',
-      '🎁 Tặng 01 Túi thảo mộc Mùi Già tắm tất niên + Bộ 10 Bao lì xì giấy dó NEPLE',
-      '✨ Ưu đãi cao nhất: Tiết kiệm ngay 138.000đ (-18%) + Miễn phí vận chuyển toàn quốc'
+      'Tặng 01 Đế/Lư cắm nhang Gốm Mộc Bát Tràng trị giá 85.000đ',
+      'Tặng 01 Túi thảo mộc Mùi Già tắm tất niên + Bộ 10 Bao lì xì giấy dó NEPLE',
+      'Ưu đãi cao nhất: Tiết kiệm ngay 138.000đ (-18%) + Miễn phí vận chuyển toàn quốc'
     ],
     upsellHint: null
   }
