@@ -362,7 +362,7 @@ const NepleApp = {
             <span class="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-[#0d2931] block">
               Chọn gói lễ hoặc Tự tay phối set theo nhu cầu của bạn
             </span>
-            <span class="text-xs text-[#0d2931]/70">Chọn từ 1 đến 3 dịp lễ để xem trước sản phẩm</span>
+            <span class="text-xs text-[#0d2931]/70">Bạn có thể chọn từng gói hoặc kết hợp thành Combo</span>
           </div>
           <span class="px-3 py-1 rounded-full bg-[#691727] text-[#f0b45b] text-xs font-extrabold shrink-0">
             ${rituals.length}/3 dịp lễ
