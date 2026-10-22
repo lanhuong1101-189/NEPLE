@@ -1067,54 +1067,44 @@ const NepleApp = {
     if (!container) return;
 
     container.innerHTML = this.state.blogs
-      .slice(0, 3)
-      .map(blog => this.renderBlogCardHTML(blog))
+      .map(blog => this.renderBlogCardHTML(blog, true))
       .join('');
   },
 
-  renderBlogCardHTML(blog) {
-    const relatedProduct = this.state.products.find(p => p.id === blog.relatedProductId);
+  scrollHomeBlog(direction = 1) {
+    const container = document.getElementById('home-blog-preview-mount');
+    if (!container) return;
+    const cardStep = 360;
+    const maxScroll = container.scrollWidth - container.clientWidth;
+    if (container.scrollLeft + 30 >= maxScroll) {
+      container.scrollTo({ left: 0, behavior: 'smooth' });
+    } else {
+      container.scrollBy({ left: direction * cardStep, behavior: 'smooth' });
+    }
+  },
+
+  renderBlogCardHTML(blog, isHome = false) {
+    const cardWidthClass = isHome 
+      ? 'w-[280px] sm:w-[330px] md:w-[360px] shrink-0' 
+      : 'w-full';
+
     return `
-      <article class="paper-card rounded-2xl overflow-hidden flex flex-col justify-between p-5">
+      <article onclick="NepleApp.switchView('cam-nang'); NepleApp.openBlogArticle('${blog.id}')"
+        class="paper-card rounded-2xl overflow-hidden flex flex-col justify-between p-5 sm:p-6 cursor-pointer group hover:-translate-y-1.5 transition-all duration-300 shadow-md hover:shadow-xl border border-[#ae9984]/30 select-none ${cardWidthClass}">
         <div>
-          <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+          <div class="flex items-center justify-between gap-2 mb-3">
             <span class="px-3 py-1 rounded-full bg-[#72826f] text-white text-[11px] font-semibold">
               ${blog.category}
             </span>
-            <div class="flex items-center gap-1.5 text-[11px] text-[#0d2931]/60">
-              <span>⏱ ${blog.readTime}</span>
-              ${blog.prayerText ? `<span class="px-2 py-0.5 rounded bg-[#f0b45b]/40 text-[#0d2931] font-bold">Có Văn Khấn</span>` : ''}
-            </div>
+            ${blog.prayerText ? `<span class="px-2.5 py-0.5 rounded-full bg-[#f0b45b]/30 text-[#0d2931] text-[11px] font-bold">Có Văn Khấn</span>` : ''}
           </div>
 
-          <h3 class="font-display text-lg sm:text-xl font-bold text-[#0d2931] hover:text-[#691727] cursor-pointer leading-snug"
-              onclick="NepleApp.switchView('cam-nang'); NepleApp.openBlogArticle('${blog.id}')">
+          <h3 class="font-bevietnam-bold text-lg sm:text-xl text-[#0d2931] group-hover:text-[#691727] transition-colors leading-snug">
             ${blog.title}
           </h3>
-          <p class="text-xs sm:text-sm text-[#0d2931]/75 mt-2.5 line-clamp-3 leading-relaxed">
+          <p class="text-xs sm:text-sm text-[#0d2931]/75 mt-3 line-clamp-3 sm:line-clamp-4 leading-relaxed">
             ${blog.excerpt}
           </p>
-        </div>
-
-        <div class="pt-4 mt-4 border-t border-[#ae9984]/30">
-          ${
-            relatedProduct
-              ? `<div class="mb-3 p-2.5 rounded-xl bg-[#f4efe6] border border-[#ae9984]/50 flex items-center justify-between gap-2">
-                   <div class="min-w-0">
-                     <span class="text-[10px] uppercase tracking-wider text-[#72826f] font-bold block">Gói lễ gắn kèm bài viết:</span>
-                     <span class="text-xs font-bold text-[#0d2931] truncate block">${relatedProduct.name} — ${this.formatVND(relatedProduct.price)}</span>
-                   </div>
-                   <button onclick="NepleApp.switchView('home'); NepleApp.selectSkuDirectly('${relatedProduct.id}', true);" class="px-2.5 py-1.5 rounded-lg bg-[#0d2931] text-[#f0b45b] hover:bg-[#691727] text-[11px] font-bold shrink-0 transition">
-                     Xem hộp lễ
-                   </button>
-                 </div>`
-              : ''
-          }
-          <button onclick="NepleApp.switchView('cam-nang'); NepleApp.openBlogArticle('${blog.id}')"
-                  class="text-xs font-bold text-[#a94025] hover:text-[#691727] inline-flex items-center gap-1">
-            <span>Đọc hướng dẫn &amp; bài văn khấn</span>
-            <span>→</span>
-          </button>
         </div>
       </article>
     `;
@@ -1226,7 +1216,7 @@ const NepleApp = {
           </button>
         </div>
 
-        <h1 class="font-display text-2xl sm:text-4xl font-bold text-[#0d2931] mt-5 leading-tight">
+        <h1 class="font-bevietnam-bold text-2xl sm:text-4xl text-[#0d2931] mt-5 leading-tight">
           ${blog.title}
         </h1>
         <p class="text-sm sm:text-base text-[#691727] font-medium mt-3 leading-relaxed">

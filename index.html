@@ -308,21 +308,28 @@
     <!-- HOME BLOG PREVIEW SECTION -->
     <section class="py-14 sm:py-20 bg-[#0d2931] text-[#faf7f2]">
       <div class="max-w-7xl mx-auto px-4 sm:px-6">
-        <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
-          <div>
-            <span class="px-3 py-1 rounded-full bg-[#f0b45b] text-[#0d2931] text-xs font-extrabold uppercase tracking-wider">
-              Cẩm Nang Nếp Lễ Cho GenZ
-            </span>
-            <h2 class="font-display text-2xl sm:text-4xl font-bold text-[#faf7f2] mt-3">
-              Hiểu Đúng Lễ Tết • Bày Mâm Tối Giản • Văn Khấn Hiện Đại
-            </h2>
-          </div>
-          <button onclick="NepleApp.switchView('cam-nang')" class="px-5 py-3 rounded-xl bg-[#691727] hover:bg-[#821d31] text-[#f0b45b] border border-[#f0b45b]/50 text-xs sm:text-sm font-bold shrink-0 transition">
-            Xem toàn bộ Cẩm Nang Tết →
-          </button>
+        <div class="mb-8">
+          <span class="text-[#faf7f2] text-xs sm:text-sm font-bold uppercase tracking-wider block">
+            Cẩm Nang Nếp Lễ Cho GenZ
+          </span>
+          <h2 class="font-bevietnam-bold text-2xl sm:text-3xl md:text-4xl text-[#faf7f2] mt-2.5 leading-snug">
+            Hiểu Đúng Lễ Tết • Bày Mâm Tối Giản • Văn Khấn Hiện Đại
+          </h2>
         </div>
 
-        <div id="home-blog-preview-mount" class="grid grid-cols-1 md:grid-cols-3 gap-6 text-[#0d2931]"></div>
+        <div class="relative flex items-center gap-3 sm:gap-5">
+          <div id="home-blog-preview-mount" class="flex gap-5 sm:gap-6 overflow-x-auto scroll-smooth no-scrollbar py-2 px-1 flex-1 text-[#0d2931]"></div>
+          <button type="button"
+            id="home-blog-next-btn"
+            onclick="NepleApp.scrollHomeBlog(1)"
+            aria-label="Trượt xem bài viết tiếp theo"
+            title="Trượt xem bài viết tiếp theo"
+            class="shrink-0 w-11 h-11 sm:w-14 sm:h-14 rounded-full bg-[#691727] hover:bg-[#821d31] border border-[#f0b45b]/80 text-[#faf7f2] hover:text-[#f0b45b] shadow-xl flex items-center justify-center transition-all duration-300 hover:scale-105 active:scale-95 group">
+            <svg class="w-5 h-5 sm:w-6 sm:h-6 transition-transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+            </svg>
+          </button>
+        </div>
       </div>
     </section>
   </main>
