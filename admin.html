@@ -16,13 +16,8 @@
   <div id="admin-login-screen" class="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-[#0d2931] via-[#123640] to-[#691727]">
     <div class="w-full max-w-md rounded-3xl bg-[#fffdf9] border-2 border-[#f0b45b] shadow-2xl p-6 sm:p-8">
       <div class="text-center mb-6">
-        <div class="w-14 h-14 mx-auto rounded-2xl bg-[#691727] border-2 border-[#f0b45b] flex items-center justify-center shadow-md mb-3">
-          <span class="font-display text-2xl font-bold text-[#f0b45b]">N</span>
-        </div>
-        <span class="px-3 py-1 rounded-full bg-[#0d2931] text-[#f0b45b] text-[11px] font-extrabold uppercase tracking-wider">
-          Internal Staff Portal • Bảo Mật 2 Lớp
-        </span>
-        <h1 class="font-display text-2xl sm:text-3xl font-bold text-[#0d2931] mt-2">
+        <img src="logo.png?v=2" alt="NEPLE Logo" class="h-16 w-auto mx-auto mb-3 object-contain drop-shadow" />
+        <h1 style="font-family: 'Be Vietnam Pro', sans-serif; font-weight: 700;" class="text-2xl sm:text-3xl font-bold text-[#0d2931] mt-2">
           Đăng Nhập Quản Trị NEPLE
         </h1>
         <p class="text-xs text-[#0d2931]/70 mt-1">
@@ -32,8 +27,8 @@
 
       <form onsubmit="AdminPortal.handleLogin(event)" class="space-y-4">
         <div>
-          <label class="block text-xs font-bold uppercase tracking-wider text-[#0d2931] mb-1">
-            Email Nhân Viên Công Ty *
+          <label class="block text-xs font-bold text-[#0d2931] mb-1">
+            Email
           </label>
           <input
             type="email"
@@ -45,8 +40,8 @@
         </div>
 
         <div>
-          <label class="block text-xs font-bold uppercase tracking-wider text-[#0d2931] mb-1">
-            Mật Khẩu Nội Bộ *
+          <label class="block text-xs font-bold text-[#0d2931] mb-1">
+            Mật khẩu
           </label>
           <div class="relative">
             <input
@@ -66,37 +61,13 @@
         <div id="login-error-box" class="hidden p-3 rounded-xl bg-[#691727]/10 border border-[#691727] text-xs text-[#691727] font-semibold"></div>
 
         <button type="submit" class="w-full py-3.5 rounded-xl btn-terracotta font-bold text-sm shadow-lg">
-          🔐 Xác Thực &amp; Truy Cập Quản Trị
+          Đăng nhập
         </button>
       </form>
 
-      <!-- Quick Demo Role Fillers for Testing -->
-      <div class="mt-6 pt-4 border-t border-[#ae9984]/40">
-        <div class="text-[11px] font-bold uppercase tracking-wider text-[#72826f] mb-2">
-          Điền nhanh tài khoản phân quyền mẫu (Để bạn test nhanh):
-        </div>
-        <div class="grid grid-cols-1 gap-1.5 text-xs">
-          <button type="button" onclick="AdminPortal.fillDemoAccount('admin@neple.vn', 'Neple@2026')"
-            class="p-2 rounded-lg bg-[#f4efe6] hover:bg-[#0d2931] hover:text-[#f0b45b] text-left transition flex items-center justify-between">
-            <span>👑 <strong>Super Admin:</strong> admin@neple.vn</span>
-            <span class="font-mono text-[11px] opacity-80">Neple@2026</span>
-          </button>
-          <button type="button" onclick="AdminPortal.fillDemoAccount('vanhanh@neple.vn', 'Vanhanh@2026')"
-            class="p-2 rounded-lg bg-[#f4efe6] hover:bg-[#0d2931] hover:text-[#f0b45b] text-left transition flex items-center justify-between">
-            <span>📦 <strong>NV Vận hành:</strong> vanhanh@neple.vn</span>
-            <span class="font-mono text-[11px] opacity-80">Vanhanh@2026</span>
-          </button>
-          <button type="button" onclick="AdminPortal.fillDemoAccount('content@neple.vn', 'Content@2026')"
-            class="p-2 rounded-lg bg-[#f4efe6] hover:bg-[#0d2931] hover:text-[#f0b45b] text-left transition flex items-center justify-between">
-            <span>📝 <strong>NV Content SEO:</strong> content@neple.vn</span>
-            <span class="font-mono text-[11px] opacity-80">Content@2026</span>
-          </button>
-        </div>
-      </div>
-
       <div class="mt-5 text-center">
         <a href="index.html" class="text-xs font-bold text-[#0d2931]/70 hover:text-[#a94025] underline">
-          ← Quay về Giao diện Khách hàng (index.html)
+          Trở về
         </a>
       </div>
     </div>
