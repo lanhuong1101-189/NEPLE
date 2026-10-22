@@ -7,7 +7,7 @@ const NepleApp = {
     activeView: 'home', // 'home' | 'cam-nang' | 'tra-cuu' | 'admin'
     selectedRituals: ['tien-tao', 'giao-thua', 'khai-xuan'], // Default: Combo Trọn Tết
     activeSkuId: 'combo-tron-tet',
-    stageTab: 'blueprint', // 'blueprint' | 'artwork'
+    stageTab: 'exterior', // 'exterior' | 'interior'
     blogCategory: 'Tất cả',
     activeBlogId: null,
     prayerFontSize: 'normal', // 'normal' | 'large'
@@ -34,7 +34,11 @@ const NepleApp = {
   loadState() {
     try {
       const savedProducts = localStorage.getItem(NEPLE_STORAGE_KEYS.PRODUCTS);
-      this.state.products = (savedProducts ? JSON.parse(savedProducts) : JSON.parse(JSON.stringify(DEFAULT_PRODUCTS))).map(p => ({ ...p, name: (p.name || '').replace(/^Pack\s+/i, '') }));
+      this.state.products = (savedProducts ? JSON.parse(savedProducts) : JSON.parse(JSON.stringify(DEFAULT_PRODUCTS))).map(p => ({
+        ...p,
+        name: (p.name || '').replace(/^Pack\s+/i, ''),
+        image: typeof p.image === 'string' && p.image.startsWith('data:image/svg+xml') ? p.image.replace(/PACK%20/gi, '') : p.image
+      }));
 
       const savedBlogs = localStorage.getItem(NEPLE_STORAGE_KEYS.BLOGS);
       this.state.blogs = savedBlogs ? JSON.parse(savedBlogs) : JSON.parse(JSON.stringify(DEFAULT_BLOGS));
@@ -260,6 +264,7 @@ const NepleApp = {
     if (!product) return;
     this.state.activeSkuId = product.id;
     this.state.selectedRituals = [...(product.rituals || ['tien-tao'])];
+    this.state.stageTab = 'exterior';
     this.renderInteractiveSkuStudio();
     this.renderComparisonMatrix();
     if (scrollIfNeeded) {
@@ -281,6 +286,7 @@ const NepleApp = {
     }
     const matched = this.getMatchedProductByRituals(this.state.selectedRituals);
     this.state.activeSkuId = matched.id;
+    this.state.stageTab = 'exterior';
     this.renderInteractiveSkuStudio();
     this.renderComparisonMatrix();
   },
@@ -289,6 +295,7 @@ const NepleApp = {
     this.state.selectedRituals = [...ritualsArray];
     const matched = this.getMatchedProductByRituals(this.state.selectedRituals);
     this.state.activeSkuId = matched.id;
+    this.state.stageTab = 'exterior';
     this.renderInteractiveSkuStudio();
     this.renderComparisonMatrix();
     const el = document.getElementById('combo-selector');
@@ -585,7 +592,7 @@ const NepleApp = {
 
     // Define the 3 Ritual Compartments for the Live Interactive Blueprint on the Right
     const interiorImgSrc = matched.interiorImage || this.getInteriorPreviewSVG(matched);
-    const activeGalleryView = this.state.stageTab === 'exterior' || this.state.stageTab === 'interior' ? this.state.stageTab : 'both';
+    const activeGalleryView = this.state.stageTab === 'interior' ? 'interior' : 'exterior';
 
     // Upsell suggestion banner inside Right Stage
     let upsellBannerHTML = '';
@@ -629,23 +636,20 @@ const NepleApp = {
             ? 'bg-[#0d2931]'
             : 'bg-[#163d48]'
         } text-[#faf7f2]">
-          <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
-            <div class="flex items-center gap-2">
-              <span class="px-3 py-1 rounded-full bg-[#f0b45b] text-[#0d2931] text-xs font-extrabold uppercase tracking-wide">
-                📦 ${matched.tierLabel}
-              </span>
-              <span class="text-xs text-[#faf7f2]/75 font-mono">${matched.sku}</span>
-            </div>
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-1.5">
+            <span class="text-[#f4ebd0] text-xs font-extrabold uppercase tracking-wide">
+              ${matched.tierLabel}
+            </span>
             ${
               savings > 0
                 ? `<span class="px-3 py-1 rounded-full bg-[#691727] border border-[#f0b45b] text-[#f0b45b] text-xs font-extrabold">
                      Tiết kiệm ${this.formatVND(savings)} (-${matched.discountPercent}%)
                    </span>`
-                : `<span class="text-xs text-[#f0b45b] font-medium">Giao 1 lần trước Tết</span>`
+                : ''
             }
           </div>
 
-          <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mt-2">
+          <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mt-1">
             <div>
               <h3 style="font-family: 'Be Vietnam Pro', sans-serif !important; font-weight: 700 !important;" class="text-2xl sm:text-3xl font-bold text-[#faf7f2]">${matched.name}</h3>
               <p class="text-xs sm:text-sm text-[#f0b45b] font-medium mt-0.5">${matched.subtitle}</p>
@@ -662,26 +666,17 @@ const NepleApp = {
         </div>
 
         <!-- Stage Body: Visual Exterior & Interior Set Preview -->
-        <div class="p-5 sm:p-6 space-y-5">
-          <div class="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-[#ae9984]/40">
-            <span class="text-xs font-bold uppercase tracking-wider text-[#0d2931]/80">
-              Hình ảnh trực quan bên ngoài &amp; bên trong set lễ:
-            </span>
+        <div class="p-5 sm:p-6 space-y-4">
+          <div class="flex items-center justify-start">
             <div class="flex rounded-xl bg-[#efe9e0] p-1 text-xs font-bold">
-              <button onclick="NepleApp.setStageTab('both')"
-                class="px-3 py-1.5 rounded-lg transition ${
-                  activeGalleryView === 'both' ? 'bg-[#0d2931] text-[#f0b45b] shadow' : 'text-[#0d2931]'
-                }">
-                👁️ Xem cả hai
-              </button>
               <button onclick="NepleApp.setStageTab('exterior')"
-                class="px-3 py-1.5 rounded-lg transition ${
+                class="px-4 py-2 rounded-lg transition ${
                   activeGalleryView === 'exterior' ? 'bg-[#0d2931] text-[#f0b45b] shadow' : 'text-[#0d2931]'
                 }">
                 📦 Bên ngoài hộp
               </button>
               <button onclick="NepleApp.setStageTab('interior')"
-                class="px-3 py-1.5 rounded-lg transition ${
+                class="px-4 py-2 rounded-lg transition ${
                   activeGalleryView === 'interior' ? 'bg-[#0d2931] text-[#f0b45b] shadow' : 'text-[#0d2931]'
                 }">
                 ✨ Bên trong set lễ
@@ -689,58 +684,14 @@ const NepleApp = {
             </div>
           </div>
 
-          <!-- Exterior & Interior Visual Showcase -->
+          <!-- Exterior / Interior Single Active Showcase -->
           <div class="p-4 rounded-2xl bg-[#f4efe6] border-2 ${
             matched.tier === 'triple' ? 'border-[#f0b45b]' : 'border-[#ae9984]'
           } space-y-3">
             ${
-              activeGalleryView === 'both'
-                ? `
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <!-- Exterior Card -->
-                <div onclick="NepleApp.setStageTab('exterior')" class="group cursor-pointer rounded-2xl bg-[#fffdf9] border border-[#ae9984]/60 hover:border-[#691727] p-3 shadow-sm transition flex flex-col">
-                  <div class="flex items-center justify-between mb-2">
-                    <span class="px-2.5 py-0.5 rounded-full bg-[#0d2931] text-[#f0b45b] text-[11px] font-bold uppercase">
-                      1. Bên ngoài hộp lễ
-                    </span>
-                    <span class="text-[11px] font-semibold text-[#691727] group-hover:underline">Phóng to ↗</span>
-                  </div>
-                  <div class="aspect-[4/3] w-full rounded-xl overflow-hidden bg-[#faf7f2] flex items-center justify-center">
-                    <img src="${matched.image}" alt="${matched.name} - Bên ngoài" class="w-full h-full object-contain group-hover:scale-105 transition duration-300" />
-                  </div>
-                  <p class="text-[11px] text-[#0d2931]/75 mt-2 leading-snug">
-                    ${matched.packagingSpec}
-                  </p>
-                </div>
-
-                <!-- Interior Card -->
-                <div onclick="NepleApp.setStageTab('interior')" class="group cursor-pointer rounded-2xl bg-[#fffdf9] border border-[#ae9984]/60 hover:border-[#691727] p-3 shadow-sm transition flex flex-col">
-                  <div class="flex items-center justify-between mb-2">
-                    <span class="px-2.5 py-0.5 rounded-full bg-[#691727] text-[#f0b45b] text-[11px] font-bold uppercase">
-                      2. Bên trong set lễ
-                    </span>
-                    <span class="text-[11px] font-semibold text-[#691727] group-hover:underline">Phóng to ↗</span>
-                  </div>
-                  <div class="aspect-[4/3] w-full rounded-xl overflow-hidden bg-[#faf7f2] flex items-center justify-center">
-                    <img src="${interiorImgSrc}" alt="${matched.name} - Bên trong set" class="w-full h-full object-contain group-hover:scale-105 transition duration-300" />
-                  </div>
-                  <p class="text-[11px] text-[#0d2931]/75 mt-2 leading-snug">
-                    Sắp xếp phân ngăn chỉn chu: đầy đủ trà, nhang trầm, nến bơ, lễ phẩm khô &amp; thiệp văn khấn.
-                  </p>
-                </div>
-              </div>
-            `
-                : activeGalleryView === 'exterior'
+              activeGalleryView === 'exterior'
                 ? `
               <div class="rounded-2xl bg-[#fffdf9] border border-[#ae9984]/60 p-4">
-                <div class="flex items-center justify-between mb-2.5">
-                  <span class="px-3 py-1 rounded-full bg-[#0d2931] text-[#f0b45b] text-xs font-bold uppercase">
-                    📦 Hình ảnh bên ngoài hộp — ${matched.name}
-                  </span>
-                  <button onclick="NepleApp.setStageTab('both')" class="text-xs font-bold text-[#691727] hover:underline">
-                    ← Thu nhỏ xem cả 2 ảnh
-                  </button>
-                </div>
                 <div class="aspect-[16/10] w-full rounded-xl overflow-hidden bg-[#faf7f2] flex items-center justify-center">
                   <img src="${matched.image}" alt="${matched.name} - Bên ngoài" class="w-full h-full object-contain" />
                 </div>
@@ -751,14 +702,6 @@ const NepleApp = {
             `
                 : `
               <div class="rounded-2xl bg-[#fffdf9] border border-[#ae9984]/60 p-4">
-                <div class="flex items-center justify-between mb-2.5">
-                  <span class="px-3 py-1 rounded-full bg-[#691727] text-[#f0b45b] text-xs font-bold uppercase">
-                    ✨ Hình ảnh bên trong set lễ — ${matched.name}
-                  </span>
-                  <button onclick="NepleApp.setStageTab('both')" class="text-xs font-bold text-[#691727] hover:underline">
-                    ← Thu nhỏ xem cả 2 ảnh
-                  </button>
-                </div>
                 <div class="aspect-[16/10] w-full rounded-xl overflow-hidden bg-[#faf7f2] flex items-center justify-center">
                   <img src="${interiorImgSrc}" alt="${matched.name} - Bên trong set" class="w-full h-full object-contain" />
                 </div>
