@@ -561,8 +561,10 @@ const NepleApp = {
               <div class="text-base sm:text-lg font-extrabold text-[#a94025]">${this.formatVND(matched.price)}</div>
               ${
                 savings > 0
-                  ? `<div class="text-[11px] font-bold text-[#691727]">Tiết kiệm ${this.formatVND(savings)} (-${matched.discountPercent}%)</div>`
-                  : `<div class="text-[11px] text-[#72826f]">Hộp đơn 1 ngăn</div>`
+                  ? rituals.length === 3
+                    ? `<div class="text-xs font-medium text-[#0d2931]/45 line-through">${this.formatVND(matched.originalPrice)}</div>`
+                    : `<div class="text-[11px] font-bold text-[#691727]"><span class="text-[#0d2931]/45 line-through font-normal mr-1">${this.formatVND(matched.originalPrice)}</span>-${matched.discountPercent}%</div>`
+                  : ''
               }
             </div>
           </div>
