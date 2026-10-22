@@ -360,9 +360,9 @@ const NepleApp = {
         <div class="flex items-center justify-between gap-2 pb-3 border-b border-[#ae9984]/40">
           <div>
             <span class="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-[#0d2931] block">
-              Tích chọn dịp lễ cần cúng (Tự ghép gói)
+              Chọn gói lễ hoặc Tự tay phối set theo nhu cầu của bạn
             </span>
-            <span class="text-xs text-[#0d2931]/70">Bấm chọn 1, 2 hoặc cả 3 dịp lễ để ghép hộp tự động</span>
+            <span class="text-xs text-[#0d2931]/70">Chọn từ 1 đến 3 dịp lễ để xem trước sản phẩm</span>
           </div>
           <span class="px-3 py-1 rounded-full bg-[#691727] text-[#f0b45b] text-xs font-extrabold shrink-0">
             ${rituals.length}/3 dịp lễ
@@ -408,7 +408,7 @@ const NepleApp = {
         <div class="p-4 rounded-2xl bg-[#fffdf9] border border-[#ae9984]/60 space-y-3">
           <div class="flex items-center justify-between gap-2">
             <div>
-              <span class="text-[11px] font-bold uppercase tracking-wider text-[#72826f] block">Gói lễ tương ứng đang chọn</span>
+              <span class="text-[11px] font-bold uppercase tracking-wider text-[#72826f] block">Gói lễ bạn đang chọn</span>
               <span style="font-family: 'Be Vietnam Pro', sans-serif; font-weight: 700;" class="text-base sm:text-lg font-bold text-[#0d2931]">
                 ${matched.name}
               </span>
@@ -433,7 +433,7 @@ const NepleApp = {
           `
               : `
             <div class="py-2 px-3 rounded-xl bg-[#f0b45b]/25 border border-[#f0b45b] text-xs font-bold text-[#0d2931] text-center">
-              ✓ Đã chọn trọn bộ 3 dịp lễ Tết (Ưu đãi cao nhất -18%)
+              Full combo: Tiết kiệm 18%
             </div>
           `
           }
