@@ -63,6 +63,10 @@ const NepleApp = {
         shipping: {
           ...DEFAULT_SETTINGS.shipping,
           ...(parsedSettings.shipping || {})
+        },
+        googleSheets: {
+          ...DEFAULT_SETTINGS.googleSheets,
+          ...(parsedSettings.googleSheets || {})
         }
       };
       if (this.state.settings.shipping.freeShipThreshold === 250000 || this.state.settings.shipping.freeShipThreshold === 180000) {
@@ -1985,6 +1989,11 @@ const NepleApp = {
     // Save order immediately so Admin has full order + QR payment info
     this.state.orders.unshift(newOrder);
     this.saveOrders();
+
+    // Đồng bộ đơn hàng mới tức thì lên Google Sheets nếu đã cấu hình
+    if (this.state.settings?.googleSheets?.syncUrl) {
+      this.syncOrderToGoogleSheets(newOrder);
+    }
     this.state.cart = [];
     this.state.checkoutForm = { name: '', phone: '', province: '', district: '', addressDetail: '', note: '' };
     this.state.checkoutPhonePreview = '';
@@ -2947,6 +2956,39 @@ const NepleApp = {
               </label>
             </div>
           </div>
+        </div>
+
+        <!-- 4. Cấu Hình Đồng Bộ 2 Chiều Google Sheets (Mọi Người Cùng Thấy) -->
+        <div class="p-6 rounded-2xl paper-card space-y-4 lg:col-span-2">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-[#ae9984]/30 pb-3">
+            <div>
+              <h3 class="font-display text-xl font-bold text-[#0d2931]">4. Đồng Bộ 2 Chiều Google Sheets (Mọi Người Cùng Hoạt Động)</h3>
+              <p class="text-xs text-[#0d2931]/70 mt-0.5">Khách đặt hàng sẽ tự động ghi vào Google Sheets. Mọi nhân viên mở điện thoại hoặc máy tính đều thấy dữ liệu thời gian thực.</p>
+            </div>
+            <span class="px-3 py-1 rounded-full ${s.googleSheets?.syncUrl ? 'bg-[#72826f]/20 text-[#72826f]' : 'bg-[#691727]/15 text-[#691727]'} text-xs font-bold">
+              ${s.googleSheets?.syncUrl ? '● Đang Kết Nối Google Sheets' : 'Chưa Kết Nối'}
+            </span>
+          </div>
+
+          <div class="space-y-3">
+            <div>
+              <label class="block font-bold mb-1">Google Apps Script Web App URL (URL Ứng Dụng Web)</label>
+              <div class="flex flex-col sm:flex-row gap-2">
+                <input type="url" id="adm-set-sheets-url" placeholder="https://script.google.com/macros/s/AKfycb.../exec" value="${s.googleSheets?.syncUrl || ''}" class="flex-1 px-3 py-2 rounded-xl border border-[#ae9984] bg-white font-mono text-xs text-[#0d2931]" />
+                <button type="button" onclick="NepleApp.testAndSyncGoogleSheets()" class="px-4 py-2 rounded-xl bg-[#0d2931] text-[#f0b45b] font-bold text-xs shrink-0 hover:bg-[#163d48] transition">
+                  🔄 Kiểm Tra &amp; Đồng Bộ Ngay
+                </button>
+              </div>
+              <p class="text-[11px] text-[#0d2931]/60 mt-1">Dán URL sau khi Triển khai Apps Script từ Google Trang Tính của bạn vào đây.</p>
+            </div>
+
+            <div class="p-4 rounded-xl bg-[#faf7f2] border border-[#ae9984]/40 text-xs text-[#0d2931]/80 space-y-1.5">
+              <div class="font-bold text-[#0d2931] text-sm">📖 Hướng dẫn 3 bước kết nối Google Sheets (Chỉ làm 1 lần mất 2 phút):</div>
+              <div>1. Tạo 1 file Google Trang Tính mới, đặt tên: <em>NEPLE - Quản Lý Đơn Hàng 2026</em>.</div>
+              <div>2. Vào menu <strong>Tiện ích mở rộng (Extensions) → Apps Script</strong>. Xóa hết code cũ, mở file <a href="google-apps-script.js" target="_blank" class="text-[#a94025] underline font-bold">google-apps-script.js</a> trong mã nguồn NEPLE và dán toàn bộ vào.</div>
+              <div>3. Bấm <strong>Triển khai (Deploy) → Tùy chọn triển khai mới → Ứng dụng web</strong> (Chọn: <em>Ai cũng có quyền truy cập / Anyone</em>) rồi sao chép link dán vào ô trên.</div>
+            </div>
+          </div>
 
           <div class="pt-3 flex justify-end">
             <button type="submit" class="px-6 py-3 rounded-xl btn-terracotta font-bold text-sm shadow-md">
@@ -2985,10 +3027,104 @@ const NepleApp = {
       freeShipThreshold: Number(document.getElementById('adm-set-freeship-thresh').value) || 0,
       freeShipCombo: document.getElementById('adm-set-freeship-combo').checked
     };
+    const sheetsUrlInput = document.getElementById('adm-set-sheets-url');
+    if (sheetsUrlInput) {
+      const sheetsUrl = sheetsUrlInput.value.trim();
+      s.googleSheets = {
+        syncUrl: sheetsUrl,
+        enabled: Boolean(sheetsUrl)
+      };
+    }
     this.saveSettings();
     this.injectAnalytics();
     this.renderFloatingSocials();
-    this.showToast('Đã lưu cài đặt Thanh toán VietQR, MoMo & Phí Vận Chuyển!');
+    this.showToast('Đã lưu cài đặt Thanh toán, Phí Vận Chuyển & Google Sheets!');
+  },
+
+  syncOrderToGoogleSheets(order) {
+    const url = this.state.settings?.googleSheets?.syncUrl;
+    if (!url) return;
+    try {
+      fetch(url, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'create_order', order })
+      }).catch(err => console.warn('Google Sheets sync warning:', err));
+    } catch (e) {
+      console.warn('Sync failed:', e);
+    }
+  },
+
+  syncOrderStatusToGoogleSheets(orderId, newStatus) {
+    const url = this.state.settings?.googleSheets?.syncUrl;
+    if (!url) return;
+    try {
+      fetch(url, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'update_status', orderId, status: newStatus })
+      }).catch(err => console.warn('Google Sheets status sync warning:', err));
+    } catch (e) {}
+  },
+
+  async fetchOrdersFromGoogleSheets(quiet = false) {
+    const url = this.state.settings?.googleSheets?.syncUrl;
+    if (!url) {
+      if (!quiet) this.showToast('Chưa cấu hình URL Google Sheets trong Cài đặt!');
+      return;
+    }
+    if (!quiet) this.showToast('Đang kết nối Google Sheets...');
+    try {
+      const res = await fetch(url);
+      const data = await res.json();
+      if (data && data.status === 'success' && Array.isArray(data.orders)) {
+        const sheetOrders = data.orders.map(so => ({
+          id: so.id,
+          createdAt: so.createdAt,
+          customerName: so.customerName,
+          phone: so.phone,
+          address: so.address,
+          items: [{ name: so.itemsSummary || 'Gói Lễ Nếp Lễ', qty: 1, price: so.subtotal || so.total }],
+          subtotal: so.subtotal || so.total,
+          shippingLabel: so.shippingLabel,
+          total: so.total,
+          paymentLabel: so.paymentLabel,
+          status: so.status,
+          note: so.note
+        }));
+        const mergedMap = new Map();
+        sheetOrders.forEach(o => mergedMap.set(o.id, o));
+        this.state.orders.forEach(o => {
+          if (!mergedMap.has(o.id)) mergedMap.set(o.id, o);
+        });
+        this.state.orders = Array.from(mergedMap.values());
+        this.saveOrders();
+        if (this.renderAdminPanel) this.renderAdminPanel();
+        if (!quiet) this.showToast(`Đã đồng bộ ${data.orders.length} đơn hàng từ Google Sheets!`);
+      } else {
+        if (!quiet) this.showToast('Phản hồi từ Google Sheets không đúng định dạng!');
+      }
+    } catch (err) {
+      console.warn('Fetch Google Sheets failed:', err);
+      if (!quiet) this.showToast('Không thể kết nối tới Google Sheets, vui lòng kiểm tra URL!');
+    }
+  },
+
+  async testAndSyncGoogleSheets() {
+    const urlInput = document.getElementById('adm-set-sheets-url');
+    const url = urlInput ? urlInput.value.trim() : '';
+    if (!url) {
+      this.showToast('Vui lòng dán URL Google Apps Script Web App trước!');
+      return;
+    }
+    this.state.settings.googleSheets = {
+      syncUrl: url,
+      enabled: true
+    };
+    this.saveSettings();
+    await this.fetchOrdersFromGoogleSheets(false);
   },
 
   renderFloatingSocials() {

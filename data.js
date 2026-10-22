@@ -698,6 +698,10 @@ const DEFAULT_SETTINGS = {
     interprovincialFee: 35000,
     freeShipThreshold: 200000,
     freeShipCombo: true
+  },
+  googleSheets: {
+    syncUrl: '',
+    enabled: false
   }
 };
 
