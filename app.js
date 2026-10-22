@@ -357,16 +357,11 @@ const NepleApp = {
 
     leftMount.innerHTML = `
       <div class="p-5 sm:p-6 rounded-3xl bg-[#f4efe6] border-2 border-[#ae9984] shadow-lg space-y-5">
-        <div class="flex items-center justify-between gap-2 pb-3 border-b border-[#ae9984]/40">
-          <div>
-            <span class="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-[#0d2931] block">
-              Chọn gói lễ hoặc Tự tay phối set theo nhu cầu của bạn
-            </span>
-            <span class="text-xs text-[#0d2931]/70">Bạn có thể chọn từng gói hoặc kết hợp thành Combo</span>
-          </div>
-          <span class="px-3 py-1 rounded-full bg-[#691727] text-[#f0b45b] text-xs font-extrabold shrink-0">
-            ${rituals.length}/3 dịp lễ
+        <div class="pb-3 border-b border-[#ae9984]/40">
+          <span class="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-[#0d2931] block">
+            Chọn gói lễ hoặc Tự tay phối set theo nhu cầu của bạn
           </span>
+          <span class="text-xs text-[#0d2931]/70">Bạn có thể chọn từng gói hoặc kết hợp thành Combo</span>
         </div>
 
         <div class="space-y-3">
