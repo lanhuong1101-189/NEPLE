@@ -63,89 +63,97 @@
         </div>
       </div>
 
-      <!-- Smart Search Bar (Desktop & Tablet) -->
-      <div class="relative flex-1 max-w-md hidden sm:block smart-search-wrapper">
-        <div class="relative">
-          <input
-            type="text"
-            placeholder="Tìm 'cúng ông táo', 'văn khấn', 'chung cư', 'trọn tết'..."
-            oninput="NepleApp.handleSmartSearch(this.value, 'header-search-results')"
-            onfocus="if(this.value) NepleApp.handleSmartSearch(this.value, 'header-search-results')"
-            class="w-full pl-9 pr-4 py-2 rounded-full bg-[#faf7f2]/90 border border-[#691727]/30 text-xs sm:text-sm text-[#691727] placeholder-[#691727]/60 focus:outline-none focus:bg-white focus:text-[#691727] transition"
-          />
-          <svg class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#691727]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-          </svg>
-        </div>
-        <!-- Instant Dropdown Results -->
-        <div id="header-search-results" class="smart-search-results hidden absolute left-0 right-0 mt-2 rounded-2xl bg-[#fffdf9] text-[#0d2931] border-2 border-[#f0b45b] shadow-2xl z-50"></div>
-      </div>
-
-      <!-- Navigation Links (4 Main Items: Nhà Nếp | Gói lễ [Dropdown] | Hội nhà Nếp | Người nhà Nếp) -->
-      <nav style="font-family: 'Be Vietnam Pro', sans-serif; font-weight: 700;" class="hidden lg:flex items-center gap-7 text-sm sm:text-base font-bold text-[#691727]">
-        <!-- 1. Nhà Nếp -->
-        <button data-view="home" onclick="NepleApp.switchView('home')" class="nav-link-item text-[#691727] hover:opacity-80 transition py-1">
-          Nhà Nếp
-        </button>
-
-        <!-- 2. Gói lễ (Hover Dropdown) -->
-        <div class="relative group py-1">
-          <button
-            onclick="NepleApp.switchView('home'); setTimeout(()=>document.getElementById('combo-selector')?.scrollIntoView({behavior:'smooth'}),50)"
-            class="flex items-center gap-1.5 text-[#691727] hover:opacity-80 transition font-bold"
-          >
-            <span>Gói lễ</span>
-            <svg class="w-3.5 h-3.5 transition-transform duration-200 group-hover:rotate-180" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
-            </svg>
+      <!-- Center: Navigation Links (Nhà Nếp -> Giỏ Lễ) focused on product conversion -->
+      <div class="hidden lg:flex items-center justify-center gap-6 flex-1" style="font-family: 'Be Vietnam Pro', sans-serif; font-weight: 700;">
+        <nav class="flex items-center gap-6 text-sm sm:text-base font-bold text-[#691727]">
+          <!-- 1. Nhà Nếp -->
+          <button data-view="home" onclick="NepleApp.switchView('home')" class="nav-link-item text-[#691727] hover:opacity-80 transition py-1">
+            Nhà Nếp
           </button>
 
-          <!-- Dropdown Menu on Hover -->
-          <div class="invisible opacity-0 group-hover:visible group-hover:opacity-100 transition-all duration-200 absolute left-0 top-full pt-2 w-56 z-50">
-            <div class="rounded-2xl bg-[#fffdf9] border-2 border-[#691727]/20 shadow-xl py-2 overflow-hidden">
-              <a
-                href="#combo-selector"
-                onclick="NepleApp.switchView('home'); setTimeout(()=>document.getElementById('combo-selector')?.scrollIntoView({behavior:'smooth'}),50)"
-                class="flex items-center gap-2.5 px-4 py-2.5 text-xs sm:text-sm font-bold text-[#691727] hover:bg-[#f4ebd0] transition"
-              >
-                <img src="logo.png?v=2" alt="NEPLE" class="w-5 h-5 object-contain shrink-0" />
-                <span>Sản phẩm</span>
-              </a>
-              <a
-                href="#so-sanh"
-                onclick="NepleApp.switchView('home'); setTimeout(()=>document.getElementById('so-sanh')?.scrollIntoView({behavior:'smooth'}),50)"
-                class="flex items-center gap-2.5 px-4 py-2.5 text-xs sm:text-sm font-bold text-[#691727] hover:bg-[#f4ebd0] transition border-t border-[#ae9984]/25"
-              >
-                <img src="logo.png?v=2" alt="NEPLE" class="w-5 h-5 object-contain shrink-0" />
-                <span>So sánh sản phẩm</span>
-              </a>
-              <button
-                onclick="NepleApp.switchView('tra-cuu')"
-                class="w-full text-left flex items-center gap-2.5 px-4 py-2.5 text-xs sm:text-sm font-bold text-[#691727] hover:bg-[#f4ebd0] transition border-t border-[#ae9984]/25"
-              >
-                <img src="logo.png?v=2" alt="NEPLE" class="w-5 h-5 object-contain shrink-0" />
-                <span>Tra cứu đơn</span>
-              </button>
+          <!-- 2. Gói lễ (Hover Dropdown - Highlighted for Product Focus) -->
+          <div class="relative group py-1">
+            <button
+              onclick="NepleApp.switchView('home'); setTimeout(()=>document.getElementById('combo-selector')?.scrollIntoView({behavior:'smooth'}),50)"
+              class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#691727]/10 hover:bg-[#691727]/20 text-[#691727] transition font-bold"
+            >
+              <span>Gói lễ</span>
+              <svg class="w-3.5 h-3.5 transition-transform duration-200 group-hover:rotate-180" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+
+            <!-- Dropdown Menu on Hover -->
+            <div class="invisible opacity-0 group-hover:visible group-hover:opacity-100 transition-all duration-200 absolute left-0 top-full pt-2 w-56 z-50">
+              <div class="rounded-2xl bg-[#fffdf9] border-2 border-[#691727]/20 shadow-xl py-2 overflow-hidden">
+                <a
+                  href="#combo-selector"
+                  onclick="NepleApp.switchView('home'); setTimeout(()=>document.getElementById('combo-selector')?.scrollIntoView({behavior:'smooth'}),50)"
+                  class="flex items-center gap-2.5 px-4 py-2.5 text-xs sm:text-sm font-bold text-[#691727] hover:bg-[#f4ebd0] transition"
+                >
+                  <img src="logo.png?v=2" alt="NEPLE" class="w-5 h-5 object-contain shrink-0" />
+                  <span>Sản phẩm</span>
+                </a>
+                <a
+                  href="#so-sanh"
+                  onclick="NepleApp.switchView('home'); setTimeout(()=>document.getElementById('so-sanh')?.scrollIntoView({behavior:'smooth'}),50)"
+                  class="flex items-center gap-2.5 px-4 py-2.5 text-xs sm:text-sm font-bold text-[#691727] hover:bg-[#f4ebd0] transition border-t border-[#ae9984]/25"
+                >
+                  <img src="logo.png?v=2" alt="NEPLE" class="w-5 h-5 object-contain shrink-0" />
+                  <span>So sánh sản phẩm</span>
+                </a>
+                <button
+                  onclick="NepleApp.switchView('tra-cuu')"
+                  class="w-full text-left flex items-center gap-2.5 px-4 py-2.5 text-xs sm:text-sm font-bold text-[#691727] hover:bg-[#f4ebd0] transition border-t border-[#ae9984]/25"
+                >
+                  <img src="logo.png?v=2" alt="NEPLE" class="w-5 h-5 object-contain shrink-0" />
+                  <span>Tra cứu đơn</span>
+                </button>
+              </div>
             </div>
           </div>
+
+          <!-- 3. Hội nhà Nếp -->
+          <button data-view="cam-nang" onclick="NepleApp.switchView('cam-nang')" class="nav-link-item text-[#691727] hover:opacity-80 transition py-1">
+            Hội nhà Nếp
+          </button>
+
+          <!-- 4. Người nhà Nếp (Directs to Internal Admin Portal) -->
+          <a href="admin.html" class="nav-link-item text-[#691727] hover:opacity-80 transition py-1">
+            Người nhà Nếp
+          </a>
+        </nav>
+
+        <!-- Cart CTA (Part of Center Group, Emphasized for Conversion) -->
+        <button onclick="NepleApp.openCheckoutModal()" class="relative px-4 py-2 rounded-xl bg-[#691727] hover:bg-[#4d0f1b] border border-[#691727] text-[#f0b45b] text-xs sm:text-sm font-bold flex items-center gap-2 transition shadow-sm shrink-0">
+          <span>🧺 Giỏ Lễ</span>
+          <span class="cart-count-badge hidden px-1.5 py-0.2 rounded-full bg-[#f0b45b] text-[#0d2931] text-[11px] font-extrabold">0</span>
+        </button>
+      </div>
+
+      <!-- Right: Smart Search Bar (Pushed to Right & Compact) + Mobile Cart CTA -->
+      <div class="flex items-center gap-2.5 shrink-0">
+        <div class="relative w-48 xl:w-64 hidden sm:block smart-search-wrapper">
+          <div class="relative">
+            <input
+              type="text"
+              placeholder="Tìm gói lễ, văn khấn..."
+              oninput="NepleApp.handleSmartSearch(this.value, 'header-search-results')"
+              onfocus="if(this.value) NepleApp.handleSmartSearch(this.value, 'header-search-results')"
+              style="font-family: 'Be Vietnam Pro', sans-serif; font-weight: 400;"
+              class="w-full pl-8 pr-3 py-1.5 rounded-full bg-[#faf7f2]/90 border border-[#691727]/30 text-xs sm:text-sm font-normal text-[#691727] placeholder-[#691727]/60 focus:outline-none focus:bg-white focus:border-[#691727] focus:text-[#691727] transition"
+            />
+            <svg class="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-[#691727]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+            </svg>
+          </div>
+          <!-- Instant Dropdown Results -->
+          <div id="header-search-results" class="smart-search-results hidden absolute right-0 mt-2 w-80 sm:w-96 rounded-2xl bg-[#fffdf9] text-[#0d2931] border-2 border-[#f0b45b] shadow-2xl z-50"></div>
         </div>
 
-        <!-- 3. Hội nhà Nếp -->
-        <button data-view="cam-nang" onclick="NepleApp.switchView('cam-nang')" class="nav-link-item text-[#691727] hover:opacity-80 transition py-1">
-          Hội nhà Nếp
-        </button>
-
-        <!-- 4. Người nhà Nếp (Directs to Internal Admin Portal) -->
-        <a href="admin.html" class="nav-link-item text-[#691727] hover:opacity-80 transition py-1">
-          Người nhà Nếp
-        </a>
-      </nav>
-
-      <!-- Cart CTA -->
-      <div class="flex items-center gap-2.5 shrink-0" style="font-family: 'Be Vietnam Pro', sans-serif; font-weight: 700;">
-        <button onclick="NepleApp.openCheckoutModal()" class="relative px-4 py-2 rounded-xl bg-[#faf7f2] hover:bg-white border border-[#691727]/40 text-[#691727] text-xs sm:text-sm font-bold flex items-center gap-2 transition shadow-sm">
+        <button onclick="NepleApp.openCheckoutModal()" class="lg:hidden relative px-3.5 py-2 rounded-xl bg-[#691727] text-[#f0b45b] text-xs font-bold flex items-center gap-1.5 transition shadow-sm">
           <span>🧺 Giỏ Lễ</span>
-          <span class="cart-count-badge hidden px-1.5 py-0.2 rounded-full bg-[#691727] text-[#faf7f2] text-[11px] font-extrabold">0</span>
+          <span class="cart-count-badge hidden px-1.5 py-0.2 rounded-full bg-[#f0b45b] text-[#0d2931] text-[11px] font-extrabold">0</span>
         </button>
       </div>
     </div>
@@ -195,11 +203,11 @@
           </div>
 
           <div class="pt-2 flex flex-wrap items-center gap-4">
-            <a href="#combo-selector" class="px-7 py-4 rounded-2xl bg-[#f0b45b] hover:bg-[#e5a649] text-[#691727] font-bold text-sm sm:text-base inline-flex items-center gap-2 transition shadow-md">
+            <a href="#combo-selector" class="px-7 py-4 rounded-2xl bg-[#f0b45b] hover:bg-[#e5a649] text-[#691727] font-bold text-sm sm:text-base inline-flex items-center gap-2 transition shadow-lg">
               <span>Khám phá Gói lễ nhà Nếp</span>
               <span>↓</span>
             </a>
-            <button onclick="NepleApp.switchView('cam-nang')" class="px-6 py-4 rounded-2xl bg-white/10 hover:bg-white/20 border border-[#f0b45b]/50 text-[#faf7f2] font-semibold text-sm sm:text-base transition">
+            <button onclick="NepleApp.switchView('cam-nang')" class="px-6 py-4 rounded-2xl bg-transparent hover:bg-white/5 border border-[#faf7f2]/35 hover:border-[#f0b45b]/60 text-[#faf7f2]/90 hover:text-[#faf7f2] font-medium text-sm sm:text-base transition">
               Khám phá thêm tại Hội nhà Nếp
             </button>
           </div>
@@ -217,22 +225,22 @@
             <div class="space-y-2.5">
               <div onclick="NepleApp.selectSkuDirectly('pack-tien-tao', true)" class="p-3.5 rounded-2xl bg-[#0d2931] hover:bg-[#163d48] flex items-center justify-between cursor-pointer transition">
                 <div>
-                  <div class="font-display text-lg sm:text-xl text-[#f0b45b] uppercase">GÓI TIỄN TÁO (23 THÁNG CHẠP)</div>
-                  <div class="text-xs text-[#faf7f2]/85 mt-0.5">Bộ lễ Táo Quân • Nhang • Nến • Giấy tiền vàng mã</div>
+                  <div style="font-family: 'Be Vietnam Pro', sans-serif; font-weight: 700;" class="text-sm sm:text-base font-bold text-[#f0b45b] uppercase">GÓI TIỄN TÁO (23 THÁNG CHẠP)</div>
+                  <div style="font-family: 'Be Vietnam Pro', sans-serif; font-weight: 400;" class="text-xs font-normal text-[#faf7f2]/85 mt-0.5">Bộ lễ Táo Quân • Nhang • Nến • Giấy tiền vàng mã</div>
                 </div>
                 <span class="text-xs font-bold text-[#f0b45b] shrink-0">Xem →</span>
               </div>
               <div onclick="NepleApp.selectSkuDirectly('pack-giao-thua', true)" class="p-3.5 rounded-2xl bg-[#691727] hover:bg-[#4d0f1b] flex items-center justify-between cursor-pointer transition">
                 <div>
-                  <div class="font-display text-lg sm:text-xl text-[#f0b45b] uppercase">GÓI GIAO THỪA (ĐÊM 30 TẾT)</div>
-                  <div class="text-xs text-[#faf7f2]/85 mt-0.5">Lễ vật giao thừa • Nhang • Nến • Gạo muối</div>
+                  <div style="font-family: 'Be Vietnam Pro', sans-serif; font-weight: 700;" class="text-sm sm:text-base font-bold text-[#f0b45b] uppercase">GÓI GIAO THỪA (ĐÊM 30 TẾT)</div>
+                  <div style="font-family: 'Be Vietnam Pro', sans-serif; font-weight: 400;" class="text-xs font-normal text-[#faf7f2]/85 mt-0.5">Lễ vật giao thừa • Nhang • Nến • Gạo muối</div>
                 </div>
                 <span class="text-xs font-bold text-[#f0b45b] shrink-0">Xem →</span>
               </div>
               <div onclick="NepleApp.selectSkuDirectly('pack-khai-xuan', true)" class="p-3.5 rounded-2xl bg-[#0d2931] hover:bg-[#163d48] flex items-center justify-between cursor-pointer transition">
                 <div>
-                  <div class="font-display text-lg sm:text-xl text-[#f0b45b] uppercase">GÓI KHAI XUÂN (MÙNG 1 TẾT)</div>
-                  <div class="text-xs text-[#faf7f2]/85 mt-0.5">Lễ vật khai xuân • Hương hoa • Lễ phẩm đầu năm</div>
+                  <div style="font-family: 'Be Vietnam Pro', sans-serif; font-weight: 700;" class="text-sm sm:text-base font-bold text-[#f0b45b] uppercase">GÓI KHAI XUÂN (MÙNG 1 TẾT)</div>
+                  <div style="font-family: 'Be Vietnam Pro', sans-serif; font-weight: 400;" class="text-xs font-normal text-[#faf7f2]/85 mt-0.5">Lễ vật khai xuân • Hương hoa • Lễ phẩm đầu năm</div>
                 </div>
                 <span class="text-xs font-bold text-[#f0b45b] shrink-0">Xem →</span>
               </div>
@@ -241,7 +249,7 @@
             <div class="pt-2 flex items-center justify-between gap-3 border-t border-[#691727]/20">
               <div>
                 <span class="text-[11px] text-[#691727] font-bold uppercase block">★ Tiết kiệm 138.000đ (-18%)</span>
-                <span class="font-display text-lg font-bold text-[#0d2931]">Hộp Đặc Biệt Combo Trọn Tết</span>
+                <span style="font-family: 'Be Vietnam Pro', sans-serif; font-weight: 700;" class="text-base sm:text-lg font-bold text-[#0d2931]">Hộp Đặc Biệt Combo Trọn Tết</span>
               </div>
               <button onclick="NepleApp.buyNow('combo-tron-tet')" class="px-4 py-2.5 rounded-xl btn-terracotta text-xs font-bold shrink-0">
                 Đặt Ngay • 649K

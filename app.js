@@ -364,7 +364,7 @@ const NepleApp = {
             </div>
             <div class="min-w-0">
               <div class="flex flex-wrap items-center gap-1.5">
-                <span class="font-display text-base sm:text-lg font-bold leading-tight">${p.name}</span>
+                <span style="font-family: 'Be Vietnam Pro', sans-serif; font-weight: 700;" class="text-base sm:text-lg font-bold leading-tight">${p.name}</span>
                 ${
                   p.bestSeller
                     ? `<span class="px-2 py-0.5 rounded-full bg-[#f0b45b] text-[#0d2931] text-[10px] font-extrabold uppercase">Best Seller</span>`
@@ -428,7 +428,7 @@ const NepleApp = {
                       active ? 'bg-[#f0b45b] text-[#0d2931]' : 'border border-[#ae9984]'
                     }">${active ? '✓' : ''}</span>
                   </div>
-                  <div class="font-display text-xs sm:text-sm font-bold mt-1">${r.title}</div>
+                  <div style="font-family: 'Be Vietnam Pro', sans-serif; font-weight: 700;" class="text-xs sm:text-sm font-bold mt-1">${r.title}</div>
                 </button>
               `;
               })
@@ -581,7 +581,7 @@ const NepleApp = {
 
           <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mt-2">
             <div>
-              <h3 class="font-display text-2xl sm:text-3xl font-bold text-[#faf7f2]">${matched.name}</h3>
+              <h3 style="font-family: 'Be Vietnam Pro', sans-serif !important; font-weight: 700 !important;" class="text-2xl sm:text-3xl font-bold text-[#faf7f2]">${matched.name}</h3>
               <p class="text-xs sm:text-sm text-[#f0b45b] font-medium mt-0.5">${matched.subtitle}</p>
             </div>
             <div class="sm:text-right">
@@ -645,7 +645,7 @@ const NepleApp = {
                               <span class="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded bg-[#0d2931] text-[#f0b45b]">${comp.num}</span>
                               <span class="text-[11px] font-bold text-[#72826f]">✓ Có trong hộp</span>
                             </div>
-                            <div class="font-display text-base font-bold text-[#0d2931]">${comp.name}</div>
+                            <div style="font-family: 'Be Vietnam Pro', sans-serif; font-weight: 700;" class="text-base font-bold text-[#0d2931]">${comp.name}</div>
                             <div class="text-[11px] font-semibold text-[#691727] mb-2.5">${comp.date}</div>
                             <ul class="space-y-1.5 text-xs text-[#0d2931]/90">
                               ${comp.miniItems.map(m => `<li class="leading-snug">${m}</li>`).join('')}
@@ -668,7 +668,7 @@ const NepleApp = {
                           <div class="w-10 h-10 rounded-full bg-[#efe9e0] group-hover:bg-[#691727] group-hover:text-[#f0b45b] text-[#0d2931] flex items-center justify-center font-bold text-lg transition">
                             +
                           </div>
-                          <div class="font-display text-base font-bold text-[#0d2931]/70 group-hover:text-[#0d2931] mt-2">${comp.name}</div>
+                          <div style="font-family: 'Be Vietnam Pro', sans-serif; font-weight: 700;" class="text-base font-bold text-[#0d2931]/70 group-hover:text-[#0d2931] mt-2">${comp.name}</div>
                           <div class="text-xs text-[#0d2931]/50">${comp.date}</div>
                           <span class="mt-3 px-3 py-1.5 rounded-lg bg-[#0d2931]/10 group-hover:bg-[#691727] group-hover:text-[#f0b45b] text-[11px] font-bold text-[#0d2931] transition">
                             + Bấm thêm ngăn này
