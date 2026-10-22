@@ -333,141 +333,110 @@ const NepleApp = {
     const matched = this.state.products.find(p => p.id === this.state.activeSkuId) || this.getMatchedProductByRituals(rituals);
     const savings = Math.max(0, (matched.originalPrice || matched.price) - matched.price);
 
-    // Group products for Left Selector Panel (No repetitive images!)
-    const tripleSku = this.state.products.filter(p => p.tier === 'triple');
-    const doubleSkus = this.state.products.filter(p => p.tier === 'double');
-    const singleSkus = this.state.products.filter(p => p.tier === 'single');
+    // Render Left Selector Panel (Redistributed layout for Ritual Selection without Cách 2)
+    const ritualOptions = [
+      {
+        key: 'tien-tao',
+        title: 'Gói Tiễn Táo',
+        sub: '23 Tháng Chạp',
+        desc: 'Bộ lễ Táo Quân • Nhang • Nến • Giấy tiền vàng mã'
+      },
+      {
+        key: 'giao-thua',
+        title: 'Gói Giao Thừa',
+        sub: 'Đêm 30 Tết',
+        desc: 'Lễ vật giao thừa • Nhang • Nến • Gạo muối'
+      },
+      {
+        key: 'khai-xuan',
+        title: 'Gói Khai Xuân',
+        sub: 'Mùng 1 Tết',
+        desc: 'Lễ vật khai xuân • Hương hoa • Lễ phẩm đầu năm'
+      }
+    ];
 
-    const renderSkuRow = (p) => {
-      const isSelected = p.id === matched.id;
-      const pSavings = Math.max(0, (p.originalPrice || p.price) - p.price);
-      const isRoyal = p.tier === 'triple';
-      return `
-        <div onclick="NepleApp.selectSkuDirectly('${p.id}')"
-             class="sku-selector-row p-3.5 sm:p-4 rounded-2xl border-2 ${
-               isSelected
-                 ? isRoyal
-                   ? 'active-royal'
-                   : 'active'
-                 : 'bg-[#fffdf9] border-[#ae9984]/50 text-[#0d2931]'
-             } flex items-center justify-between gap-3">
-          <div class="flex items-start gap-3 min-w-0">
-            <!-- Radio Dot Indicator -->
-            <div class="w-5 h-5 rounded-full border-2 mt-0.5 flex items-center justify-center shrink-0 ${
-              isSelected ? 'border-[#f0b45b] bg-[#f0b45b]' : 'border-[#ae9984]'
-            }">
+    leftMount.innerHTML = `
+      <div class="p-5 sm:p-6 rounded-3xl bg-[#f4efe6] border-2 border-[#ae9984] shadow-lg space-y-5">
+        <div class="flex items-center justify-between gap-2 pb-3 border-b border-[#ae9984]/40">
+          <div>
+            <span class="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-[#0d2931] block">
+              Tích chọn dịp lễ cần cúng (Tự ghép gói)
+            </span>
+            <span class="text-xs text-[#0d2931]/70">Bấm chọn 1, 2 hoặc cả 3 dịp lễ để ghép hộp tự động</span>
+          </div>
+          <span class="px-3 py-1 rounded-full bg-[#691727] text-[#f0b45b] text-xs font-extrabold shrink-0">
+            ${rituals.length}/3 dịp lễ
+          </span>
+        </div>
+
+        <div class="space-y-3">
+          ${ritualOptions
+            .map(r => {
+              const active = rituals.includes(r.key);
+              return `
+              <button type="button" onclick="NepleApp.toggleRitual('${r.key}')"
+                class="ritual-chip w-full p-4 rounded-2xl border-2 text-left transition flex items-start justify-between gap-3 ${
+                  active ? 'active' : 'bg-[#fffdf9] border-[#ae9984]/60 text-[#0d2931] hover:border-[#0d2931]'
+                }">
+                <div class="space-y-1 min-w-0">
+                  <div class="flex flex-wrap items-center gap-2">
+                    <span style="font-family: 'Be Vietnam Pro', sans-serif; font-weight: 700;" class="text-base sm:text-lg font-bold leading-tight uppercase">
+                      ${r.title}
+                    </span>
+                    <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase ${
+                      active ? 'bg-[#f0b45b]/20 text-[#f0b45b] border border-[#f0b45b]/40' : 'bg-[#691727]/10 text-[#691727]'
+                    }">
+                      ${r.sub}
+                    </span>
+                  </div>
+                  <div style="font-family: 'Be Vietnam Pro', sans-serif; font-weight: 400;" class="text-xs sm:text-sm font-normal ${
+                    active ? 'text-[#faf7f2]/85' : 'text-[#0d2931]/75'
+                  }">
+                    ${r.desc}
+                  </div>
+                </div>
+                <span class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-extrabold shrink-0 mt-0.5 ${
+                  active ? 'bg-[#f0b45b] text-[#0d2931]' : 'border-2 border-[#ae9984] text-transparent'
+                }">✓</span>
+              </button>
+            `;
+            })
+            .join('')}
+        </div>
+
+        <!-- Quick Select All / Summary Card -->
+        <div class="p-4 rounded-2xl bg-[#fffdf9] border border-[#ae9984]/60 space-y-3">
+          <div class="flex items-center justify-between gap-2">
+            <div>
+              <span class="text-[11px] font-bold uppercase tracking-wider text-[#72826f] block">Gói lễ tương ứng đang chọn</span>
+              <span style="font-family: 'Be Vietnam Pro', sans-serif; font-weight: 700;" class="text-base sm:text-lg font-bold text-[#0d2931]">
+                ${matched.name}
+              </span>
+            </div>
+            <div class="text-right">
+              <div class="text-base sm:text-lg font-extrabold text-[#a94025]">${this.formatVND(matched.price)}</div>
               ${
-                isSelected
-                  ? `<div class="w-2.5 h-2.5 rounded-full bg-[#0d2931]"></div>`
-                  : ''
+                savings > 0
+                  ? `<div class="text-[11px] font-bold text-[#691727]">Tiết kiệm ${this.formatVND(savings)} (-${matched.discountPercent}%)</div>`
+                  : `<div class="text-[11px] text-[#72826f]">Hộp đơn 1 ngăn</div>`
               }
             </div>
-            <div class="min-w-0">
-              <div class="flex flex-wrap items-center gap-1.5">
-                <span style="font-family: 'Be Vietnam Pro', sans-serif; font-weight: 700;" class="text-base sm:text-lg font-bold leading-tight">${p.name}</span>
-                ${
-                  p.bestSeller
-                    ? `<span class="px-2 py-0.5 rounded-full bg-[#f0b45b] text-[#0d2931] text-[10px] font-extrabold uppercase">Best Seller</span>`
-                    : ''
-                }
-                ${
-                  pSavings > 0
-                    ? `<span class="px-2 py-0.5 rounded-full ${
-                        isSelected ? 'bg-white/15 text-[#f0b45b]' : 'bg-[#691727]/10 text-[#691727]'
-                      } text-[10px] font-bold">Tiết kiệm ${this.formatVND(pSavings)}</span>`
-                    : ''
-                }
-              </div>
-              <div class="text-xs mt-0.5 ${isSelected ? 'text-[#faf7f2]/80' : 'text-[#0d2931]/70'} truncate">
-                ${p.subtitle}
-              </div>
+          </div>
+
+          ${
+            rituals.length < 3
+              ? `
+            <button type="button" onclick="NepleApp.setRitualsPreset(['tien-tao', 'giao-thua', 'khai-xuan'])"
+              class="w-full py-2.5 px-4 rounded-xl bg-[#691727] hover:bg-[#4d0f1b] text-[#f0b45b] text-xs font-bold transition flex items-center justify-center gap-1.5 shadow-sm">
+              <span>★ Chọn đủ 3 dịp lễ (Combo Trọn Tết • Tiết kiệm 18%)</span>
+            </button>
+          `
+              : `
+            <div class="py-2 px-3 rounded-xl bg-[#f0b45b]/25 border border-[#f0b45b] text-xs font-bold text-[#0d2931] text-center">
+              ✓ Đã chọn trọn bộ 3 dịp lễ Tết (Ưu đãi cao nhất -18%)
             </div>
-          </div>
-
-          <div class="text-right shrink-0">
-            <div class="text-sm sm:text-base font-extrabold ${isSelected ? 'text-[#f0b45b]' : 'text-[#a94025]'}">
-              ${this.formatVND(p.price)}
-            </div>
-            ${
-              pSavings > 0
-                ? `<div class="text-[11px] line-through ${isSelected ? 'text-white/50' : 'text-[#0d2931]/45'}">${this.formatVND(p.originalPrice)}</div>`
-                : `<div class="text-[10px] ${isSelected ? 'text-white/70' : 'text-[#72826f]'}">Hộp đơn</div>`
-            }
-          </div>
-        </div>
-      `;
-    };
-
-    // Render Left Selector Panel
-    leftMount.innerHTML = `
-      <div class="space-y-5">
-        <!-- Quick Ritual Checkboxes (Syncs with 7 SKUs) -->
-        <div class="p-4 rounded-2xl bg-[#f4efe6] border border-[#ae9984]">
-          <div class="flex items-center justify-between mb-2.5">
-            <span class="text-xs font-extrabold uppercase tracking-wider text-[#0d2931]">
-              Cách 1: Tích chọn dịp lễ cần cúng (Tự ghép gói)
-            </span>
-            <span class="text-[11px] font-bold text-[#691727]">${rituals.length}/3 dịp lễ</span>
-          </div>
-          <div class="grid grid-cols-3 gap-2">
-            ${[
-              { key: 'tien-tao', title: 'Tiễn Táo', sub: '23 Chạp' },
-              { key: 'giao-thua', title: 'Giao Thừa', sub: 'Đêm 30' },
-              { key: 'khai-xuan', title: 'Khai Xuân', sub: 'Mùng 1' }
-            ]
-              .map(r => {
-                const active = rituals.includes(r.key);
-                return `
-                <button type="button" onclick="NepleApp.toggleRitual('${r.key}')"
-                  class="ritual-chip p-2.5 rounded-xl border-2 text-left transition flex flex-col justify-between ${
-                    active ? 'active' : 'bg-white border-[#ae9984]/50 text-[#0d2931]'
-                  }">
-                  <div class="flex items-center justify-between w-full">
-                    <span class="text-[10px] font-bold uppercase opacity-80">${r.sub}</span>
-                    <span class="w-4 h-4 rounded-full flex items-center justify-center text-[10px] font-bold ${
-                      active ? 'bg-[#f0b45b] text-[#0d2931]' : 'border border-[#ae9984]'
-                    }">${active ? '✓' : ''}</span>
-                  </div>
-                  <div style="font-family: 'Be Vietnam Pro', sans-serif; font-weight: 700;" class="text-xs sm:text-sm font-bold mt-1">${r.title}</div>
-                </button>
-              `;
-              })
-              .join('')}
-          </div>
-        </div>
-
-        <!-- Direct 7-SKU Selector List -->
-        <div class="space-y-4">
-          <div class="text-xs font-extrabold uppercase tracking-wider text-[#0d2931] px-1">
-            Cách 2: Bấm chọn trực tiếp từng SKU để xem hộp biến đổi bên cạnh →
-          </div>
-
-          <!-- Tier 3: Full 3-Day Combo -->
-          <div class="space-y-2">
-            <div class="flex items-center justify-between text-[11px] font-bold uppercase tracking-wider text-[#691727] px-1">
-              <span>★ Hộp Quà Lớn Trọn Tết (Đủ 3 Lễ • Ưu đãi 18%)</span>
-              <span>3 Ngăn Độc Lập</span>
-            </div>
-            ${tripleSku.map(renderSkuRow).join('')}
-          </div>
-
-          <!-- Tier 2: 2-Day Combos -->
-          <div class="space-y-2">
-            <div class="flex items-center justify-between text-[11px] font-bold uppercase tracking-wider text-[#0d2931]/75 px-1">
-              <span>📦 Hộp Đôi Combo 2 Ngày Lễ (Ưu đãi 13% - 14%)</span>
-              <span>2 Ngăn Riêng Biệt</span>
-            </div>
-            ${doubleSkus.map(renderSkuRow).join('')}
-          </div>
-
-          <!-- Tier 1: Single Packs -->
-          <div class="space-y-2">
-            <div class="flex items-center justify-between text-[11px] font-bold uppercase tracking-wider text-[#72826f] px-1">
-              <span>🌿 Hộp Đơn Mua Lẻ Từng Dịp (1 Ngày Lễ)</span>
-              <span>1 Ngăn Tiêu Chuẩn</span>
-            </div>
-            ${singleSkus.map(renderSkuRow).join('')}
-          </div>
+          `
+          }
         </div>
       </div>
     `;

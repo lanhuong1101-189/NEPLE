@@ -262,25 +262,22 @@
 
     <!-- ================================================================== -->
     <!-- 2 & 3.1. SPLIT-SCREEN INTERACTIVE SKU & COMBO STUDIO               -->
-    <!-- Left: Select SKU or Toggle Rituals | Right: Live Pack Stage        -->
+    <!-- Left: Select Rituals | Right: Live Pack Stage                      -->
     <!-- ================================================================== -->
     <section id="combo-selector" class="py-12 sm:py-16 max-w-7xl mx-auto px-4 sm:px-6 scroll-mt-16">
       <div class="text-center max-w-3xl mx-auto mb-10">
-        <span class="px-3.5 py-1 rounded-full bg-[#691727] text-[#f0b45b] text-xs font-extrabold uppercase tracking-wider">
-          Interactive 7-SKU &amp; Combo Studio
-        </span>
-        <h2 class="font-display text-2xl sm:text-4xl font-bold text-[#0d2931] mt-3">
-          Chọn Gói Nếp Lễ &amp; Xem Hộp Lễ Biến Đổi Trực Quan
+        <h2 class="font-display text-2xl sm:text-4xl font-bold text-[#0d2931]">
+          GÓI LỄ NHÀ NẾP
         </h2>
         <p class="text-sm sm:text-base text-[#0d2931]/75 mt-2">
-          Bấm chọn <strong>bất kỳ SKU nào ở cột bên trái</strong> (hoặc tích chọn các ngày lễ cần cúng), vùng <strong>Mô phỏng Hộp Lễ bên phải</strong> sẽ tự động thay đổi số ngăn hộp, danh mục lễ vật khô, quà tặng đi kèm và mức tiết kiệm ngay lập tức.
+          Chọn dịp lễ hoặc gói lễ để xem thành phần lễ vật, cách sắp xếp và mức giá.
         </p>
       </div>
 
       <!-- TWO-COLUMN SPLIT INTERACTIVE LAYOUT -->
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        <!-- LEFT COLUMN (5 cols): Interactive Ritual Filter + 7 SKU List -->
-        <div id="sku-selector-left-mount" class="lg:col-span-5"></div>
+        <!-- LEFT COLUMN (5 cols, Sticky): Interactive Ritual Selector -->
+        <div id="sku-selector-left-mount" class="lg:col-span-5 lg:sticky lg:top-24"></div>
 
         <!-- RIGHT COLUMN (7 cols, Sticky): Live Pack Visualizer Stage -->
         <div id="live-pack-stage-mount" class="lg:col-span-7 lg:sticky lg:top-24"></div>
