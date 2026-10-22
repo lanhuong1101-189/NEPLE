@@ -816,41 +816,41 @@ const NepleApp = {
           </thead>
           <tbody class="divide-y divide-[#ae9984]/30 text-xs sm:text-sm">
             <tr>
-              <td class="p-4 font-bold bg-[#f4efe6]/60 text-[#0d2931]">1. Quy cách vỏ hộp</td>
+              <td class="p-4 font-bold bg-[#f4efe6]/60 text-[#0d2931]">Quy cách vỏ hộp</td>
               ${COMPARISON_TIERS.map(t => `<td class="p-4 ${t.featured ? 'bg-[#0d2931]/5 font-medium' : ''}">${t.packaging}</td>`).join('')}
             </tr>
             <tr>
-              <td class="p-4 font-bold bg-[#f4efe6]/60 text-[#0d2931]">2. Vật phẩm lễ khô</td>
+              <td class="p-4 font-bold bg-[#f4efe6]/60 text-[#0d2931]">Vật phẩm lễ khô</td>
               ${COMPARISON_TIERS.map(t => `<td class="p-4 ${t.featured ? 'bg-[#0d2931]/5 font-medium' : ''}">${t.components}</td>`).join('')}
             </tr>
             <tr>
-              <td class="p-4 font-bold bg-[#f4efe6]/60 text-[#0d2931]">3. Ấn phẩm Văn khấn &amp; Cẩm nang</td>
+              <td class="p-4 font-bold bg-[#f4efe6]/60 text-[#0d2931]">Ấn phẩm Văn khấn &amp; Cẩm nang</td>
               ${COMPARISON_TIERS.map(t => `<td class="p-4 ${t.featured ? 'bg-[#0d2931]/5 font-medium' : ''}">${t.publications}</td>`).join('')}
             </tr>
             <tr>
-              <td class="p-4 font-bold bg-[#f4efe6]/60 text-[#0d2931]">4. Quà tặng &amp; Ưu đãi</td>
+              <td class="p-4 font-bold bg-[#f4efe6]/60 text-[#0d2931]">Quà tặng &amp; Ưu đãi</td>
               ${COMPARISON_TIERS.map(t => `<td class="p-4 font-semibold text-[#691727] ${t.featured ? 'bg-[#fdf3e1]' : ''}">${t.exclusiveGifts}</td>`).join('')}
             </tr>
             <tr>
-              <td class="p-4 font-bold bg-[#f4efe6]/60 text-[#0d2931]">5. Gia đình phù hợp</td>
+              <td class="p-4 font-bold bg-[#f4efe6]/60 text-[#0d2931]">Gia đình phù hợp</td>
               ${COMPARISON_TIERS.map(t => `<td class="p-4 ${t.featured ? 'bg-[#0d2931]/5' : ''}">${t.bestFor}</td>`).join('')}
             </tr>
             <tr>
-              <td class="p-4 font-bold bg-[#f4efe6]/60 text-[#0d2931]">6. Mức giá &amp; Chọn nhanh</td>
+              <td class="p-4 font-bold bg-[#f4efe6]/60 text-[#0d2931]">Mức giá</td>
               ${COMPARISON_TIERS.map(t => `
                 <td class="p-4 ${t.featured ? 'bg-[#0d2931]/5' : ''}">
-                  <div class="text-base font-extrabold text-[#a94025] mb-2">${t.priceRange}</div>
-                  <button onclick='NepleApp.setRitualsPreset(${JSON.stringify(t.ctaRituals)})'
-                    class="w-full py-2.5 px-3 rounded-xl font-bold text-xs transition ${
-                      t.featured ? 'btn-terracotta text-white' : 'bg-[#0d2931] hover:bg-[#163d48] text-[#f0b45b]'
-                    }">
-                    Xem mô phỏng hộp này ↑
-                  </button>
+                  <div class="text-base font-extrabold text-[#a94025]">${t.priceRange}</div>
                 </td>
               `).join('')}
             </tr>
           </tbody>
         </table>
+        <div class="p-5 bg-[#f4efe6]/50 border-t border-[#ae9984]/40 flex justify-center">
+          <button onclick="document.getElementById('combo-selector').scrollIntoView({behavior:'smooth'})"
+            class="py-3.5 px-12 rounded-2xl btn-terracotta text-white font-bold text-sm sm:text-base transition shadow-md">
+            Mua ngay
+          </button>
+        </div>
       </div>
     `;
   },
