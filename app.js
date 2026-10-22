@@ -1751,6 +1751,51 @@ const NepleApp = {
       .join('');
   },
 
+  buildOrderPaymentData(method, cleanPhone, total, orderId) {
+    const s = this.state.settings || DEFAULT_SETTINGS;
+    const transferContent = `NEPLE ${cleanPhone}`;
+    if (method === 'VIETQR') {
+      const qrImageUrl = `https://img.vietqr.io/image/${encodeURIComponent(s.bankId)}-${encodeURIComponent(
+        s.accountNumber
+      )}-compact2.png?amount=${total}&addInfo=${encodeURIComponent(transferContent)}&accountName=${encodeURIComponent(
+        s.accountName
+      )}`;
+      return {
+        transferContent,
+        qrImageUrl,
+        bankName: s.bankName,
+        accountNumber: s.accountNumber,
+        accountName: s.accountName
+      };
+    }
+    if (method === 'MOMO') {
+      const momoQrSvg =
+        `data:image/svg+xml;utf8,` +
+        encodeURIComponent(`
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 220">
+          <rect width="220" height="220" rx="16" fill="#a50064"/>
+          <rect x="14" y="14" width="192" height="192" rx="12" fill="#ffffff"/>
+          <rect x="28" y="28" width="46" height="46" rx="6" fill="#a50064"/>
+          <rect x="146" y="28" width="46" height="46" rx="6" fill="#a50064"/>
+          <rect x="28" y="146" width="46" height="46" rx="6" fill="#a50064"/>
+          <rect x="85" y="85" width="50" height="50" rx="8" fill="#a50064"/>
+          <text x="110" y="115" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="bold" fill="#ffffff">MoMo</text>
+          <text x="110" y="176" text-anchor="middle" font-family="sans-serif" font-size="10" font-weight="bold" fill="#a50064">${s.momoPhone}</text>
+        </svg>
+      `);
+      return {
+        transferContent,
+        qrImageUrl: momoQrSvg,
+        momoPhone: s.momoPhone,
+        momoName: s.momoName
+      };
+    }
+    return {
+      transferContent: '',
+      qrImageUrl: ''
+    };
+  },
+
   submitOrder(e) {
     e.preventDefault();
     this.syncCheckoutFormFromDOM();
@@ -1768,7 +1813,10 @@ const NepleApp = {
       return;
     }
 
+    const cleanPhone = phone.replace(/\s+/g, '');
     const fullAddress = `${addressDetail}, ${district}, ${province}`;
+    const total = this.getCartTotal();
+    const orderId = 'NP-' + Math.floor(100000 + Math.random() * 900000);
 
     const paymentLabels = {
       VIETQR: 'Chuyển khoản VietQR Ngân hàng',
@@ -1776,33 +1824,149 @@ const NepleApp = {
       COD: 'Thanh toán khi nhận hàng (COD)'
     };
 
+    const paymentDetails = this.buildOrderPaymentData(this.state.paymentMethod, cleanPhone, total, orderId);
+
     const newOrder = {
-      id: 'NP-' + Math.floor(100000 + Math.random() * 900000),
+      id: orderId,
       customerName: name,
-      phone: phone.replace(/\s+/g, ''),
+      phone: cleanPhone,
+      province,
+      district,
+      addressDetail,
       address: fullAddress,
       note: note || 'Giao tiêu chuẩn trước Tết',
       paymentMethod: this.state.paymentMethod,
       paymentLabel: paymentLabels[this.state.paymentMethod],
+      paymentDetails,
       status: 'Đã tiếp nhận',
       createdAt: new Date().toLocaleString('vi-VN'),
-      total: this.getCartTotal(),
-      items: this.state.cart.map(i => ({ id: i.id, name: i.name, price: i.price, qty: i.qty }))
+      total,
+      items: this.state.cart.map(i => ({ id: i.id, name: i.name, price: i.price, qty: i.qty, image: i.image }))
     };
 
+    // Save order immediately so Admin has full order + QR payment info
     this.state.orders.unshift(newOrder);
     this.saveOrders();
     this.state.cart = [];
     this.state.checkoutForm = { name: '', phone: '', province: '', district: '', addressDetail: '', note: '' };
     this.state.checkoutPhonePreview = '';
     this.saveCart();
-    this.closeCheckoutModal();
 
+    // If user chose VIETQR or MOMO, show the dedicated QR Payment Screen inside the modal
+    if (newOrder.paymentMethod === 'VIETQR' || newOrder.paymentMethod === 'MOMO') {
+      this.renderOrderPaymentQRScreen(newOrder);
+      this.showToast(`Đã tạo đơn ${newOrder.id}! Vui lòng quét mã QR để hoàn tất thanh toán.`);
+      return;
+    }
+
+    // For COD, finish directly and go to Order Tracking
+    this.finishOrderAndTrack(newOrder.phone, newOrder.id);
+  },
+
+  renderOrderPaymentQRScreen(order) {
+    const container = document.getElementById('checkout-modal-body');
+    if (!container) return;
+
+    const p = order.paymentDetails || this.buildOrderPaymentData(order.paymentMethod, order.phone, order.total, order.id);
+    const isVietQR = order.paymentMethod === 'VIETQR';
+
+    container.innerHTML = `
+      <div class="max-w-3xl mx-auto py-2 space-y-6">
+        <div class="p-4 rounded-2xl bg-[#72826f]/15 border border-[#72826f]/40 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <span class="text-xs font-extrabold uppercase tracking-wider text-[#72826f] block">Đơn hàng đã được ghi nhận vào hệ thống</span>
+            <div style="font-family: 'Be Vietnam Pro', sans-serif; font-weight: 700;" class="text-lg sm:text-xl font-bold text-[#0d2931] mt-0.5">
+              Mã đơn: ${order.id} — ${order.customerName} (${order.phone})
+            </div>
+            <div class="text-xs text-[#0d2931]/75 mt-0.5">Địa chỉ: ${order.address}</div>
+          </div>
+          <span class="px-3.5 py-1.5 rounded-full bg-[#0d2931] text-[#f0b45b] text-xs font-extrabold shrink-0 self-start sm:self-center">
+            ${order.paymentLabel}
+          </span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center bg-[#f4efe6] p-5 sm:p-6 rounded-3xl border-2 border-[#ae9984]">
+          <!-- QR Image Column -->
+          <div class="md:col-span-5 text-center space-y-2">
+            <div class="text-xs font-extrabold uppercase tracking-wider ${isVietQR ? 'text-[#0d2931]' : 'text-[#a50064]'}">
+              ${isVietQR ? 'Quét Mã VietQR Napas 247' : 'Quét Mã QR Ví MoMo'}
+            </div>
+            <div class="w-56 h-56 mx-auto rounded-2xl overflow-hidden border-2 border-[#f0b45b] bg-white shadow-md flex items-center justify-center p-2">
+              <img src="${p.qrImageUrl}" alt="QR Thanh Toán ${order.id}" class="w-full h-full object-contain"
+                onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,'+encodeURIComponent('<svg xmlns=\\'http://www.w3.org/2000/svg\\' viewBox=\\'0 0 200 200\\'><rect width=\\'200\\' height=\\'200\\' fill=\\'#faf7f2\\'/><rect x=\\'20\\' y=\\'20\\' width=\\'50\\' height=\\'50\\' fill=\\'#0d2931\\'/><rect x=\\'130\\' y=\\'20\\' width=\\'50\\' height=\\'50\\' fill=\\'#0d2931\\'/><rect x=\\'20\\' y=\\'130\\' width=\\'50\\' height=\\'50\\' fill=\\'#0d2931\\'/><rect x=\\'80\\' y=\\'80\\' width=\\'40\\' height=\\'40\\' fill=\\'#691727\\'/><text x=\\'100\\' y=\\'192\\' text-anchor=\\'middle\\' font-size=\\'11\\' font-family=\\'sans-serif\\' fill=\\'#0d2931\\'>VIETQR NAPAS</text></svg>');" />
+            </div>
+            <p class="text-[11px] text-[#0d2931]/65">Mở App Ngân hàng hoặc MoMo quét mã để tự động điền đúng số tiền &amp; nội dung</p>
+          </div>
+
+          <!-- Transfer Details Column -->
+          <div class="md:col-span-7 space-y-3">
+            <div class="p-4 rounded-2xl bg-white border border-[#ae9984]/50 space-y-2.5 text-xs sm:text-sm">
+              ${
+                isVietQR
+                  ? `
+                <div class="flex justify-between gap-2 py-1 border-b border-[#ae9984]/25">
+                  <span class="text-[#0d2931]/65">Ngân hàng:</span>
+                  <strong class="text-[#0d2931] text-right">${p.bankName}</strong>
+                </div>
+                <div class="flex justify-between items-center gap-2 py-1 border-b border-[#ae9984]/25">
+                  <span class="text-[#0d2931]/65">Số tài khoản:</span>
+                  <div class="flex items-center gap-2">
+                    <strong class="text-[#0d2931] text-base">${p.accountNumber}</strong>
+                    <button type="button" onclick="navigator.clipboard?.writeText('${p.accountNumber}'); NepleApp.showToast('Đã sao chép Số tài khoản!');"
+                      class="px-2 py-0.5 rounded bg-[#efe9e0] hover:bg-[#0d2931] hover:text-white text-[11px] font-bold transition">Copy</button>
+                  </div>
+                </div>
+                <div class="flex justify-between gap-2 py-1 border-b border-[#ae9984]/25">
+                  <span class="text-[#0d2931]/65">Chủ tài khoản:</span>
+                  <strong class="text-[#0d2931] text-right">${p.accountName}</strong>
+                </div>
+              `
+                  : `
+                <div class="flex justify-between items-center gap-2 py-1 border-b border-[#ae9984]/25">
+                  <span class="text-[#0d2931]/65">SĐT Ví MoMo:</span>
+                  <div class="flex items-center gap-2">
+                    <strong class="text-[#a50064] text-base">${p.momoPhone}</strong>
+                    <button type="button" onclick="navigator.clipboard?.writeText('${p.momoPhone}'); NepleApp.showToast('Đã sao chép SĐT MoMo!');"
+                      class="px-2 py-0.5 rounded bg-[#efe9e0] hover:bg-[#0d2931] hover:text-white text-[11px] font-bold transition">Copy</button>
+                  </div>
+                </div>
+                <div class="flex justify-between gap-2 py-1 border-b border-[#ae9984]/25">
+                  <span class="text-[#0d2931]/65">Chủ ví MoMo:</span>
+                  <strong class="text-[#0d2931] text-right">${p.momoName}</strong>
+                </div>
+              `
+              }
+              <div class="flex justify-between gap-2 py-1 border-b border-[#ae9984]/25">
+                <span class="text-[#0d2931]/65">Số tiền thanh toán:</span>
+                <strong class="text-[#BA3820] text-base sm:text-lg font-extrabold">${this.formatVND(order.total)}</strong>
+              </div>
+              <div class="flex justify-between items-center gap-2 pt-1">
+                <span class="text-[#0d2931]/65">Nội dung CK:</span>
+                <div class="flex items-center gap-2">
+                  <strong class="text-[#691727] bg-[#f0b45b]/35 px-2.5 py-1 rounded-lg font-extrabold">${p.transferContent}</strong>
+                  <button type="button" onclick="navigator.clipboard?.writeText('${p.transferContent}'); NepleApp.showToast('Đã sao chép Nội dung chuyển khoản!');"
+                    class="px-2 py-0.5 rounded bg-[#efe9e0] hover:bg-[#0d2931] hover:text-white text-[11px] font-bold transition">Copy</button>
+                </div>
+              </div>
+            </div>
+
+            <button type="button" onclick="NepleApp.finishOrderAndTrack('${order.phone}', '${order.id}')"
+              class="w-full py-4 px-6 rounded-xl bg-[#BA3820] hover:bg-[#9e2e19] text-white font-bold text-sm sm:text-base uppercase tracking-wide shadow-lg transition">
+              HOÀN TẤT &amp; THEO DÕI ĐƠN HÀNG →
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+  },
+
+  finishOrderAndTrack(phone, orderId) {
+    this.closeCheckoutModal();
     this.switchView('tra-cuu');
     const phoneInput = document.getElementById('order-lookup-phone');
-    if (phoneInput) phoneInput.value = newOrder.phone;
-    this.lookupOrderByPhone(newOrder.phone);
-    this.showToast(`Đặt đơn ${newOrder.id} thành công! Cảm ơn gia đình bạn đã chọn NEPLE.`);
+    if (phoneInput) phoneInput.value = phone;
+    this.lookupOrderByPhone(phone);
+    this.showToast(`Đặt đơn ${orderId} thành công! Cảm ơn gia đình bạn đã chọn NEPLE.`);
   },
 
   renderOrderLookupSampleList() {
@@ -2023,9 +2187,11 @@ const NepleApp = {
             </thead>
             <tbody class="divide-y divide-[#ae9984]/30">
               ${this.state.orders
-                .map(
-                  o => `
-                <tr class="hover:bg-[#f4efe6]/70">
+                .map(o => {
+                  const p = o.paymentDetails || this.buildOrderPaymentData(o.paymentMethod, o.phone, o.total, o.id);
+                  const isQRMethod = o.paymentMethod === 'VIETQR' || o.paymentMethod === 'MOMO';
+                  return `
+                <tr class="hover:bg-[#f4efe6]/70 align-top">
                   <td class="p-3.5 font-bold text-[#0d2931]">
                     ${o.id}
                     <div class="text-[11px] font-normal text-[#0d2931]/60">${o.createdAt}</div>
@@ -2033,14 +2199,41 @@ const NepleApp = {
                   <td class="p-3.5">
                     <div class="font-bold text-[#0d2931]">${o.customerName}</div>
                     <div class="text-xs text-[#691727] font-semibold">${o.phone}</div>
-                    <div class="text-xs text-[#0d2931]/70 max-w-xs truncate">${o.address}</div>
+                    <div class="text-xs text-[#0d2931]/70 max-w-xs">${o.address}</div>
                   </td>
                   <td class="p-3.5">
                     ${(o.items || []).map(i => `<div>• ${i.name} (x${i.qty})</div>`).join('')}
                   </td>
                   <td class="p-3.5">
                     <div class="font-extrabold text-[#a94025]">${this.formatVND(o.total)}</div>
-                    <div class="text-[11px] text-[#0d2931]/70">${o.paymentLabel}</div>
+                    <div class="text-[11px] font-semibold text-[#0d2931]/80">${o.paymentLabel}</div>
+                    ${
+                      isQRMethod && p.transferContent
+                        ? `
+                      <div class="mt-1 text-[11px] text-[#691727]">
+                        ND CK: <strong class="bg-[#f0b45b]/30 px-1.5 py-0.5 rounded">${p.transferContent}</strong>
+                      </div>
+                      <details class="mt-1.5 text-[11px]">
+                        <summary class="cursor-pointer font-bold text-[#0d2931] hover:text-[#a94025] select-none">
+                          Xem mã QR &amp; TT thanh toán
+                        </summary>
+                        <div class="mt-2 p-2.5 rounded-xl bg-white border border-[#ae9984]/60 space-y-1.5 max-w-[220px]">
+                          <img src="${p.qrImageUrl}" alt="QR ${o.id}" class="w-32 h-32 mx-auto object-contain rounded-lg border border-[#ae9984]/30 p-1 bg-[#faf7f2]" />
+                          ${
+                            o.paymentMethod === 'VIETQR'
+                              ? `<div class="text-[10px] leading-snug text-[#0d2931]/80">
+                                   <div><strong>NH:</strong> ${p.bankName || ''}</div>
+                                   <div><strong>STK:</strong> ${p.accountNumber || ''}</div>
+                                 </div>`
+                              : `<div class="text-[10px] leading-snug text-[#0d2931]/80">
+                                   <div><strong>Ví MoMo:</strong> ${p.momoPhone || ''}</div>
+                                 </div>`
+                          }
+                        </div>
+                      </details>
+                    `
+                        : ''
+                    }
                   </td>
                   <td class="p-3.5">
                     <select onchange="NepleApp.updateOrderStatus('${o.id}', this.value)"
@@ -2051,8 +2244,8 @@ const NepleApp = {
                     </select>
                   </td>
                 </tr>
-              `
-                )
+              `;
+                })
                 .join('')}
             </tbody>
           </table>
