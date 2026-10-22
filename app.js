@@ -532,11 +532,6 @@ const NepleApp = {
                     <span style="font-family: 'Be Vietnam Pro', sans-serif; font-weight: 700;" class="text-base sm:text-lg font-bold leading-tight uppercase">
                       ${r.title}
                     </span>
-                    <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase ${
-                      active ? 'bg-[#f0b45b]/20 text-[#f0b45b] border border-[#f0b45b]/40' : 'bg-[#691727]/10 text-[#691727]'
-                    }">
-                      ${r.sub}
-                    </span>
                   </div>
                   <div style="font-family: 'Be Vietnam Pro', sans-serif; font-weight: 400;" class="text-xs sm:text-sm font-normal ${
                     active ? 'text-[#faf7f2]/85' : 'text-[#0d2931]/75'
@@ -577,12 +572,12 @@ const NepleApp = {
               ? `
             <button type="button" onclick="NepleApp.setRitualsPreset(['tien-tao', 'giao-thua', 'khai-xuan'])"
               class="w-full py-2.5 px-4 rounded-xl bg-[#691727] hover:bg-[#4d0f1b] text-[#f0b45b] text-xs font-bold transition flex items-center justify-center gap-1.5 shadow-sm">
-              <span>Chọn đủ 3 dịp lễ (Combo Trọn Tết • Tiết kiệm 18%)</span>
+              <span>Chọn đủ 3 dịp lễ (Combo Trọn Tết • 219.000đ)</span>
             </button>
           `
               : `
             <div class="py-2 px-3 rounded-xl bg-[#f0b45b]/25 border border-[#f0b45b] text-xs font-bold text-[#0d2931] text-center">
-              Full combo: Tiết kiệm 18%
+              Full combo: Tiết kiệm ${matched.discountPercent}%
             </div>
           `
           }
@@ -613,7 +608,7 @@ const NepleApp = {
       upsellBannerHTML = `
         <div class="p-3.5 rounded-2xl bg-[#f0b45b]/25 border border-[#f0b45b]">
           <p class="text-xs sm:text-sm text-[#0d2931] font-semibold">
-            Bạn đang chọn <strong>Hộp Quà Lớn Combo Trọn Tết (Đủ 3 Ngăn Lễ)</strong> — Tiết kiệm cao nhất <strong>${this.formatVND(savings)} (-18%)</strong> + Tặng kèm <strong>Lư Gốm Mộc Bát Tràng</strong>!
+            Bạn đang chọn <strong>Hộp Quà Lớn Combo Trọn Tết (Đủ 3 Ngăn Lễ)</strong> — Tiết kiệm cao nhất <strong>${this.formatVND(savings)} (-${matched.discountPercent}%)</strong> + Tặng kèm <strong>Lư Gốm Mộc Bát Tràng</strong>!
           </p>
         </div>
       `;
