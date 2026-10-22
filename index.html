@@ -214,38 +214,57 @@
               <span class="text-xs font-semibold text-[#691727]">Ảnh thực tế hộp lễ</span>
             </div>
 
-            <!-- Product Mockup Image -->
-            <div onclick="NepleApp.selectSkuDirectly('combo-tron-tet', true)" class="relative overflow-hidden rounded-2xl border border-[#ae9984]/40 shadow-md group cursor-pointer">
-              <img src="hop-combo-tron-tet.jpg" alt="Hộp Đặc Biệt Combo Trọn Tết NEPLE" class="w-full h-44 sm:h-52 object-cover object-center group-hover:scale-105 transition duration-500" />
-              <div class="absolute inset-0 bg-gradient-to-t from-[#0d2931]/75 via-transparent to-transparent flex items-end p-3">
-                <span class="text-white text-xs sm:text-sm font-bold drop-shadow flex items-center gap-1.5">
-                  <span class="w-2 h-2 rounded-full bg-[#f0b45b] animate-pulse"></span>
-                  Hộp Đặc Biệt Combo Trọn Tết (Đủ 3 Ngày Lễ)
-                </span>
+            <!-- Product Mockup Image (To & Nổi Bật) -->
+            <div onclick="NepleApp.selectSkuDirectly('combo-tron-tet', true)" class="relative overflow-hidden rounded-2xl border border-[#ae9984]/40 shadow-xl group cursor-pointer">
+              <img src="hop-combo-tron-tet.jpg" alt="Hộp Đặc Biệt Combo Trọn Tết NEPLE" class="w-full h-60 sm:h-72 md:h-80 object-cover object-center group-hover:scale-105 transition duration-500" />
+              <div class="absolute inset-0 bg-gradient-to-t from-[#0d2931]/85 via-black/20 to-transparent flex items-end justify-between p-3.5 sm:p-4">
+                <div class="text-white min-w-0 pr-2">
+                  <span class="text-xs sm:text-sm font-bold drop-shadow flex items-center gap-1.5 truncate">
+                    <span class="w-2 h-2 rounded-full bg-[#f0b45b] animate-pulse shrink-0"></span>
+                    Hộp Đặc Biệt Combo Trọn Tết
+                  </span>
+                  <span class="text-[11px] text-[#faf7f2]/85 block font-normal truncate">Bộ 3 ngăn lễ đủ đầy cho cả mùa Tết</span>
+                </div>
+                <span class="px-2.5 py-1 rounded-lg bg-[#f0b45b] text-[#0d2931] text-[11px] font-extrabold uppercase shadow shrink-0">Xem Hộp →</span>
               </div>
             </div>
 
-            <div class="space-y-2.5">
-              <div onclick="NepleApp.selectSkuDirectly('pack-tien-tao', true)" class="p-3.5 sm:p-4 rounded-2xl bg-[#0d2931] hover:bg-[#163d48] flex items-center justify-between gap-3 cursor-pointer transition">
-                <div class="min-w-0">
-                  <div style="font-family: 'Be Vietnam Pro', sans-serif; font-weight: 700;" class="text-sm sm:text-base font-bold text-[#f0b45b] uppercase">GÓI TIỄN TÁO</div>
-                  <div style="font-family: 'Be Vietnam Pro', sans-serif; font-weight: 400;" class="text-xs font-normal text-[#faf7f2]/90 mt-0.5 truncate">Bộ lễ Táo Quân • Nhang • Nến • Giấy tiền vàng mã</div>
+            <!-- 3 Ô Hàng Ngang Nằm Phía Dưới Ảnh -->
+            <div class="grid grid-cols-3 gap-2 sm:gap-2.5">
+              <div onclick="NepleApp.selectSkuDirectly('pack-tien-tao', true)" class="p-2.5 sm:p-3 rounded-xl sm:rounded-2xl bg-[#0d2931] hover:bg-[#163d48] flex flex-col justify-between cursor-pointer transition shadow hover:scale-[1.02]">
+                <div>
+                  <div style="font-family: 'Be Vietnam Pro', sans-serif; font-weight: 700;" class="text-[11px] sm:text-xs md:text-sm font-bold text-[#f0b45b] uppercase truncate">TIỄN TÁO</div>
+                  <div class="text-[10px] sm:text-[11px] text-[#f0b45b]/80 font-semibold mt-0.5">23 Chạp</div>
+                  <div class="text-[10px] sm:text-xs text-[#faf7f2]/80 mt-0.5 font-bold">179.000đ</div>
                 </div>
-                <span class="text-xs font-bold text-[#f0b45b] shrink-0">Xem →</span>
+                <div class="mt-2 pt-1 border-t border-white/10 flex items-center justify-between text-[10px] sm:text-[11px] text-[#f0b45b] font-bold">
+                  <span>Chi tiết</span>
+                  <span>→</span>
+                </div>
               </div>
-              <div onclick="NepleApp.selectSkuDirectly('pack-giao-thua', true)" class="p-3.5 sm:p-4 rounded-2xl bg-[#691727] hover:bg-[#4d0f1b] flex items-center justify-between gap-3 cursor-pointer transition">
-                <div class="min-w-0">
-                  <div style="font-family: 'Be Vietnam Pro', sans-serif; font-weight: 700;" class="text-sm sm:text-base font-bold text-[#f0b45b] uppercase">GÓI GIAO THỪA</div>
-                  <div style="font-family: 'Be Vietnam Pro', sans-serif; font-weight: 400;" class="text-xs font-normal text-[#faf7f2]/90 mt-0.5 truncate">Lễ vật giao thừa • Nhang • Nến • Gạo muối</div>
+
+              <div onclick="NepleApp.selectSkuDirectly('pack-giao-thua', true)" class="p-2.5 sm:p-3 rounded-xl sm:rounded-2xl bg-[#691727] hover:bg-[#4d0f1b] flex flex-col justify-between cursor-pointer transition shadow hover:scale-[1.02]">
+                <div>
+                  <div style="font-family: 'Be Vietnam Pro', sans-serif; font-weight: 700;" class="text-[11px] sm:text-xs md:text-sm font-bold text-[#f0b45b] uppercase truncate">GIAO THỪA</div>
+                  <div class="text-[10px] sm:text-[11px] text-[#f0b45b]/80 font-semibold mt-0.5">Đêm 30</div>
+                  <div class="text-[10px] sm:text-xs text-[#faf7f2]/80 mt-0.5 font-bold">139.000đ</div>
                 </div>
-                <span class="text-xs font-bold text-[#f0b45b] shrink-0">Xem →</span>
+                <div class="mt-2 pt-1 border-t border-white/10 flex items-center justify-between text-[10px] sm:text-[11px] text-[#f0b45b] font-bold">
+                  <span>Chi tiết</span>
+                  <span>→</span>
+                </div>
               </div>
-              <div onclick="NepleApp.selectSkuDirectly('pack-khai-xuan', true)" class="p-3.5 sm:p-4 rounded-2xl bg-[#0d2931] hover:bg-[#163d48] flex items-center justify-between gap-3 cursor-pointer transition">
-                <div class="min-w-0">
-                  <div style="font-family: 'Be Vietnam Pro', sans-serif; font-weight: 700;" class="text-sm sm:text-base font-bold text-[#f0b45b] uppercase">GÓI KHAI XUÂN</div>
-                  <div style="font-family: 'Be Vietnam Pro', sans-serif; font-weight: 400;" class="text-xs font-normal text-[#faf7f2]/90 mt-0.5 truncate">Lễ vật khai xuân • Hương hoa • Lễ phẩm đầu năm</div>
+
+              <div onclick="NepleApp.selectSkuDirectly('pack-khai-xuan', true)" class="p-2.5 sm:p-3 rounded-xl sm:rounded-2xl bg-[#0d2931] hover:bg-[#163d48] flex flex-col justify-between cursor-pointer transition shadow hover:scale-[1.02]">
+                <div>
+                  <div style="font-family: 'Be Vietnam Pro', sans-serif; font-weight: 700;" class="text-[11px] sm:text-xs md:text-sm font-bold text-[#f0b45b] uppercase truncate">KHAI XUÂN</div>
+                  <div class="text-[10px] sm:text-[11px] text-[#f0b45b]/80 font-semibold mt-0.5">Mùng 1</div>
+                  <div class="text-[10px] sm:text-xs text-[#faf7f2]/80 mt-0.5 font-bold">129.000đ</div>
                 </div>
-                <span class="text-xs font-bold text-[#f0b45b] shrink-0">Xem →</span>
+                <div class="mt-2 pt-1 border-t border-white/10 flex items-center justify-between text-[10px] sm:text-[11px] text-[#f0b45b] font-bold">
+                  <span>Chi tiết</span>
+                  <span>→</span>
+                </div>
               </div>
             </div>
 
