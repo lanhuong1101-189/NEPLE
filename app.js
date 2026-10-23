@@ -2269,9 +2269,9 @@ const NepleApp = {
           .map(
             t => `
           <button onclick="NepleApp.setAdminTab('${t.id}')"
-            class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold whitespace-nowrap transition ${
+            class="h-9 px-3.5 inline-flex items-center justify-center rounded-lg text-xs font-bold whitespace-nowrap transition ${
               tab === t.id
-                ? 'bg-[#0d2931] text-[#f0b45b] shadow'
+                ? 'bg-[#0d2931] text-[#f0b45b] shadow font-extrabold'
                 : 'bg-[#efe9e0] text-[#0d2931] hover:bg-[#ae9984]/40'
             }">
             ${t.label}

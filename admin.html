@@ -108,23 +108,25 @@
   <div id="admin-dashboard-screen" class="hidden flex-1 flex flex-col">
     <!-- Top Admin Bar -->
     <header class="sticky top-0 z-40 bg-[#0d2931] text-[#faf7f2] border-b-2 border-[#f0b45b] shadow-lg">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 py-2.5 sm:py-3 flex flex-wrap items-center justify-between gap-3">
+      <div class="w-full max-w-[1600px] mx-auto px-4 sm:px-6 py-2.5 flex items-center justify-between gap-4">
+        <!-- Bên trái: Thông tin thương hiệu -->
         <div class="flex items-center gap-3 shrink-0">
-          <img src="logo.png?v=2" alt="NEPLE Logo" class="h-9 sm:h-10 w-auto object-contain" />
+          <img src="logo.png?v=2" alt="NEPLE Logo" class="h-9 sm:h-10 w-auto object-contain shrink-0" />
           <div>
             <div class="flex items-center gap-2">
               <span class="text-base sm:text-lg font-bold text-[#faf7f2] tracking-wide" style="font-family: 'Be Vietnam Pro', sans-serif;">NEPLE ADMIN CMS</span>
-              <span id="current-staff-role-badge" class="px-2 py-0.5 rounded-full bg-[#f0b45b] text-[#0d2931] text-[10px] font-extrabold uppercase"></span>
+              <span id="current-staff-role-badge" class="px-2 py-0.5 rounded-full bg-[#f0b45b] text-[#0d2931] text-[10px] font-extrabold uppercase whitespace-nowrap"></span>
             </div>
-            <div id="current-staff-email" class="text-[11px] text-[#faf7f2]/75"></div>
+            <div id="current-staff-email" class="text-[11px] text-[#faf7f2]/75 leading-tight"></div>
           </div>
         </div>
 
-        <!-- [1] Khung màu xanh: Thanh điều hướng các mục nằm ngay kế bên trái ô Đăng xuất -->
-        <div class="flex items-center gap-2 sm:gap-3 flex-wrap justify-end flex-1 min-w-0">
-          <nav id="admin-top-nav-mount" class="flex items-center overflow-x-auto gap-1 sm:gap-1.5 no-scrollbar py-0.5"></nav>
+        <!-- Bên phải: Các thanh công cụ quản lý đồng bộ kích thước & Đăng xuất -->
+        <div class="flex items-center gap-1.5 sm:gap-2 flex-nowrap overflow-x-auto no-scrollbar py-0.5 shrink-0">
+          <nav id="admin-top-nav-mount" class="flex items-center gap-1.5 sm:gap-2 flex-nowrap"></nav>
           
-          <button onclick="AdminPortal.logout()" class="px-3.5 py-1.5 sm:py-2 rounded-xl bg-[#691727] hover:bg-[#871f33] border border-[#f0b45b]/40 text-xs font-bold text-white transition shadow-sm whitespace-nowrap shrink-0">
+          <button onclick="AdminPortal.logout()"
+            class="h-9 px-3.5 inline-flex items-center justify-center rounded-lg bg-[#691727] hover:bg-[#871f33] border border-[#f0b45b]/40 text-[#faf7f2] text-xs font-bold transition shadow-sm whitespace-nowrap shrink-0">
             Đăng xuất
           </button>
         </div>
@@ -132,7 +134,7 @@
     </header>
 
     <!-- Main Dashboard Container -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 py-8 w-full flex-1">
+    <main class="w-full max-w-[1600px] mx-auto px-4 sm:px-6 py-6 sm:py-8 flex-1">
       <div id="admin-cms-mount"></div>
     </main>
   </div>
@@ -360,6 +362,12 @@
         const cmsMount = document.getElementById('admin-cms-mount');
         if (!this.state.currentUser) return;
 
+        if (this.state.currentUser.role === 'SUPER_ADMIN' || (this.state.currentUser.allowedTabs && this.state.currentUser.allowedTabs.includes('settings'))) {
+          if (!this.state.currentUser.allowedTabs.includes('optimize')) {
+            this.state.currentUser.allowedTabs.push('optimize');
+          }
+        }
+
         const allTabs = [
           { id: 'orders', label: 'Theo dõi đơn hàng' },
           { id: 'products', label: 'Quản lí danh mục sản phẩm' },
@@ -377,9 +385,9 @@
             .map(
               t => `
             <button onclick="AdminPortal.setTab('${t.id}')"
-              class="px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-xl text-xs sm:text-sm whitespace-nowrap transition font-bold ${
+              class="h-9 px-3 sm:px-3.5 inline-flex items-center justify-center rounded-lg text-xs font-bold whitespace-nowrap transition ${
                 this.state.activeTab === t.id
-                  ? 'bg-[#f0b45b] text-[#0d2931] shadow-md font-extrabold'
+                  ? 'bg-[#f0b45b] text-[#0d2931] shadow font-extrabold'
                   : 'bg-white/10 text-[#faf7f2] hover:bg-white/20'
               }">
               ${t.label}
