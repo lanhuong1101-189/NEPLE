@@ -81,15 +81,8 @@
     <!-- Top Admin Bar -->
     <header class="sticky top-0 z-40 bg-[#0d2931] text-[#faf7f2] border-b-2 border-[#f0b45b] shadow-lg">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3.5 flex flex-wrap items-center justify-between gap-4">
-        <div class="flex items-center gap-3">
-          <img src="logo.png?v=2" alt="NEPLE Logo" class="h-10 sm:h-11 w-auto object-contain" />
-          <div>
-            <div class="flex items-center gap-2">
-              <span class="font-display text-lg sm:text-xl font-bold text-[#faf7f2]">NEPLE ADMIN CMS</span>
-              <span id="current-staff-role-badge" class="px-2.5 py-0.5 rounded-full bg-[#f0b45b] text-[#0d2931] text-[10px] font-extrabold uppercase"></span>
-            </div>
-            <div id="current-staff-email" class="text-xs text-[#faf7f2]/75"></div>
-          </div>
+        <div class="flex items-center">
+          <span class="font-display text-lg sm:text-xl font-bold text-[#faf7f2] tracking-wider">NEPLE ADMIN CMS</span>
         </div>
 
         <div class="flex flex-wrap items-center gap-2.5">
@@ -310,8 +303,10 @@
       showDashboardScreen() {
         document.getElementById('admin-login-screen').classList.add('hidden');
         document.getElementById('admin-dashboard-screen').classList.remove('hidden');
-        document.getElementById('current-staff-role-badge').textContent = this.state.currentUser.roleLabel;
-        document.getElementById('current-staff-email').textContent = `${this.state.currentUser.name} • ${this.state.currentUser.email}`;
+        const roleBadge = document.getElementById('current-staff-role-badge');
+        if (roleBadge) roleBadge.textContent = this.state.currentUser.roleLabel;
+        const emailMount = document.getElementById('current-staff-email');
+        if (emailMount) emailMount.textContent = `${this.state.currentUser.name} • ${this.state.currentUser.email}`;
         this.renderDashboard();
       },
 
