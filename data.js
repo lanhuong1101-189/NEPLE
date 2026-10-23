@@ -677,6 +677,7 @@ const DEFAULT_SETTINGS = {
   accountName: 'CONG TY TNHH NEP LE VIET NAM',
   momoPhone: '0901234567',
   momoName: 'NEPLE STORE - NẾP LỄ VIỆT NAM',
+  customQrImage: '',
   hotline: '0901 234 567',
   email: 'chao@neple.vn',
   address: 'Số 28 Nguyễn Thị Minh Khai, Quận 1, TP. Hồ Chí Minh',

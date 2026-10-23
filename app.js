@@ -1878,7 +1878,7 @@ const NepleApp = {
     const s = this.state.settings || DEFAULT_SETTINGS;
     const transferContent = `NEPLE ${cleanPhone}`;
     if (method === 'VIETQR') {
-      const qrImageUrl = `https://img.vietqr.io/image/${encodeURIComponent(s.bankId)}-${encodeURIComponent(
+      const qrImageUrl = s.customQrImage || `https://img.vietqr.io/image/${encodeURIComponent(s.bankId)}-${encodeURIComponent(
         s.accountNumber
       )}-compact2.png?amount=${total}&addInfo=${encodeURIComponent(transferContent)}&accountName=${encodeURIComponent(
         s.accountName
@@ -1892,7 +1892,7 @@ const NepleApp = {
       };
     }
     if (method === 'MOMO') {
-      const momoQrSvg =
+      const momoQrSvg = s.customQrImage ||
         `data:image/svg+xml;utf8,` +
         encodeURIComponent(`
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 220">
@@ -2965,6 +2965,9 @@ const NepleApp = {
     s.accountName = document.getElementById('adm-set-accname')?.value?.trim() || s.accountName;
     s.momoPhone = document.getElementById('adm-set-momo')?.value?.trim() || s.momoPhone;
     s.momoName = document.getElementById('adm-set-momoname')?.value?.trim() || s.momoName;
+    if (document.getElementById('adm-set-qr-image')) {
+      s.customQrImage = document.getElementById('adm-set-qr-image').value.trim();
+    }
     if (document.getElementById('adm-set-hotline')) {
       s.hotline = document.getElementById('adm-set-hotline').value.trim();
     }
