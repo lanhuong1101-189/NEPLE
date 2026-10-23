@@ -2868,45 +2868,11 @@ const NepleApp = {
           </div>
         </div>
 
-        <div class="p-6 rounded-2xl paper-card space-y-4">
-          <h3 class="font-display text-xl font-bold text-[#0d2931]">2. Công Cụ Tối Ưu UX (Clarity / GA4) &amp; Social Hub</h3>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div>
-              <label class="block font-bold mb-1">Microsoft Clarity Project ID (Heatmap)</label>
-              <input type="text" id="adm-set-clarity" placeholder="VD: lq8xyz1234" value="${s.analytics?.clarityId || ''}" class="w-full px-3 py-2 rounded-xl border border-[#ae9984] bg-white" />
-            </div>
-            <div>
-              <label class="block font-bold mb-1">Google Analytics 4 (Measurement ID)</label>
-              <input type="text" id="adm-set-ga4" placeholder="VD: G-XXXXXXXXXX" value="${s.analytics?.ga4Id || ''}" class="w-full px-3 py-2 rounded-xl border border-[#ae9984] bg-white" />
-            </div>
-          </div>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div>
-              <label class="block font-bold mb-1">Hotline CSKH</label>
-              <input type="text" id="adm-set-hotline" value="${s.hotline}" class="w-full px-3 py-2 rounded-xl border border-[#ae9984] bg-white" />
-            </div>
-            <div>
-              <label class="block font-bold mb-1">Link Zalo OA / Cá nhân</label>
-              <input type="text" id="adm-set-zalo" value="${s.socials?.zalo || ''}" class="w-full px-3 py-2 rounded-xl border border-[#ae9984] bg-white" />
-            </div>
-          </div>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div>
-              <label class="block font-bold mb-1">Link Messenger</label>
-              <input type="text" id="adm-set-msg" value="${s.socials?.messenger || ''}" class="w-full px-3 py-2 rounded-xl border border-[#ae9984] bg-white" />
-            </div>
-            <div>
-              <label class="block font-bold mb-1">Link TikTok / Instagram</label>
-              <input type="text" id="adm-set-tiktok" value="${s.socials?.tiktok || ''}" class="w-full px-3 py-2 rounded-xl border border-[#ae9984] bg-white" />
-            </div>
-          </div>
-        </div>
-
-        <!-- 3. Cấu Hình Phí Vận Chuyển (Cách 3: Linh Hoạt Theo Vị Trí & Freeship) -->
+        <!-- 2. Cấu Hình Phí Vận Chuyển (Cách 3: Linh Hoạt Theo Vị Trí & Freeship) -->
         <div class="p-6 rounded-2xl paper-card space-y-4 lg:col-span-2">
           <div class="flex flex-wrap items-center justify-between gap-2 border-b border-[#ae9984]/30 pb-3">
             <div>
-              <h3 class="font-display text-xl font-bold text-[#0d2931]">3. Cấu Hình Phí Vận Chuyển (Cách 3: Theo Vị Trí &amp; Freeship)</h3>
+              <h3 class="font-display text-xl font-bold text-[#0d2931]">2. Cấu Hình Phí Vận Chuyển (Cách 3: Theo Vị Trí &amp; Freeship)</h3>
               <p class="text-xs text-[#0d2931]/70 mt-0.5">Tự động tính phí theo địa chỉ khách và miễn phí ship khi giỏ hàng có Combo Trọn Tết hoặc đạt ngưỡng giá trị đơn hàng.</p>
             </div>
             <span class="px-3 py-1 rounded-full bg-[#72826f]/15 text-[#72826f] text-xs font-bold">Cách 3 Đang Bật</span>
@@ -2993,29 +2959,35 @@ const NepleApp = {
   saveSettingsFromAdmin(e) {
     e.preventDefault();
     const s = this.state.settings;
-    s.bankId = document.getElementById('adm-set-bankid').value.trim();
-    s.bankName = document.getElementById('adm-set-bankname').value.trim();
-    s.accountNumber = document.getElementById('adm-set-accno').value.trim();
-    s.accountName = document.getElementById('adm-set-accname').value.trim();
-    s.momoPhone = document.getElementById('adm-set-momo').value.trim();
-    s.momoName = document.getElementById('adm-set-momoname').value.trim();
-    s.hotline = document.getElementById('adm-set-hotline').value.trim();
-    s.socials = {
-      ...s.socials,
-      zalo: document.getElementById('adm-set-zalo').value.trim(),
-      messenger: document.getElementById('adm-set-msg').value.trim(),
-      tiktok: document.getElementById('adm-set-tiktok').value.trim()
-    };
-    s.analytics = {
-      clarityId: document.getElementById('adm-set-clarity').value.trim(),
-      ga4Id: document.getElementById('adm-set-ga4').value.trim()
-    };
+    s.bankId = document.getElementById('adm-set-bankid')?.value?.trim() || s.bankId;
+    s.bankName = document.getElementById('adm-set-bankname')?.value?.trim() || s.bankName;
+    s.accountNumber = document.getElementById('adm-set-accno')?.value?.trim() || s.accountNumber;
+    s.accountName = document.getElementById('adm-set-accname')?.value?.trim() || s.accountName;
+    s.momoPhone = document.getElementById('adm-set-momo')?.value?.trim() || s.momoPhone;
+    s.momoName = document.getElementById('adm-set-momoname')?.value?.trim() || s.momoName;
+    if (document.getElementById('adm-set-hotline')) {
+      s.hotline = document.getElementById('adm-set-hotline').value.trim();
+    }
+    if (document.getElementById('adm-set-zalo')) {
+      s.socials = {
+        ...s.socials,
+        zalo: document.getElementById('adm-set-zalo')?.value?.trim() || s.socials?.zalo || '',
+        messenger: document.getElementById('adm-set-msg')?.value?.trim() || s.socials?.messenger || '',
+        tiktok: document.getElementById('adm-set-tiktok')?.value?.trim() || s.socials?.tiktok || ''
+      };
+    }
+    if (document.getElementById('adm-set-clarity')) {
+      s.analytics = {
+        clarityId: document.getElementById('adm-set-clarity').value.trim(),
+        ga4Id: document.getElementById('adm-set-ga4')?.value?.trim() || ''
+      };
+    }
     s.shipping = {
-      innerCityFee: Number(document.getElementById('adm-set-innerfee').value) || 0,
-      suburbanFee: Number(document.getElementById('adm-set-suburbanfee').value) || 0,
-      interprovincialFee: Number(document.getElementById('adm-set-interfee').value) || 0,
-      freeShipThreshold: Number(document.getElementById('adm-set-freeship-thresh').value) || 0,
-      freeShipCombo: document.getElementById('adm-set-freeship-combo').checked
+      innerCityFee: Number(document.getElementById('adm-set-innerfee')?.value) || 0,
+      suburbanFee: Number(document.getElementById('adm-set-suburbanfee')?.value) || 0,
+      interprovincialFee: Number(document.getElementById('adm-set-interfee')?.value) || 0,
+      freeShipThreshold: Number(document.getElementById('adm-set-freeship-thresh')?.value) || 0,
+      freeShipCombo: document.getElementById('adm-set-freeship-combo')?.checked ?? true
     };
     const sheetsUrlInput = document.getElementById('adm-set-sheets-url');
     if (sheetsUrlInput) {
