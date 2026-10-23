@@ -2256,42 +2256,29 @@ const NepleApp = {
 
     const tab = this.state.adminTab;
     const tabs = [
-      { id: 'orders', label: `📦 Đơn Hàng (${this.state.orders.length})` },
-      { id: 'products', label: `🎁 Sản Phẩm & 7 SKU (${this.state.products.length})` },
-      { id: 'blogs', label: `📝 Blog SEO (${this.state.blogs.length})` },
-      { id: 'settings', label: `⚙️ Cài Đặt VietQR / MoMo / GA4` }
+      { id: 'orders', label: `Đơn Hàng (${this.state.orders.length})` },
+      { id: 'products', label: `Sản Phẩm & 7 SKU (${this.state.products.length})` },
+      { id: 'blogs', label: `Blog SEO (${this.state.blogs.length})` },
+      { id: 'settings', label: `Cài Đặt VietQR / MoMo / GA4` },
+      { id: 'optimize', label: `Tối Ưu Website` }
     ];
 
     const navHTML = `
-      <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
-        <div class="flex flex-wrap gap-2">
-          ${tabs
-            .map(
-              t => `
-            <button onclick="NepleApp.setAdminTab('${t.id}')"
-              class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition ${
-                tab === t.id
-                  ? 'bg-[#0d2931] text-[#f0b45b] shadow'
-                  : 'bg-[#efe9e0] text-[#0d2931] hover:bg-[#ae9984]/40'
-              }">
-              ${t.label}
-            </button>
-          `
-            )
-            .join('')}
-        </div>
-        <div class="flex flex-wrap items-center gap-2">
-          <button onclick="NepleApp.exportFullBackupJSON()" class="px-3.5 py-2 rounded-xl bg-[#72826f] text-white text-xs font-bold hover:opacity-90 transition">
-            💾 Xuất File Backup (.json)
+      <div class="flex items-center overflow-x-auto gap-2 mb-6 pb-2 border-b border-[#ae9984]/30 no-scrollbar">
+        ${tabs
+          .map(
+            t => `
+          <button onclick="NepleApp.setAdminTab('${t.id}')"
+            class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold whitespace-nowrap transition ${
+              tab === t.id
+                ? 'bg-[#0d2931] text-[#f0b45b] shadow'
+                : 'bg-[#efe9e0] text-[#0d2931] hover:bg-[#ae9984]/40'
+            }">
+            ${t.label}
           </button>
-          <label class="px-3.5 py-2 rounded-xl bg-[#0d2931] text-[#f0b45b] text-xs font-bold cursor-pointer hover:opacity-90 transition">
-            📂 Nhập File Backup
-            <input type="file" accept=".json" class="hidden" onchange="NepleApp.importFullBackupJSON(event)" />
-          </label>
-          <button onclick="NepleApp.resetAllData()" class="px-3.5 py-2 rounded-xl border border-[#691727]/40 text-[#691727] hover:bg-[#691727] hover:text-white text-xs font-semibold transition">
-            ↺ Khôi phục gốc
-          </button>
-        </div>
+        `
+          )
+          .join('')}
       </div>
     `;
 
@@ -2301,8 +2288,10 @@ const NepleApp = {
       mount.innerHTML = navHTML + this.renderAdminProductsTab();
     } else if (tab === 'blogs') {
       mount.innerHTML = navHTML + this.renderAdminBlogsTab();
-    } else {
+    } else if (tab === 'settings') {
       mount.innerHTML = navHTML + this.renderAdminSettingsTab();
+    } else {
+      mount.innerHTML = navHTML + this.renderAdminOptimizeTab();
     }
   },
 
@@ -2324,11 +2313,11 @@ const NepleApp = {
           <div class="p-4 rounded-2xl paper-card flex flex-col justify-between">
             <span class="text-xs text-[#72826f] font-bold uppercase">Xuất Dữ Liệu &amp; Đồng Bộ</span>
             <div class="flex flex-wrap gap-2 mt-2">
-              <button onclick="NepleApp.exportOrdersCSV()" class="px-3 py-2 rounded-xl bg-[#0d2931] text-[#f0b45b] text-xs font-bold">
-                ⬇ Xuất File Excel / CSV
+              <button onclick="NepleApp.exportOrdersCSV()" class="px-3 py-2 rounded-xl bg-[#0d2931] text-[#f0b45b] text-xs font-bold hover:bg-[#163d48] transition">
+                Xuất File Excel / CSV
               </button>
-              <button onclick="NepleApp.copyOrdersForGoogleSheets()" class="px-3 py-2 rounded-xl bg-[#72826f] text-white text-xs font-bold">
-                📋 Copy Dán Google Sheets
+              <button onclick="NepleApp.copyOrdersForGoogleSheets()" class="px-3 py-2 rounded-xl bg-[#72826f] text-white text-xs font-bold hover:bg-[#5b6a59] transition">
+                Copy Dán Google Sheets
               </button>
             </div>
           </div>
@@ -2548,16 +2537,16 @@ const NepleApp = {
               <label class="block font-bold mb-1">URL Hình ảnh bao bì (Hoặc tải ảnh từ máy tính bên dưới)</label>
               <div class="flex flex-col sm:flex-row gap-2">
                 <input type="text" id="adm-prod-img" value="${p.image}" class="flex-1 px-3 py-2 rounded-xl border border-[#ae9984] bg-white text-xs" />
-                <label class="px-3.5 py-2 rounded-xl bg-[#72826f] text-white text-xs font-bold cursor-pointer shrink-0 text-center">
-                  📷 Tải ảnh lên
+                <label class="px-3.5 py-2 rounded-xl bg-[#72826f] text-white text-xs font-bold cursor-pointer shrink-0 text-center hover:bg-[#5b6a59] transition">
+                  Tải ảnh lên
                   <input type="file" accept="image/*" class="hidden" onchange="NepleApp.uploadProductImage(event)" />
                 </label>
               </div>
             </div>
 
             <div class="pt-2 flex justify-end">
-              <button type="submit" class="px-6 py-3 rounded-xl btn-terracotta font-bold text-sm">
-                💾 Lưu Thay Đổi Sản Phẩm
+              <button type="submit" class="px-6 py-3 rounded-xl btn-terracotta font-bold text-sm shadow-md">
+                Lưu Thay Đổi Sản Phẩm
               </button>
             </div>
           </form>
@@ -2649,7 +2638,7 @@ const NepleApp = {
               <div class="flex items-center justify-between mb-4">
                 <h3 class="font-display text-xl font-bold text-[#0d2931]">Trình Soạn Thảo Bài Viết &amp; SEO</h3>
                 <button onclick="NepleApp.deleteBlogPost('${blog.id}')" class="px-3 py-1.5 rounded-lg bg-[#691727]/15 text-[#691727] text-xs font-bold hover:bg-[#691727] hover:text-white transition">
-                  🗑 Xóa bài viết
+                  Xóa bài viết
                 </button>
               </div>
               <form onsubmit="NepleApp.saveBlogFromAdmin(event, '${blog.id}')" class="space-y-3.5 text-xs sm:text-sm">
@@ -2713,8 +2702,8 @@ const NepleApp = {
                 </div>
 
                 <div class="pt-2 flex justify-end">
-                  <button type="submit" class="px-6 py-3 rounded-xl btn-terracotta font-bold text-sm">
-                    💾 Lưu Bài Viết &amp; Cấu Hình SEO
+                  <button type="submit" class="px-6 py-3 rounded-xl btn-terracotta font-bold text-sm shadow-md">
+                    Lưu Bài Viết &amp; Cấu Hình SEO
                   </button>
                 </div>
               </form>
@@ -2956,14 +2945,14 @@ const NepleApp = {
               <div class="flex flex-col sm:flex-row gap-2">
                 <input type="url" id="adm-set-sheets-url" placeholder="https://script.google.com/macros/s/AKfycb.../exec" value="${s.googleSheets?.syncUrl || ''}" class="flex-1 px-3 py-2 rounded-xl border border-[#ae9984] bg-white font-mono text-xs text-[#0d2931]" />
                 <button type="button" onclick="NepleApp.testAndSyncGoogleSheets()" class="px-4 py-2 rounded-xl bg-[#0d2931] text-[#f0b45b] font-bold text-xs shrink-0 hover:bg-[#163d48] transition">
-                  🔄 Kiểm Tra &amp; Đồng Bộ Ngay
+                  Kiểm Tra &amp; Đồng Bộ Ngay
                 </button>
               </div>
               <p class="text-[11px] text-[#0d2931]/60 mt-1">Dán URL sau khi Triển khai Apps Script từ Google Trang Tính của bạn vào đây.</p>
             </div>
 
             <div class="p-4 rounded-xl bg-[#faf7f2] border border-[#ae9984]/40 text-xs text-[#0d2931]/80 space-y-1.5">
-              <div class="font-bold text-[#0d2931] text-sm">📖 Hướng dẫn 3 bước kết nối Google Sheets (Chỉ làm 1 lần mất 2 phút):</div>
+              <div class="font-bold text-[#0d2931] text-sm">Hướng dẫn 3 bước kết nối Google Sheets (Chỉ làm 1 lần mất 2 phút):</div>
               <div>1. Tạo 1 file Google Trang Tính mới, đặt tên: <em>NEPLE - Quản Lý Đơn Hàng 2026</em>.</div>
               <div>2. Vào menu <strong>Tiện ích mở rộng (Extensions) → Apps Script</strong>. Xóa hết code cũ, mở file <a href="google-apps-script.js" target="_blank" class="text-[#a94025] underline font-bold">google-apps-script.js</a> trong mã nguồn NEPLE và dán toàn bộ vào.</div>
               <div>3. Bấm <strong>Triển khai (Deploy) → Tùy chọn triển khai mới → Ứng dụng web</strong> (Chọn: <em>Ai cũng có quyền truy cập / Anyone</em>) rồi sao chép link dán vào ô trên.</div>
@@ -2972,7 +2961,7 @@ const NepleApp = {
 
           <div class="pt-3 flex justify-end">
             <button type="submit" class="px-6 py-3 rounded-xl btn-terracotta font-bold text-sm shadow-md">
-              💾 Lưu Toàn Bộ Cài Đặt Hệ Thống
+              Lưu Toàn Bộ Cài Đặt Hệ Thống
             </button>
           </div>
         </div>
@@ -3028,6 +3017,141 @@ const NepleApp = {
     this.injectAnalytics();
     this.renderFloatingSocials();
     this.showToast('Đã lưu cài đặt Thanh toán, Phí Vận Chuyển & Google Sheets!');
+  },
+
+  renderAdminOptimizeTab() {
+    const s = this.state.settings;
+    return `
+      <div class="space-y-6 text-xs sm:text-sm">
+        <!-- 1. Trực tiếp Mở Xem Website Khách Hàng -->
+        <div class="p-6 rounded-2xl paper-card border-l-4 border-[#f0b45b]">
+          <div class="flex flex-wrap items-center justify-between gap-4">
+            <div>
+              <h3 class="font-display text-lg sm:text-xl font-bold text-[#0d2931]">Trải Nghiệm Khách Hàng (Live Website)</h3>
+              <p class="text-xs text-[#0d2931]/75 mt-1">Mở giao diện khách hàng thực tế để kiểm tra danh mục sản phẩm, tính toán phí vận chuyển, các gói lễ và luồng thanh toán VietQR / MoMo.</p>
+            </div>
+            <a href="index.html" target="_blank" class="px-5 py-2.5 rounded-xl bg-[#0d2931] hover:bg-[#163d48] text-[#f0b45b] font-bold text-xs sm:text-sm transition flex items-center gap-2 shadow-md">
+              Mở Xem Trang Khách Hàng ↗
+            </a>
+          </div>
+        </div>
+
+        <!-- 2. Quản Lý Sao Lưu & Phục Hồi Dữ Liệu Toàn Diện (Backup & Restore) -->
+        <div class="p-6 rounded-2xl paper-card space-y-4">
+          <div class="border-b border-[#ae9984]/30 pb-3 flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <h3 class="font-display text-lg sm:text-xl font-bold text-[#0d2931]">Quản Lý Sao Lưu &amp; Khôi Phục Dữ Liệu</h3>
+              <p class="text-xs text-[#0d2931]/75 mt-0.5">Tải toàn bộ cơ sở dữ liệu hiện tại về máy tính hoặc nạp dữ liệu từ file sao lưu .json</p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
+            <div class="p-4 rounded-xl bg-[#faf7f2] border border-[#ae9984]/40 flex flex-col justify-between space-y-3">
+              <div>
+                <div class="font-bold text-[#0d2931]">Xuất Bản Sao Lưu (.json)</div>
+                <div class="text-xs text-[#0d2931]/70 mt-1">Đóng gói toàn bộ đơn hàng, sản phẩm, bài viết cẩm nang và cấu hình thành 1 file .json an toàn.</div>
+              </div>
+              <button onclick="NepleApp.exportFullBackupJSON()" class="w-full py-2.5 rounded-xl bg-[#72826f] hover:bg-[#5b6a59] text-white text-xs font-bold transition">
+                Xuất Backup (.json)
+              </button>
+            </div>
+
+            <div class="p-4 rounded-xl bg-[#faf7f2] border border-[#ae9984]/40 flex flex-col justify-between space-y-3">
+              <div>
+                <div class="font-bold text-[#0d2931]">Nhập Bản Sao Lưu (.json)</div>
+                <div class="text-xs text-[#0d2931]/70 mt-1">Khôi phục nhanh hệ thống từ một file sao lưu .json đã lưu trước đó trên máy tính của bạn.</div>
+              </div>
+              <label class="w-full py-2.5 rounded-xl bg-[#0d2931] hover:bg-[#163d48] text-[#f0b45b] text-xs font-bold text-center cursor-pointer transition block">
+                Nhập Backup
+                <input type="file" accept=".json" class="hidden" onchange="NepleApp.importFullBackupJSON(event)" />
+              </label>
+            </div>
+
+            <div class="p-4 rounded-xl bg-[#691727]/5 border border-[#691727]/30 flex flex-col justify-between space-y-3">
+              <div>
+                <div class="font-bold text-[#691727]">Khôi Phục Dữ Liệu Mẫu Gốc</div>
+                <div class="text-xs text-[#0d2931]/70 mt-1">Đặt lại hệ thống về trạng thái mặc định ban đầu của NEPLE khi cần làm mới hoặc trình diễn lại.</div>
+              </div>
+              <button onclick="NepleApp.resetAllData()" class="w-full py-2.5 rounded-xl border-2 border-[#691727] text-[#691727] hover:bg-[#691727] hover:text-white text-xs font-bold transition">
+                Khôi phục dữ liệu mẫu gốc
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Công Cụ Đo Lường & Tối Ưu Trải Nghiệm Người Dùng (UX Analytics) -->
+        <div class="p-6 rounded-2xl paper-card space-y-4">
+          <div class="border-b border-[#ae9984]/30 pb-3 flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <h3 class="font-display text-lg sm:text-xl font-bold text-[#0d2931]">Công Cụ Tối Ưu UX &amp; Giám Sát Hành Vi Khách Hàng</h3>
+              <p class="text-xs text-[#0d2931]/75 mt-0.5">Theo dõi bản đồ nhiệt Heatmap, hành vi cuộn chuột và số liệu chuyển đổi theo thời gian thực.</p>
+            </div>
+          </div>
+
+          <div class="space-y-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block font-bold mb-1">Microsoft Clarity Project ID (Bản đồ nhiệt &amp; Ghi hình phiên)</label>
+                <input type="text" id="app-opt-clarity" placeholder="VD: lq8xyz1234" value="${s.analytics?.clarityId || ''}" class="w-full px-3.5 py-2.5 rounded-xl border border-[#ae9984] bg-white text-xs sm:text-sm" />
+                <p class="text-[11px] text-[#0d2931]/60 mt-1">Tự động kích hoạt heatmap phân tích điểm dừng mắt và click của khách.</p>
+              </div>
+              <div>
+                <label class="block font-bold mb-1">Google Analytics 4 Measurement ID</label>
+                <input type="text" id="app-opt-ga4" placeholder="VD: G-XXXXXXXXXX" value="${s.analytics?.ga4Id || ''}" class="w-full px-3.5 py-2.5 rounded-xl border border-[#ae9984] bg-white text-xs sm:text-sm" />
+                <p class="text-[11px] text-[#0d2931]/60 mt-1">Đo lường lượng truy cập và phễu chuyển đổi từ giỏ hàng đến đặt hàng thành công.</p>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block font-bold mb-1">Hotline CSKH / Tư Vấn Nhanh</label>
+                <input type="text" id="app-opt-hotline" value="${s.hotline}" class="w-full px-3.5 py-2.5 rounded-xl border border-[#ae9984] bg-white text-xs sm:text-sm" />
+              </div>
+              <div>
+                <label class="block font-bold mb-1">Link Zalo Official Account / Hỗ Trợ Trực Tuyến</label>
+                <input type="text" id="app-opt-zalo" value="${s.socials?.zalo || ''}" class="w-full px-3.5 py-2.5 rounded-xl border border-[#ae9984] bg-white text-xs sm:text-sm" />
+              </div>
+            </div>
+
+            <div class="flex justify-end pt-2">
+              <button type="button" onclick="NepleApp.saveOptimizeSettings()" class="px-5 py-2.5 rounded-xl bg-[#0d2931] hover:bg-[#163d48] text-[#f0b45b] font-bold text-xs sm:text-sm transition shadow-sm">
+                Lưu Cấu Hình Tối Ưu UX
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. Tối Ưu SEO & Nội Dung Cẩm Nang -->
+        <div class="p-6 rounded-2xl paper-card space-y-3">
+          <div class="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <h3 class="font-display text-lg sm:text-xl font-bold text-[#0d2931]">Tối Ưu Tìm Kiếm &amp; Bài Viết Cẩm Nang (SEO)</h3>
+              <p class="text-xs text-[#0d2931]/75 mt-0.5">Quản lý tiêu đề thẻ Meta Title, Meta Description và từ khóa tìm kiếm Google cho toàn bộ bài viết.</p>
+            </div>
+            <button onclick="NepleApp.setAdminTab('blogs')" class="px-4 py-2 rounded-xl bg-[#72826f] hover:bg-[#5b6a59] text-white text-xs font-bold transition">
+              Đến Quản Lý Blog SEO
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+  },
+
+  saveOptimizeSettings() {
+    const clarity = document.getElementById('app-opt-clarity')?.value?.trim() || '';
+    const ga4 = document.getElementById('app-opt-ga4')?.value?.trim() || '';
+    const hotline = document.getElementById('app-opt-hotline')?.value?.trim() || this.state.settings.hotline;
+    const zalo = document.getElementById('app-opt-zalo')?.value?.trim() || '';
+
+    this.state.settings.analytics = this.state.settings.analytics || {};
+    this.state.settings.analytics.clarityId = clarity;
+    this.state.settings.analytics.ga4Id = ga4;
+    this.state.settings.hotline = hotline;
+    this.state.settings.socials = this.state.settings.socials || {};
+    this.state.settings.socials.zalo = zalo;
+
+    this.saveSettings();
+    this.showToast('Đã lưu cấu hình Tối ưu Website thành công!');
   },
 
   syncOrderToGoogleSheets(order) {
