@@ -8,6 +8,34 @@
   <link rel="icon" type="image/png" href="logo.png?v=2" />
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* Cấu hình font Be Vietnam Bold cho toàn bộ nội dung khu vực kem quản trị */
+    #admin-dashboard-screen,
+    #admin-dashboard-screen main,
+    #admin-dashboard-screen main *,
+    #admin-dashboard-screen h1,
+    #admin-dashboard-screen h2,
+    #admin-dashboard-screen h3,
+    #admin-dashboard-screen h4,
+    #admin-dashboard-screen h5,
+    #admin-dashboard-screen h6,
+    #admin-dashboard-screen .font-display,
+    #admin-dashboard-screen .paper-card h3,
+    #admin-dashboard-screen .paper-card h4 {
+      font-family: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, sans-serif !important;
+    }
+
+    #admin-dashboard-screen h1,
+    #admin-dashboard-screen h2,
+    #admin-dashboard-screen h3,
+    #admin-dashboard-screen h4,
+    #admin-dashboard-screen .font-display,
+    #admin-dashboard-screen .paper-card h3,
+    #admin-dashboard-screen .paper-card h4,
+    #admin-dashboard-screen .font-bold {
+      font-weight: 700 !important;
+    }
+  </style>
 </head>
 <body class="min-h-screen flex flex-col bg-[#f4efe6] text-[#0d2931]">
 
@@ -80,20 +108,23 @@
   <div id="admin-dashboard-screen" class="hidden flex-1 flex flex-col">
     <!-- Top Admin Bar -->
     <header class="sticky top-0 z-40 bg-[#0d2931] text-[#faf7f2] border-b-2 border-[#f0b45b] shadow-lg">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3.5 flex flex-wrap items-center justify-between gap-4">
-        <div class="flex items-center gap-3">
-          <img src="logo.png?v=2" alt="NEPLE Logo" class="h-10 sm:h-11 w-auto object-contain" />
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 py-2.5 sm:py-3 flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center gap-3 shrink-0">
+          <img src="logo.png?v=2" alt="NEPLE Logo" class="h-9 sm:h-10 w-auto object-contain" />
           <div>
             <div class="flex items-center gap-2">
-              <span class="font-display text-lg sm:text-xl font-bold text-[#faf7f2]">NEPLE ADMIN CMS</span>
-              <span id="current-staff-role-badge" class="px-2.5 py-0.5 rounded-full bg-[#f0b45b] text-[#0d2931] text-[10px] font-extrabold uppercase"></span>
+              <span class="text-base sm:text-lg font-bold text-[#faf7f2] tracking-wide" style="font-family: 'Be Vietnam Pro', sans-serif;">NEPLE ADMIN CMS</span>
+              <span id="current-staff-role-badge" class="px-2 py-0.5 rounded-full bg-[#f0b45b] text-[#0d2931] text-[10px] font-extrabold uppercase"></span>
             </div>
-            <div id="current-staff-email" class="text-xs text-[#faf7f2]/75"></div>
+            <div id="current-staff-email" class="text-[11px] text-[#faf7f2]/75"></div>
           </div>
         </div>
 
-        <div class="flex items-center gap-3">
-          <button onclick="AdminPortal.logout()" class="px-4 py-2 rounded-xl bg-[#691727] hover:bg-[#871f33] border border-[#f0b45b]/40 text-xs font-bold text-white transition shadow-sm">
+        <!-- [1] Khung màu xanh: Thanh điều hướng các mục nằm ngay kế bên trái ô Đăng xuất -->
+        <div class="flex items-center gap-2 sm:gap-3 flex-wrap justify-end flex-1 min-w-0">
+          <nav id="admin-top-nav-mount" class="flex items-center overflow-x-auto gap-1 sm:gap-1.5 no-scrollbar py-0.5"></nav>
+          
+          <button onclick="AdminPortal.logout()" class="px-3.5 py-1.5 sm:py-2 rounded-xl bg-[#691727] hover:bg-[#871f33] border border-[#f0b45b]/40 text-xs font-bold text-white transition shadow-sm whitespace-nowrap shrink-0">
             Đăng xuất
           </button>
         </div>
@@ -325,39 +356,38 @@
       },
 
       renderDashboard() {
-        const mount = document.getElementById('admin-cms-mount');
-        if (!mount || !this.state.currentUser) return;
+        const topNavMount = document.getElementById('admin-top-nav-mount');
+        const cmsMount = document.getElementById('admin-cms-mount');
+        if (!this.state.currentUser) return;
 
         const allTabs = [
-          { id: 'orders', label: `Đơn Hàng (${this.state.orders.length})` },
-          { id: 'products', label: `Sản Phẩm & 7 SKU (${this.state.products.length})` },
-          { id: 'blogs', label: `Blog SEO (${this.state.blogs.length})` },
-          { id: 'settings', label: `Cài Đặt VietQR / MoMo / GA4` },
-          { id: 'staff', label: `Phân Quyền Nhân Viên (${this.state.staffList.length})` },
-          { id: 'optimize', label: `Tối Ưu Website` }
+          { id: 'orders', label: 'Theo dõi đơn hàng' },
+          { id: 'products', label: 'Quản lí danh mục sản phẩm' },
+          { id: 'blogs', label: 'Quản lí nội dung Blog' },
+          { id: 'settings', label: 'Cài đặt thanh toán' },
+          { id: 'staff', label: 'Phân quyền' },
+          { id: 'optimize', label: 'Tối ưu website' }
         ];
 
         const allowed = this.state.currentUser.allowedTabs || [];
         const visibleTabs = allTabs.filter(t => allowed.includes(t.id));
 
-        const navHTML = `
-          <div class="flex items-center overflow-x-auto gap-2 mb-6 pb-2 border-b border-[#ae9984]/30 no-scrollbar">
-            ${visibleTabs
-              .map(
-                t => `
-              <button onclick="AdminPortal.setTab('${t.id}')"
-                class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold whitespace-nowrap transition ${
-                  this.state.activeTab === t.id
-                    ? 'bg-[#0d2931] text-[#f0b45b] shadow'
-                    : 'bg-[#efe9e0] text-[#0d2931] hover:bg-[#ae9984]/40'
-                }">
-                ${t.label}
-              </button>
-            `
-              )
-              .join('')}
-          </div>
-        `;
+        if (topNavMount) {
+          topNavMount.innerHTML = visibleTabs
+            .map(
+              t => `
+            <button onclick="AdminPortal.setTab('${t.id}')"
+              class="px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-xl text-xs sm:text-sm whitespace-nowrap transition font-bold ${
+                this.state.activeTab === t.id
+                  ? 'bg-[#f0b45b] text-[#0d2931] shadow-md font-extrabold'
+                  : 'bg-white/10 text-[#faf7f2] hover:bg-white/20'
+              }">
+              ${t.label}
+            </button>
+          `
+            )
+            .join('');
+        }
 
         let bodyHTML = '';
         if (this.state.activeTab === 'orders') bodyHTML = this.renderOrdersTab();
@@ -367,7 +397,7 @@
         else if (this.state.activeTab === 'staff') bodyHTML = this.renderStaffTab();
         else if (this.state.activeTab === 'optimize') bodyHTML = this.renderOptimizeTab();
 
-        mount.innerHTML = navHTML + bodyHTML;
+        if (cmsMount) cmsMount.innerHTML = bodyHTML;
       },
 
       renderOrdersTab() {
@@ -542,7 +572,7 @@
             </div>
 
             <div class="lg:col-span-8 p-6 rounded-2xl paper-card">
-              <h3 class="font-display text-xl font-bold text-[#0d2931] mb-4">
+              <h3 class="font-bevietnam-bold text-xl font-bold text-[#0d2931] mb-4">
                 Chỉnh sửa gói lễ: ${p.name} (${p.sku})
               </h3>
               <form onsubmit="AdminPortal.saveProduct(event, '${p.id}')" class="space-y-4 text-xs sm:text-sm">
@@ -705,7 +735,7 @@
                   blog
                     ? `
                   <div class="flex items-center justify-between mb-4">
-                    <h3 class="font-display text-xl font-bold text-[#0d2931]">Trình Soạn Thảo Bài Viết &amp; SEO</h3>
+                    <h3 class="font-bevietnam-bold text-xl font-bold text-[#0d2931]">Trình Soạn Thảo Bài Viết &amp; SEO</h3>
                     <button onclick="AdminPortal.deleteBlogPost('${blog.id}')" class="px-3 py-1.5 rounded-lg bg-[#691727]/15 text-[#691727] text-xs font-bold hover:bg-[#691727] hover:text-white transition">
                       Xóa bài viết
                     </button>
@@ -861,7 +891,7 @@
         return `
           <form onsubmit="AdminPortal.saveSettings(event)" class="grid grid-cols-1 lg:grid-cols-2 gap-6 text-xs sm:text-sm">
             <div class="p-6 rounded-2xl paper-card space-y-4">
-              <h3 class="font-display text-xl font-bold text-[#0d2931]">1. Cấu Hình Tài Khoản VietQR &amp; Ví MoMo</h3>
+              <h3 class="font-bevietnam-bold text-xl font-bold text-[#0d2931]">1. Cấu Hình Tài Khoản VietQR &amp; Ví MoMo</h3>
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label class="block font-bold mb-1">Mã Ngân hàng Napas (MB, VCB, TCB...)</label>
@@ -929,7 +959,7 @@
             </div>
 
             <div class="p-6 rounded-2xl paper-card space-y-4">
-              <h3 class="font-display text-xl font-bold text-[#0d2931]">2. Công Cụ Tối Ưu UX (Clarity / GA4) &amp; Liên Hệ</h3>
+              <h3 class="font-bevietnam-bold text-xl font-bold text-[#0d2931]">2. Công Cụ Tối Ưu UX (Clarity / GA4) &amp; Liên Hệ</h3>
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label class="block font-bold mb-1">Microsoft Clarity Project ID</label>
@@ -956,7 +986,7 @@
             <div class="p-6 rounded-2xl paper-card space-y-4 lg:col-span-2">
               <div class="flex flex-wrap items-center justify-between gap-2 border-b border-[#ae9984]/30 pb-3">
                 <div>
-                  <h3 class="font-display text-xl font-bold text-[#0d2931]">3. Cấu Hình Phí Vận Chuyển (Cách 3: Theo Vị Trí &amp; Freeship)</h3>
+                  <h3 class="font-bevietnam-bold text-xl font-bold text-[#0d2931]">3. Cấu Hình Phí Vận Chuyển (Cách 3: Theo Vị Trí &amp; Freeship)</h3>
                   <p class="text-xs text-[#0d2931]/70 mt-0.5">Tự động tính phí theo địa chỉ khách và miễn phí ship khi giỏ hàng có Combo Trọn Tết hoặc đạt ngưỡng giá trị đơn hàng.</p>
                 </div>
                 <span class="px-3 py-1 rounded-full bg-[#72826f]/15 text-[#72826f] text-xs font-bold">Cách 3 Đang Bật</span>
@@ -1002,7 +1032,7 @@
             <div class="p-6 rounded-2xl paper-card space-y-4 lg:col-span-2">
               <div class="flex flex-wrap items-center justify-between gap-2 border-b border-[#ae9984]/30 pb-3">
                 <div>
-                  <h3 class="font-display text-xl font-bold text-[#0d2931]">4. Đồng Bộ 2 Chiều Google Sheets (Mọi Người Cùng Hoạt Động)</h3>
+                  <h3 class="font-bevietnam-bold text-xl font-bold text-[#0d2931]">4. Đồng Bộ 2 Chiều Google Sheets (Mọi Người Cùng Hoạt Động)</h3>
                   <p class="text-xs text-[#0d2931]/70 mt-0.5">Khách đặt hàng sẽ tự động ghi vào Google Sheets. Mọi nhân viên mở điện thoại hoặc máy tính đều thấy dữ liệu thời gian thực.</p>
                 </div>
                 <span class="px-3 py-1 rounded-full ${s.googleSheets?.syncUrl ? 'bg-[#72826f]/20 text-[#72826f]' : 'bg-[#691727]/15 text-[#691727]'} text-xs font-bold">
@@ -1159,7 +1189,7 @@
             <!-- Left: Staff Accounts & Add New Staff -->
             <div class="lg:col-span-7 space-y-5">
               <div class="p-6 rounded-2xl paper-card">
-                <h3 class="font-display text-xl font-bold text-[#0d2931] mb-3">
+                <h3 class="font-bevietnam-bold text-xl font-bold text-[#0d2931] mb-3">
                   Danh Sách Nhân Sự Được Cấp Quyền Truy Cập
                 </h3>
                 <div class="space-y-2.5">
@@ -1188,7 +1218,7 @@
 
               <!-- Add New Staff Form -->
               <form onsubmit="AdminPortal.addNewStaff(event)" class="p-6 rounded-2xl paper-card space-y-3.5">
-                <h4 class="font-display text-lg font-bold text-[#0d2931]">+ Cấp Tài Khoản Mới Cho Nhân Viên Công Ty</h4>
+                <h4 class="font-bevietnam-bold text-lg font-bold text-[#0d2931]">+ Cấp Tài Khoản Mới Cho Nhân Viên Công Ty</h4>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
                     <label class="block font-bold mb-1">Họ tên nhân sự *</label>
@@ -1221,7 +1251,7 @@
 
             <!-- Right: Security Audit Log -->
             <div class="lg:col-span-5 p-6 rounded-2xl paper-card">
-              <h3 class="font-display text-xl font-bold text-[#0d2931] mb-3">
+              <h3 class="font-bevietnam-bold text-xl font-bold text-[#0d2931] mb-3">
                 Nhật Ký Hoạt Động Quản Trị (Audit Log)
               </h3>
               <p class="text-xs text-[#0d2931]/70 mb-3">
@@ -1255,7 +1285,7 @@
             <div class="p-6 rounded-2xl paper-card border-l-4 border-[#f0b45b]">
               <div class="flex flex-wrap items-center justify-between gap-4">
                 <div>
-                  <h3 class="font-display text-lg sm:text-xl font-bold text-[#0d2931]">Trải Nghiệm Khách Hàng (Live Website)</h3>
+                  <h3 class="font-bevietnam-bold text-lg sm:text-xl font-bold text-[#0d2931]">Trải Nghiệm Khách Hàng (Live Website)</h3>
                   <p class="text-xs text-[#0d2931]/75 mt-1">Mở giao diện khách hàng thực tế để kiểm tra danh mục sản phẩm, tính toán phí vận chuyển, các gói lễ và luồng thanh toán VietQR / MoMo.</p>
                 </div>
                 <a href="index.html" target="_blank" class="px-5 py-2.5 rounded-xl bg-[#0d2931] hover:bg-[#163d48] text-[#f0b45b] font-bold text-xs sm:text-sm transition flex items-center gap-2 shadow-md">
@@ -1268,7 +1298,7 @@
             <div class="p-6 rounded-2xl paper-card space-y-4">
               <div class="border-b border-[#ae9984]/30 pb-3 flex flex-wrap items-center justify-between gap-2">
                 <div>
-                  <h3 class="font-display text-lg sm:text-xl font-bold text-[#0d2931]">Quản Lý Sao Lưu &amp; Khôi Phục Dữ Liệu</h3>
+                  <h3 class="font-bevietnam-bold text-lg sm:text-xl font-bold text-[#0d2931]">Quản Lý Sao Lưu &amp; Khôi Phục Dữ Liệu</h3>
                   <p class="text-xs text-[#0d2931]/75 mt-0.5">Tải toàn bộ cơ sở dữ liệu hiện tại về máy tính hoặc nạp dữ liệu từ file sao lưu .json</p>
                 </div>
               </div>
@@ -1311,7 +1341,7 @@
             <div class="p-6 rounded-2xl paper-card space-y-4">
               <div class="border-b border-[#ae9984]/30 pb-3 flex flex-wrap items-center justify-between gap-2">
                 <div>
-                  <h3 class="font-display text-lg sm:text-xl font-bold text-[#0d2931]">Công Cụ Tối Ưu UX &amp; Giám Sát Hành Vi Khách Hàng</h3>
+                  <h3 class="font-bevietnam-bold text-lg sm:text-xl font-bold text-[#0d2931]">Công Cụ Tối Ưu UX &amp; Giám Sát Hành Vi Khách Hàng</h3>
                   <p class="text-xs text-[#0d2931]/75 mt-0.5">Theo dõi bản đồ nhiệt Heatmap, hành vi cuộn chuột và số liệu chuyển đổi theo thời gian thực.</p>
                 </div>
               </div>
@@ -1353,7 +1383,7 @@
             <div class="p-6 rounded-2xl paper-card space-y-3">
               <div class="flex flex-wrap items-center justify-between gap-3">
                 <div>
-                  <h3 class="font-display text-lg sm:text-xl font-bold text-[#0d2931]">Tối Ưu Tìm Kiếm &amp; Bài Viết Cẩm Nang (SEO)</h3>
+                  <h3 class="font-bevietnam-bold text-lg sm:text-xl font-bold text-[#0d2931]">Tối Ưu Tìm Kiếm &amp; Bài Viết Cẩm Nang (SEO)</h3>
                   <p class="text-xs text-[#0d2931]/75 mt-0.5">Quản lý tiêu đề thẻ Meta Title, Meta Description và từ khóa tìm kiếm Google cho toàn bộ bài viết.</p>
                 </div>
                 <button onclick="AdminPortal.setTab('blogs')" class="px-4 py-2 rounded-xl bg-[#72826f] hover:bg-[#5b6a59] text-white text-xs font-bold transition">

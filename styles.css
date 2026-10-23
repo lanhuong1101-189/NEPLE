@@ -162,6 +162,39 @@ h1, h2, h3, .font-display {
   letter-spacing: 0.02em;
 }
 
+/* Admin CMS typography: Force Be Vietnam Pro Bold */
+#admin-dashboard-screen,
+#admin-dashboard-screen *,
+#admin-dashboard-screen h1,
+#admin-dashboard-screen h2,
+#admin-dashboard-screen h3,
+#admin-dashboard-screen h4,
+#admin-dashboard-screen .font-display,
+#admin-panel-mount,
+#admin-panel-mount *,
+#admin-panel-mount h1,
+#admin-panel-mount h2,
+#admin-panel-mount h3,
+#admin-panel-mount h4,
+#admin-panel-mount .font-display {
+  font-family: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, sans-serif !important;
+}
+
+#admin-dashboard-screen h1,
+#admin-dashboard-screen h2,
+#admin-dashboard-screen h3,
+#admin-dashboard-screen h4,
+#admin-dashboard-screen .font-display,
+#admin-dashboard-screen .font-bold,
+#admin-panel-mount h1,
+#admin-panel-mount h2,
+#admin-panel-mount h3,
+#admin-panel-mount h4,
+#admin-panel-mount .font-display,
+#admin-panel-mount .font-bold {
+  font-weight: 700 !important;
+}
+
 .font-accent {
   font-family: var(--font-accent);
 }

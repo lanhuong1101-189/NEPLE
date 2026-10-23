@@ -2256,11 +2256,11 @@ const NepleApp = {
 
     const tab = this.state.adminTab;
     const tabs = [
-      { id: 'orders', label: `Đơn Hàng (${this.state.orders.length})` },
-      { id: 'products', label: `Sản Phẩm & 7 SKU (${this.state.products.length})` },
-      { id: 'blogs', label: `Blog SEO (${this.state.blogs.length})` },
-      { id: 'settings', label: `Cài Đặt VietQR / MoMo / GA4` },
-      { id: 'optimize', label: `Tối Ưu Website` }
+      { id: 'orders', label: 'Theo dõi đơn hàng' },
+      { id: 'products', label: 'Quản lí danh mục sản phẩm' },
+      { id: 'blogs', label: 'Quản lí nội dung Blog' },
+      { id: 'settings', label: 'Cài đặt thanh toán' },
+      { id: 'optimize', label: 'Tối ưu website' }
     ];
 
     const navHTML = `
