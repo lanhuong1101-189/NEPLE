@@ -81,8 +81,15 @@
     <!-- Top Admin Bar -->
     <header class="sticky top-0 z-40 bg-[#0d2931] text-[#faf7f2] border-b-2 border-[#f0b45b] shadow-lg">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3.5 flex flex-wrap items-center justify-between gap-4">
-        <div class="flex items-center">
-          <span class="font-display text-lg sm:text-xl font-bold text-[#faf7f2] tracking-wider">NEPLE ADMIN CMS</span>
+        <div class="flex items-center gap-3">
+          <img src="logo.png?v=2" alt="NEPLE Logo" class="h-10 sm:h-11 w-auto object-contain" />
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="font-display text-lg sm:text-xl font-bold text-[#faf7f2]">NEPLE ADMIN CMS</span>
+              <span id="current-staff-role-badge" class="px-2.5 py-0.5 rounded-full bg-[#f0b45b] text-[#0d2931] text-[10px] font-extrabold uppercase"></span>
+            </div>
+            <div id="current-staff-email" class="text-xs text-[#faf7f2]/75"></div>
+          </div>
         </div>
 
         <div class="flex flex-wrap items-center gap-2.5">
@@ -303,10 +310,8 @@
       showDashboardScreen() {
         document.getElementById('admin-login-screen').classList.add('hidden');
         document.getElementById('admin-dashboard-screen').classList.remove('hidden');
-        const roleBadge = document.getElementById('current-staff-role-badge');
-        if (roleBadge) roleBadge.textContent = this.state.currentUser.roleLabel;
-        const emailMount = document.getElementById('current-staff-email');
-        if (emailMount) emailMount.textContent = `${this.state.currentUser.name} • ${this.state.currentUser.email}`;
+        document.getElementById('current-staff-role-badge').textContent = this.state.currentUser.roleLabel;
+        document.getElementById('current-staff-email').textContent = `${this.state.currentUser.name} • ${this.state.currentUser.email}`;
         this.renderDashboard();
       },
 
@@ -327,7 +332,7 @@
           { id: 'orders', label: `📦 Đơn Hàng (${this.state.orders.length})` },
           { id: 'products', label: `🎁 Sản Phẩm & 7 SKU (${this.state.products.length})` },
           { id: 'blogs', label: `📝 Blog SEO (${this.state.blogs.length})` },
-          { id: 'settings', label: `⚙️ Cài Đặt Thanh Toán & Hệ Thống` },
+          { id: 'settings', label: `⚙️ Cài Đặt VietQR / MoMo / GA4` },
           { id: 'staff', label: `🔐 Phân Quyền Nhân Viên (${this.state.staffList.length})` }
         ];
 
@@ -862,7 +867,7 @@
         const s = this.state.settings;
         return `
           <form onsubmit="AdminPortal.saveSettings(event)" class="grid grid-cols-1 lg:grid-cols-2 gap-6 text-xs sm:text-sm">
-            <div class="p-6 rounded-2xl paper-card space-y-4 lg:col-span-2">
+            <div class="p-6 rounded-2xl paper-card space-y-4">
               <h3 class="font-display text-xl font-bold text-[#0d2931]">1. Cấu Hình Tài Khoản VietQR &amp; Ví MoMo</h3>
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
@@ -930,11 +935,35 @@
               </div>
             </div>
 
-            <!-- 2. Cấu Hình Phí Vận Chuyển (Cách 3: Theo Vị Trí & Freeship) -->
+            <div class="p-6 rounded-2xl paper-card space-y-4">
+              <h3 class="font-display text-xl font-bold text-[#0d2931]">2. Công Cụ Tối Ưu UX (Clarity / GA4) &amp; Liên Hệ</h3>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label class="block font-bold mb-1">Microsoft Clarity Project ID</label>
+                  <input type="text" id="adm-set-clarity" placeholder="VD: lq8xyz1234" value="${s.analytics?.clarityId || ''}" class="w-full px-3 py-2 rounded-xl border border-[#ae9984] bg-white" />
+                </div>
+                <div>
+                  <label class="block font-bold mb-1">Google Analytics 4 ID</label>
+                  <input type="text" id="adm-set-ga4" placeholder="VD: G-XXXXXXXXXX" value="${s.analytics?.ga4Id || ''}" class="w-full px-3 py-2 rounded-xl border border-[#ae9984] bg-white" />
+                </div>
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label class="block font-bold mb-1">Hotline CSKH</label>
+                  <input type="text" id="adm-set-hotline" value="${s.hotline}" class="w-full px-3 py-2 rounded-xl border border-[#ae9984] bg-white" />
+                </div>
+                <div>
+                  <label class="block font-bold mb-1">Link Zalo OA</label>
+                  <input type="text" id="adm-set-zalo" value="${s.socials?.zalo || ''}" class="w-full px-3 py-2 rounded-xl border border-[#ae9984] bg-white" />
+                </div>
+              </div>
+            </div>
+
+            <!-- 3. Cấu Hình Phí Vận Chuyển (Cách 3: Theo Vị Trí & Freeship) -->
             <div class="p-6 rounded-2xl paper-card space-y-4 lg:col-span-2">
               <div class="flex flex-wrap items-center justify-between gap-2 border-b border-[#ae9984]/30 pb-3">
                 <div>
-                  <h3 class="font-display text-xl font-bold text-[#0d2931]">2. Cấu Hình Phí Vận Chuyển (Cách 3: Theo Vị Trí &amp; Freeship)</h3>
+                  <h3 class="font-display text-xl font-bold text-[#0d2931]">3. Cấu Hình Phí Vận Chuyển (Cách 3: Theo Vị Trí &amp; Freeship)</h3>
                   <p class="text-xs text-[#0d2931]/70 mt-0.5">Tự động tính phí theo địa chỉ khách và miễn phí ship khi giỏ hàng có Combo Trọn Tết hoặc đạt ngưỡng giá trị đơn hàng.</p>
                 </div>
                 <span class="px-3 py-1 rounded-full bg-[#72826f]/15 text-[#72826f] text-xs font-bold">Cách 3 Đang Bật</span>
@@ -976,11 +1005,11 @@
               </div>
             </div>
 
-            <!-- 3. Cấu Hình Đồng Bộ 2 Chiều Google Sheets (Mọi Người Cùng Thấy) -->
+            <!-- 4. Cấu Hình Đồng Bộ 2 Chiều Google Sheets (Mọi Người Cùng Thấy) -->
             <div class="p-6 rounded-2xl paper-card space-y-4 lg:col-span-2">
               <div class="flex flex-wrap items-center justify-between gap-2 border-b border-[#ae9984]/30 pb-3">
                 <div>
-                  <h3 class="font-display text-xl font-bold text-[#0d2931]">3. Đồng Bộ 2 Chiều Google Sheets (Mọi Người Cùng Hoạt Động)</h3>
+                  <h3 class="font-display text-xl font-bold text-[#0d2931]">4. Đồng Bộ 2 Chiều Google Sheets (Mọi Người Cùng Hoạt Động)</h3>
                   <p class="text-xs text-[#0d2931]/70 mt-0.5">Khách đặt hàng sẽ tự động ghi vào Google Sheets. Mọi nhân viên mở điện thoại hoặc máy tính đều thấy dữ liệu thời gian thực.</p>
                 </div>
                 <span class="px-3 py-1 rounded-full ${s.googleSheets?.syncUrl ? 'bg-[#72826f]/20 text-[#72826f]' : 'bg-[#691727]/15 text-[#691727]'} text-xs font-bold">

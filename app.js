@@ -2259,7 +2259,7 @@ const NepleApp = {
       { id: 'orders', label: `📦 Đơn Hàng (${this.state.orders.length})` },
       { id: 'products', label: `🎁 Sản Phẩm & 7 SKU (${this.state.products.length})` },
       { id: 'blogs', label: `📝 Blog SEO (${this.state.blogs.length})` },
-      { id: 'settings', label: `⚙️ Cài Đặt Thanh Toán & Hệ Thống` }
+      { id: 'settings', label: `⚙️ Cài Đặt VietQR / MoMo / GA4` }
     ];
 
     const navHTML = `
@@ -2868,11 +2868,35 @@ const NepleApp = {
           </div>
         </div>
 
-        <!-- 2. Cấu Hình Phí Vận Chuyển (Cách 3: Linh Hoạt Theo Vị Trí & Freeship) -->
+        <div class="p-6 rounded-2xl paper-card space-y-4">
+          <h3 class="font-display text-xl font-bold text-[#0d2931]">2. Công Cụ Tối Ưu UX (Clarity / GA4) &amp; Social Hub</h3>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block font-bold mb-1">Microsoft Clarity Project ID (Heatmap)</label>
+              <input type="text" id="adm-set-clarity" placeholder="VD: lq8xyz1234" value="${s.analytics?.clarityId || ''}" class="w-full px-3 py-2 rounded-xl border border-[#ae9984] bg-white" />
+            </div>
+            <div>
+              <label class="block font-bold mb-1">Google Analytics 4 (Measurement ID)</label>
+              <input type="text" id="adm-set-ga4" placeholder="VD: G-XXXXXXXXXX" value="${s.analytics?.ga4Id || ''}" class="w-full px-3 py-2 rounded-xl border border-[#ae9984] bg-white" />
+            </div>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block font-bold mb-1">Hotline CSKH</label>
+              <input type="text" id="adm-set-hotline" value="${s.hotline}" class="w-full px-3 py-2 rounded-xl border border-[#ae9984] bg-white" />
+            </div>
+            <div>
+              <label class="block font-bold mb-1">Link Zalo OA / Cá nhân</label>
+              <input type="text" id="adm-set-zalo" value="${s.socials?.zalo || ''}" class="w-full px-3 py-2 rounded-xl border border-[#ae9984] bg-white" />
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Cấu Hình Phí Vận Chuyển (Cách 3: Linh Hoạt Theo Vị Trí & Freeship) -->
         <div class="p-6 rounded-2xl paper-card space-y-4 lg:col-span-2">
           <div class="flex flex-wrap items-center justify-between gap-2 border-b border-[#ae9984]/30 pb-3">
             <div>
-              <h3 class="font-display text-xl font-bold text-[#0d2931]">2. Cấu Hình Phí Vận Chuyển (Cách 3: Theo Vị Trí &amp; Freeship)</h3>
+              <h3 class="font-display text-xl font-bold text-[#0d2931]">3. Cấu Hình Phí Vận Chuyển (Cách 3: Theo Vị Trí &amp; Freeship)</h3>
               <p class="text-xs text-[#0d2931]/70 mt-0.5">Tự động tính phí theo địa chỉ khách và miễn phí ship khi giỏ hàng có Combo Trọn Tết hoặc đạt ngưỡng giá trị đơn hàng.</p>
             </div>
             <span class="px-3 py-1 rounded-full bg-[#72826f]/15 text-[#72826f] text-xs font-bold">Cách 3 Đang Bật</span>
