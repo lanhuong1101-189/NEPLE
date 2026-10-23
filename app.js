@@ -2259,7 +2259,7 @@ const NepleApp = {
       { id: 'orders', label: `📦 Đơn Hàng (${this.state.orders.length})` },
       { id: 'products', label: `🎁 Sản Phẩm & 7 SKU (${this.state.products.length})` },
       { id: 'blogs', label: `📝 Blog SEO (${this.state.blogs.length})` },
-      { id: 'settings', label: `⚙️ Cài Đặt VietQR / MoMo / GA4` }
+      { id: 'settings', label: `⚙️ Cài Đặt Thanh Toán & Hệ Thống` }
     ];
 
     const navHTML = `
