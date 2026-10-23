@@ -683,10 +683,10 @@ const DEFAULT_SETTINGS = {
   socials: {
     zalo: 'https://zalo.me/0901234567',
     messenger: 'https://m.me/neple.vn',
-    facebook: 'https://facebook.com/neple.vn',
-    instagram: 'https://instagram.com/neple.vn',
-    tiktok: 'https://tiktok.com/@neple.vn',
-    threads: 'https://threads.net/@neple.vn'
+    facebook: 'https://www.facebook.com/share/19jikPGxG6/?mibextid=wwXIfr',
+    tiktok: 'https://www.tiktok.com/@neple.modern.ritu?_r=1&_t=ZS-9AlxBYoWB3k',
+    youtube: 'https://youtube.com/@neple9999?si=p6U8Ii_e4K4U4HVN',
+    website: 'https://neple-store-vn.vercel.app/'
   },
   analytics: {
     ga4Id: '',
