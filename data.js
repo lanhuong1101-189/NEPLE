@@ -685,8 +685,7 @@ const DEFAULT_SETTINGS = {
     messenger: 'https://m.me/neple.vn',
     facebook: 'https://www.facebook.com/share/19jikPGxG6/?mibextid=wwXIfr',
     tiktok: 'https://www.tiktok.com/@neple.modern.ritu?_r=1&_t=ZS-9AlxBYoWB3k',
-    youtube: 'https://youtube.com/@neple9999?si=p6U8Ii_e4K4U4HVN',
-    website: 'https://neple-store-vn.vercel.app/'
+    youtube: 'https://youtube.com/@neple9999?si=p6U8Ii_e4K4U4HVN'
   },
   analytics: {
     ga4Id: '',
