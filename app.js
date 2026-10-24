@@ -237,6 +237,20 @@ const NepleApp = {
       if (!clickedInside) {
         document.querySelectorAll('.smart-search-results').forEach(el => el.classList.add('hidden'));
       }
+
+      // Close mobile policy dropdown on outside click
+      const mobileMenu = document.getElementById('mobile-policy-menu');
+      if (mobileMenu && !mobileMenu.classList.contains('hidden') && !e.target.closest('#mobile-policy-menu') && !e.target.closest('button[onclick*="toggleMobilePolicyDropdown"]')) {
+        mobileMenu.classList.add('hidden');
+      }
+    });
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        this.closePolicyModal();
+        this.closeCheckoutModal();
+        this.closeProductModal();
+      }
     });
   },
 
@@ -1608,6 +1622,51 @@ const NepleApp = {
   closeCheckoutModal() {
     const modal = document.getElementById('checkout-modal');
     if (modal) modal.classList.add('hidden');
+  },
+
+  openPolicyModal(type = 'shipping') {
+    const modal = document.getElementById('policy-modal');
+    if (!modal) return;
+    this.switchPolicyTab(type);
+    modal.classList.remove('hidden');
+  },
+
+  closePolicyModal() {
+    const modal = document.getElementById('policy-modal');
+    if (modal) modal.classList.add('hidden');
+  },
+
+  switchPolicyTab(type) {
+    const shippingContent = document.getElementById('policy-content-shipping');
+    const returnContent = document.getElementById('policy-content-return');
+    const shippingTab = document.getElementById('policy-tab-btn-shipping');
+    const returnTab = document.getElementById('policy-tab-btn-return');
+
+    if (type === 'return') {
+      if (shippingContent) shippingContent.classList.add('hidden');
+      if (returnContent) returnContent.classList.remove('hidden');
+      if (shippingTab) {
+        shippingTab.className = 'px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 bg-white/10 text-[#faf7f2] hover:bg-white/20 cursor-pointer whitespace-nowrap';
+      }
+      if (returnTab) {
+        returnTab.className = 'px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 bg-[#f0b45b] text-[#0d2931] shadow-md cursor-pointer whitespace-nowrap';
+      }
+    } else {
+      if (shippingContent) shippingContent.classList.remove('hidden');
+      if (returnContent) returnContent.classList.add('hidden');
+      if (shippingTab) {
+        shippingTab.className = 'px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 bg-[#f0b45b] text-[#0d2931] shadow-md cursor-pointer whitespace-nowrap';
+      }
+      if (returnTab) {
+        returnTab.className = 'px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 bg-white/10 text-[#faf7f2] hover:bg-white/20 cursor-pointer whitespace-nowrap';
+      }
+    }
+  },
+
+  toggleMobilePolicyDropdown(e) {
+    if (e && e.stopPropagation) e.stopPropagation();
+    const menu = document.getElementById('mobile-policy-menu');
+    if (menu) menu.classList.toggle('hidden');
   },
 
   setPaymentMethod(method) {

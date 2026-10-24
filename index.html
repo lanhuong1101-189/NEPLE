@@ -122,6 +122,29 @@
           <span>Giỏ Lễ</span>
           <span class="cart-count-badge hidden px-1.5 py-0.2 rounded-full bg-[#f0b45b] text-[#0d2931] text-[11px] font-extrabold">0</span>
         </button>
+
+        <!-- Dropdown "Chính sách" (Ngay phía bên phải GIỎ LỄ) -->
+        <div class="relative group shrink-0 hidden sm:block">
+          <button type="button" class="px-3.5 py-2 rounded-xl bg-[#faf7f2] hover:bg-[#691727] text-[#691727] hover:text-[#f0b45b] border border-[#691727]/30 hover:border-[#691727] text-xs sm:text-sm font-bold flex items-center gap-1.5 transition shadow-sm cursor-pointer">
+            <span>Chính sách</span>
+            <svg class="w-3.5 h-3.5 transition-transform duration-200 group-hover:rotate-180" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+          <!-- Hover Dropdown Menu -->
+          <div class="absolute left-0 top-full pt-1.5 hidden group-hover:block z-50 min-w-[280px]">
+            <div class="rounded-2xl bg-[#0d2931] border-2 border-[#f0b45b] shadow-2xl p-2 text-left space-y-1">
+              <button type="button" onclick="NepleApp.openPolicyModal('shipping')" class="w-full text-left px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-[#faf7f2] hover:bg-[#163d48] hover:text-[#f0b45b] transition flex items-center gap-2.5 cursor-pointer">
+                <span class="text-base shrink-0">🚚</span>
+                <span>Chính sách giao hàng toàn quốc</span>
+              </button>
+              <button type="button" onclick="NepleApp.openPolicyModal('return')" class="w-full text-left px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-[#faf7f2] hover:bg-[#163d48] hover:text-[#f0b45b] transition flex items-center gap-2.5 cursor-pointer">
+                <span class="text-base shrink-0">🔄</span>
+                <span>Chính sách đổi trả và hoàn tiền</span>
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- Right: Smart Search Bar (Pushed to Right & Compact) + Mobile Cart CTA -->
@@ -148,6 +171,26 @@
           <span>Giỏ Lễ</span>
           <span class="cart-count-badge hidden px-1.5 py-0.2 rounded-full bg-[#f0b45b] text-[#0d2931] text-[11px] font-extrabold">0</span>
         </button>
+
+        <!-- Mobile "Chính sách" trigger right next to Giỏ Lễ -->
+        <div class="sm:hidden relative">
+          <button type="button" onclick="NepleApp.toggleMobilePolicyDropdown(event)" class="px-2.5 py-2 rounded-xl bg-[#faf7f2] border border-[#691727]/30 text-[#691727] text-xs font-bold flex items-center gap-1 transition shadow-sm cursor-pointer">
+            <span>Chính sách</span>
+            <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div id="mobile-policy-menu" class="hidden absolute right-0 top-full pt-1.5 z-50 min-w-[260px]">
+            <div class="rounded-2xl bg-[#0d2931] border-2 border-[#f0b45b] shadow-2xl p-2 text-left space-y-1">
+              <button type="button" onclick="NepleApp.openPolicyModal('shipping'); NepleApp.toggleMobilePolicyDropdown(event)" class="w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-bold text-[#faf7f2] hover:bg-[#163d48] hover:text-[#f0b45b] transition flex items-center gap-2 cursor-pointer">
+                <span>🚚</span>
+                <span>Chính sách giao hàng toàn quốc</span>
+              </button>
+              <button type="button" onclick="NepleApp.openPolicyModal('return'); NepleApp.toggleMobilePolicyDropdown(event)" class="w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-bold text-[#faf7f2] hover:bg-[#163d48] hover:text-[#f0b45b] transition flex items-center gap-2 cursor-pointer">
+                <span>🔄</span>
+                <span>Chính sách đổi trả và hoàn tiền</span>
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -423,17 +466,278 @@
   <!-- MODAL 2: 1-STEP CHECKOUT (VIETQR + MOMO + COD) -->
   <div id="checkout-modal" class="hidden fixed inset-0 z-50 modal-backdrop flex items-center justify-center p-4 overflow-y-auto">
     <div class="relative w-full max-w-5xl rounded-3xl bg-[#fffdf9] border-2 border-[#f0b45b] shadow-2xl p-5 sm:p-8 my-8 max-h-[92vh] overflow-y-auto">
-      <div class="flex items-center justify-between pb-4 mb-5 border-b border-[#ae9984]/40">
-        <div>
+      <div class="flex items-center justify-between pb-4 mb-5 border-b border-[#ae9984]/40 flex-wrap gap-3">
+        <div class="flex items-center flex-wrap gap-2.5 sm:gap-4">
           <h3 style="font-family: 'Be Vietnam Pro', sans-serif !important; font-weight: 700 !important;" class="text-xl sm:text-2xl font-bold text-[#0d2931] uppercase tracking-tight">
             GIỎ LỄ &amp; ĐẶT HÀNG NHANH (VIETQR / MOMO / COD)
           </h3>
+          <!-- Policy Dropdown right next to GIỎ LỄ in checkout modal -->
+          <div class="relative group">
+            <button type="button" class="px-3 py-1.5 rounded-xl bg-[#0d2931] text-[#f0b45b] hover:bg-[#163d48] border border-[#f0b45b]/60 text-xs font-bold flex items-center gap-1.5 transition shadow-sm cursor-pointer">
+              <span>Chính sách</span>
+              <svg class="w-3.5 h-3.5 transition-transform duration-200 group-hover:rotate-180" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            <div class="absolute left-0 top-full pt-1.5 hidden group-hover:block z-[60] min-w-[270px]">
+              <div class="rounded-xl bg-[#0d2931] border border-[#f0b45b] shadow-2xl p-1.5 space-y-1">
+                <button type="button" onclick="NepleApp.openPolicyModal('shipping')" class="w-full text-left px-3 py-2 rounded-lg text-xs font-bold text-[#faf7f2] hover:bg-[#163d48] hover:text-[#f0b45b] transition flex items-center gap-2 cursor-pointer">
+                  <span>🚚</span>
+                  <span>Chính sách giao hàng toàn quốc</span>
+                </button>
+                <button type="button" onclick="NepleApp.openPolicyModal('return')" class="w-full text-left px-3 py-2 rounded-lg text-xs font-bold text-[#faf7f2] hover:bg-[#163d48] hover:text-[#f0b45b] transition flex items-center gap-2 cursor-pointer">
+                  <span>🔄</span>
+                  <span>Chính sách đổi trả và hoàn tiền</span>
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
-        <button onclick="NepleApp.closeCheckoutModal()" class="w-9 h-9 rounded-full bg-[#efe9e0] hover:bg-[#0d2931] hover:text-white font-bold text-sm flex items-center justify-center transition">
+        <button onclick="NepleApp.closeCheckoutModal()" class="w-9 h-9 rounded-full bg-[#efe9e0] hover:bg-[#0d2931] hover:text-white font-bold text-sm flex items-center justify-center transition cursor-pointer">
           ✕
         </button>
       </div>
       <div id="checkout-modal-body"></div>
+    </div>
+  </div>
+
+  <!-- MODAL 3: BẢNG CHÍNH SÁCH DỊCH VỤ & GIAO HÀNG / ĐỔI TRẢ (BACKGROUND XANH LÁ SẪM #0d2931) -->
+  <div id="policy-modal" class="hidden fixed inset-0 z-[70] modal-backdrop flex items-center justify-center p-3 sm:p-5 overflow-y-auto" onclick="if(event.target === this) NepleApp.closePolicyModal()">
+    <div style="font-family: 'Be Vietnam Pro', sans-serif !important;" class="relative w-full max-w-4xl rounded-3xl bg-[#0d2931] text-[#faf7f2] border-2 border-[#f0b45b] shadow-2xl p-5 sm:p-8 my-6 max-h-[92vh] overflow-y-auto">
+      
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between pb-4 mb-4 border-b border-[#f0b45b]/30">
+        <div class="flex items-center gap-3">
+          <img src="logo.png?v=2" alt="NEPLE" class="w-8 h-8 object-contain shrink-0" />
+          <div>
+            <span class="text-[11px] uppercase tracking-widest text-[#f0b45b] font-bold block">NEPLE • NẾP LỄ TRUYỀN THỐNG</span>
+            <span class="text-base sm:text-lg font-bold text-white">Chính Sách &amp; Quyền Lợi Khách Hàng</span>
+          </div>
+        </div>
+        <button onclick="NepleApp.closePolicyModal()" class="w-9 h-9 rounded-full bg-white/10 hover:bg-[#f0b45b] text-white hover:text-[#0d2931] font-bold text-sm flex items-center justify-center transition cursor-pointer shrink-0">
+          ✕
+        </button>
+      </div>
+
+      <!-- Policy Tabs Switcher -->
+      <div class="flex items-center gap-2 sm:gap-3 border-b border-white/15 pb-4 mb-6 overflow-x-auto">
+        <button type="button" id="policy-tab-btn-shipping" onclick="NepleApp.switchPolicyTab('shipping')" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 bg-[#f0b45b] text-[#0d2931] shadow-md cursor-pointer whitespace-nowrap">
+          <span>🚚</span>
+          <span>Chính sách giao hàng toàn quốc</span>
+        </button>
+        <button type="button" id="policy-tab-btn-return" onclick="NepleApp.switchPolicyTab('return')" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 bg-white/10 text-[#faf7f2] hover:bg-white/20 cursor-pointer whitespace-nowrap">
+          <span>🔄</span>
+          <span>Chính sách đổi trả và hoàn tiền</span>
+        </button>
+      </div>
+
+      <!-- TAB 1: CHÍNH SÁCH GIAO HÀNG TOÀN QUỐC -->
+      <div id="policy-content-shipping" class="space-y-6">
+        <div class="border-b border-[#f0b45b]/30 pb-3">
+          <h3 class="text-xl sm:text-2xl font-bold text-[#f0b45b] uppercase tracking-wide">
+            I. CHÍNH SÁCH GIAO HÀNG TOÀN QUỐC
+          </h3>
+          <p class="text-xs sm:text-sm text-[#faf7f2]/80 mt-1">
+            Cam kết vận chuyển an toàn, đúng hẹn và giữ trọn vẹn sự trang trọng của từng hộp quà Tết.
+          </p>
+        </div>
+
+        <!-- 1. Phạm vi và phương thức giao hàng -->
+        <div class="space-y-4">
+          <div class="flex items-center gap-2.5">
+            <span class="w-7 h-7 rounded-lg bg-[#f0b45b] text-[#0d2931] flex items-center justify-center text-sm font-black shrink-0">1</span>
+            <h4 class="text-base sm:text-lg font-bold text-[#faf7f2]">Phạm vi và phương thức giao hàng</h4>
+          </div>
+          <p class="text-xs sm:text-sm text-[#faf7f2]/90 leading-relaxed sm:pl-9">
+            NEPLE hỗ trợ giao hàng tới tất cả các tỉnh/thành phố trên toàn quốc thông qua các đối tác vận chuyển uy tín.
+          </p>
+
+          <!-- Delivery Times Cards -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:pl-9">
+            <!-- Giao hàng hỏa tốc -->
+            <div class="rounded-2xl bg-[#163d48]/80 border border-[#f0b45b]/40 p-4 space-y-2">
+              <div class="flex items-center gap-2 text-[#f0b45b] font-bold text-xs sm:text-sm">
+                <span class="text-base">⚡</span>
+                <span>Giao hàng hỏa tốc (Nội thành TP.HCM):</span>
+              </div>
+              <p class="text-xs sm:text-sm text-[#faf7f2]/90 leading-relaxed">
+                Nhận hàng trong vòng <strong class="text-[#f0b45b]">2 – 4 giờ</strong> kể từ khi đơn hàng được xác nhận.
+              </p>
+            </div>
+
+            <!-- Giao hàng tiêu chuẩn -->
+            <div class="rounded-2xl bg-[#163d48]/80 border border-[#f0b45b]/40 p-4 space-y-2">
+              <div class="flex items-center gap-2 text-[#f0b45b] font-bold text-xs sm:text-sm">
+                <span class="text-base">📦</span>
+                <span>Giao hàng tiêu chuẩn (Toàn quốc):</span>
+              </div>
+              <ul class="text-xs sm:text-sm text-[#faf7f2]/90 space-y-1.5 pl-1">
+                <li>• <strong>Khu vực TP.HCM &amp; các tỉnh lân cận:</strong> 1 – 2 ngày làm việc.</li>
+                <li>• <strong>Khu vực Miền Trung &amp; Miền Bắc:</strong> 2 – 4 ngày làm việc.</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Lưu ý về Thời gian đóng gói -->
+          <div class="rounded-2xl bg-[#07191f]/90 border-l-4 border-[#f0b45b] p-4 sm:ml-9 space-y-2">
+            <div class="text-xs sm:text-sm font-bold text-[#f0b45b] flex items-center gap-2">
+              <span>⏱️</span>
+              <span>Lưu ý về Thời gian đóng gói:</span>
+            </div>
+            <ul class="text-xs sm:text-sm text-[#faf7f2]/90 space-y-1.5 pl-2 leading-relaxed">
+              <li>• <strong class="text-white">Sản phẩm đóng sẵn:</strong> Đóng gói và giao cho đơn vị vận chuyển trong vòng <strong>24 giờ</strong>.</li>
+              <li>• <strong class="text-white">Sản phẩm cá nhân hóa (Custom Box - in ảnh/viết thiệp riêng):</strong> Cần thời gian chuẩn bị từ <strong>12 – 24 giờ</strong> trước khi bàn giao cho đơn vị vận chuyển.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- 2. Quy trình giao nhận quà tặng (Đặc thù Gifting) -->
+        <div class="space-y-4 pt-2">
+          <div class="flex items-center gap-2.5">
+            <span class="w-7 h-7 rounded-lg bg-[#f0b45b] text-[#0d2931] flex items-center justify-center text-sm font-black shrink-0">2</span>
+            <h4 class="text-base sm:text-lg font-bold text-[#faf7f2]">Quy trình giao nhận quà tặng (Đặc thù Gifting)</h4>
+          </div>
+          <p class="text-xs sm:text-sm text-[#faf7f2]/90 leading-relaxed sm:pl-9">
+            Chúng tôi hỗ trợ dịch vụ <strong class="text-[#f0b45b]">Bảo mật thông tin thanh toán</strong>:
+          </p>
+
+          <!-- 3 Columns Gifting Specifics -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3.5 sm:pl-9">
+            <div class="rounded-2xl bg-[#163d48]/70 border border-white/10 p-4 space-y-2">
+              <div class="text-xs sm:text-sm font-bold text-[#f0b45b] flex items-center gap-1.5">
+                <span>📞</span>
+                <span>Quy trình xác nhận</span>
+              </div>
+              <p class="text-xs sm:text-sm text-[#faf7f2]/85 leading-relaxed">
+                Đơn vị vận chuyển sẽ <strong>liên hệ qua điện thoại</strong> với Người nhận trước khi giao hàng.
+              </p>
+            </div>
+
+            <div class="rounded-2xl bg-[#163d48]/70 border border-white/10 p-4 space-y-2">
+              <div class="text-xs sm:text-sm font-bold text-[#f0b45b] flex items-center gap-1.5">
+                <span>🤫</span>
+                <span>Hóa đơn &amp; Giá tiền</span>
+              </div>
+              <p class="text-xs sm:text-sm text-[#faf7f2]/85 leading-relaxed">
+                Hóa đơn thanh toán và thông tin giá cả sẽ <strong>không được đính kèm bên trong hộp quà</strong> (chỉ gửi qua Email/ Zalo của Người đặt hàng).
+              </p>
+            </div>
+
+            <div class="rounded-2xl bg-[#163d48]/70 border border-white/10 p-4 space-y-2">
+              <div class="text-xs sm:text-sm font-bold text-[#f0b45b] flex items-center gap-1.5">
+                <span>🛡️</span>
+                <span>Kiểm hàng (Đồng kiểm)</span>
+              </div>
+              <p class="text-xs sm:text-sm text-[#faf7f2]/85 leading-relaxed">
+                Khách hàng/ Người nhận được quyền <strong>kiểm tra tình trạng ngoại quan</strong> của hộp (tem niêm phong, độ nguyên vẹn) trước khi ký nhận.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 2: CHÍNH SÁCH ĐỔI TRẢ VÀ HOÀN TIỀN -->
+      <div id="policy-content-return" class="hidden space-y-6">
+        <div class="border-b border-[#f0b45b]/30 pb-3">
+          <h3 class="text-xl sm:text-2xl font-bold text-[#f0b45b] uppercase tracking-wide">
+            II. CHÍNH SÁCH ĐỔI TRẢ VÀ HOÀN TIỀN
+          </h3>
+          <p class="text-xs sm:text-sm text-[#faf7f2]/85 mt-1 leading-relaxed">
+            Nhằm đảm bảo quyền lợi tuyệt đối cho khách hàng, NEPLE áp dụng chính sách đổi trả và hoàn tiền minh bạch đối với mọi đơn hàng trên hệ thống.
+          </p>
+        </div>
+
+        <!-- 3 Specific cases -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <!-- 24h: Móp méo / vỡ hỏng do vận chuyển -->
+          <div class="rounded-2xl bg-[#163d48]/80 border border-[#f0b45b]/30 p-4 flex flex-col justify-between space-y-3">
+            <div class="space-y-2">
+              <div class="flex items-center gap-2">
+                <span class="px-2.5 py-1 rounded-lg bg-[#BA3820] text-white text-xs font-black">24 GIỜ</span>
+                <span class="text-xs sm:text-sm font-bold text-[#f0b45b]">Móp méo, vỡ hỏng do vận chuyển</span>
+              </div>
+              <p class="text-xs sm:text-sm text-[#faf7f2]/90 leading-relaxed">
+                Đối với các trường hợp hộp bị móp méo nặng, biến dạng hoặc vỡ hỏng do quá trình vận chuyển, quý khách vui lòng phản hồi trong vòng <strong class="text-[#f0b45b]">24 giờ</strong> kể từ khi nhận hàng để được <strong class="text-[#f0b45b]">đổi mới 100% hoàn toàn miễn phí</strong>.
+              </p>
+            </div>
+            <div class="pt-2 border-t border-white/10">
+              <span class="inline-block px-3 py-1.5 rounded-lg bg-[#f0b45b] text-[#0d2931] text-[11px] font-black uppercase tracking-wide">
+                Đổi mới 100% hoàn toàn miễn phí
+              </span>
+            </div>
+          </div>
+
+          <!-- 48h: Giao sai / thiếu sản phẩm -->
+          <div class="rounded-2xl bg-[#163d48]/80 border border-[#f0b45b]/30 p-4 flex flex-col justify-between space-y-3">
+            <div class="space-y-2">
+              <div class="flex items-center gap-2">
+                <span class="px-2.5 py-1 rounded-lg bg-[#f0b45b] text-[#0d2931] text-xs font-black">48 GIỜ</span>
+                <span class="text-xs sm:text-sm font-bold text-[#f0b45b]">Giao sai hoặc thiếu sản phẩm</span>
+              </div>
+              <p class="text-xs sm:text-sm text-[#faf7f2]/90 leading-relaxed">
+                Trường hợp giao sai hoặc thiếu sản phẩm so với đơn đặt ban đầu, NEPLE hỗ trợ tiếp nhận xử lý trong vòng <strong class="text-[#f0b45b]">48 giờ</strong> để giao bổ sung hoặc đổi mới cho khách hàng.
+              </p>
+            </div>
+            <div class="pt-2 border-t border-white/10">
+              <span class="inline-block px-3 py-1.5 rounded-lg bg-[#faf7f2] text-[#0d2931] text-[11px] font-black uppercase tracking-wide">
+                Giao bổ sung hoặc đổi mới
+              </span>
+            </div>
+          </div>
+
+          <!-- 7 ngày: Lỗi kỹ thuật NSX -->
+          <div class="rounded-2xl bg-[#163d48]/80 border border-[#f0b45b]/30 p-4 flex flex-col justify-between space-y-3">
+            <div class="space-y-2">
+              <div class="flex items-center gap-2">
+                <span class="px-2.5 py-1 rounded-lg bg-[#72826f] text-white text-xs font-black">7 NGÀY</span>
+                <span class="text-xs sm:text-sm font-bold text-[#f0b45b]">Lỗi kỹ thuật nhà sản xuất</span>
+              </div>
+              <p class="text-xs sm:text-sm text-[#faf7f2]/90 leading-relaxed">
+                Ngoài ra, nếu sản phẩm bên trong gặp lỗi kỹ thuật từ nhà sản xuất, khách hàng có quyền yêu cầu đổi mới sản phẩm hoặc hoàn tiền tương ứng trong vòng <strong class="text-[#f0b45b]">7 ngày</strong> kể từ khi nhận hàng.
+              </p>
+            </div>
+            <div class="pt-2 border-t border-white/10">
+              <span class="inline-block px-3 py-1.5 rounded-lg bg-[#f0b45b] text-[#0d2931] text-[11px] font-black uppercase tracking-wide">
+                Đổi mới hoặc hoàn tiền
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Video Unboxing Requirement -->
+        <div class="rounded-2xl bg-[#163d48]/80 border border-[#f0b45b]/50 p-4 space-y-2">
+          <div class="text-xs sm:text-sm font-bold text-[#f0b45b] flex items-center gap-2">
+            <span class="text-base">📹</span>
+            <span>Quy định xác thực hỗ trợ:</span>
+          </div>
+          <p class="text-xs sm:text-sm text-[#faf7f2]/95 leading-relaxed">
+            Để được áp dụng chính sách hỗ trợ nhanh nhất, quý khách vui lòng cung cấp <strong class="text-[#f0b45b]">Video mở hộp (Unboxing video)</strong> hoặc hình ảnh rõ nét thể hiện lỗi sản phẩm, đồng thời <strong class="text-[#f0b45b]">giữ nguyên tem/nhãn niêm phong</strong> của hộp.
+          </p>
+        </div>
+
+        <!-- Từ chối hoàn trả Notice -->
+        <div class="rounded-2xl bg-[#BA3820]/25 border-l-4 border-[#BA3820] p-4 space-y-1.5">
+          <div class="text-xs sm:text-sm font-bold text-[#f0b45b] flex items-center gap-2">
+            <span>⚠️</span>
+            <span>Lưu ý về các trường hợp từ chối áp dụng:</span>
+          </div>
+          <p class="text-xs sm:text-sm text-[#faf7f2]/90 leading-relaxed">
+            NEPLE xin phép từ chối áp dụng hoàn trả cho các đơn hàng giao không thành công do Người nhận từ chối nhận quà vì lý do cá nhân hoặc các trường hợp khách hàng không cung cấp được video/hình ảnh chứng minh lỗi sản phẩm theo quy định.
+          </p>
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="mt-8 pt-4 border-t border-white/15 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-[#faf7f2]/70">
+        <div class="flex items-center gap-2">
+          <span>🛡️</span>
+          <span>Hỗ trợ trực tiếp 24/7 qua Hotline/Zalo: <strong class="text-[#f0b45b]">0901 234 567</strong></span>
+        </div>
+        <button onclick="NepleApp.closePolicyModal()" class="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-[#f0b45b] hover:bg-[#e0a447] text-[#0d2931] font-bold text-xs transition cursor-pointer">
+          Đã hiểu &amp; Đóng
+        </button>
+      </div>
+
     </div>
   </div>
 
@@ -480,6 +784,8 @@
         <ul class="space-y-1.5 text-[#faf7f2]/80">
           <li><button onclick="NepleApp.switchView('cam-nang')" class="hover:text-[#f0b45b]">Cẩm Nang Nếp Lễ &amp; Văn Khấn</button></li>
           <li><button onclick="NepleApp.switchView('tra-cuu')" class="hover:text-[#f0b45b]">Tra Cứu Đơn Hàng Bằng SĐT</button></li>
+          <li><button onclick="NepleApp.openPolicyModal('shipping')" class="hover:text-[#f0b45b]">Chính Sách Giao Hàng Toàn Quốc</button></li>
+          <li><button onclick="NepleApp.openPolicyModal('return')" class="hover:text-[#f0b45b]">Chính Sách Đổi Trả &amp; Hoàn Tiền</button></li>
           <li class="pt-2 text-[#f0b45b] font-semibold">Hotline/Zalo: 0901 234 567</li>
           <li class="text-xs text-[#faf7f2]/60">Email: chao@neple.vn</li>
         </ul>
