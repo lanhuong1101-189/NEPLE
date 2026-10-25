@@ -344,3 +344,100 @@ h1, h2, h3, .font-display {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+/* ==================================================================== */
+/* BLOG RICH CONTENT & CALLOUT (Chuẩn Format PDF & Rich Text)            */
+/* ==================================================================== */
+.blog-rich-content {
+  font-family: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+  color: #1a292c;
+  line-height: 1.85;
+  font-size: 0.975rem;
+}
+
+.blog-rich-content h2 {
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: #0d2931;
+  margin-top: 1.75rem;
+  margin-bottom: 0.75rem;
+  line-height: 1.35;
+}
+
+.blog-rich-content h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #0d2931;
+  margin-top: 1.5rem;
+  margin-bottom: 0.65rem;
+  line-height: 1.4;
+}
+
+.blog-rich-content h4 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #691727;
+  margin-top: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.blog-rich-content p {
+  margin-bottom: 1rem;
+  line-height: 1.8;
+}
+
+.blog-rich-content ul {
+  list-style-type: disc;
+  margin-left: 1.6rem;
+  margin-bottom: 1.25rem;
+}
+
+.blog-rich-content ol {
+  list-style-type: decimal;
+  margin-left: 1.6rem;
+  margin-bottom: 1.25rem;
+}
+
+.blog-rich-content li {
+  margin-bottom: 0.45rem;
+  padding-left: 0.25rem;
+}
+
+.blog-rich-content blockquote {
+  border-left: 4px solid #f0b45b;
+  padding: 0.75rem 1.25rem;
+  margin: 1.25rem 0;
+  background-color: #fbf7ee;
+  border-radius: 0 0.75rem 0.75rem 0;
+  font-style: italic;
+  color: #4a5568;
+}
+
+.blog-rich-content .nep-callout,
+.nep-callout {
+  background-color: #f4efe6;
+  border-left: 5px solid #0d2931;
+  padding: 1.25rem 1.5rem;
+  border-radius: 1rem;
+  margin: 1.75rem 0;
+  box-shadow: 0 2px 10px rgba(13, 41, 49, 0.05);
+}
+
+.blog-rich-content figure {
+  margin: 1.75rem auto;
+  text-align: center;
+}
+
+.blog-rich-content figure img {
+  border-radius: 1rem;
+  max-width: 100%;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  margin: 0 auto;
+}
+
+.blog-rich-content figcaption {
+  font-size: 0.85rem;
+  color: #72826f;
+  margin-top: 0.65rem;
+  font-style: italic;
+}

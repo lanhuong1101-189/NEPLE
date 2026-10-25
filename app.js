@@ -50,7 +50,13 @@ const NepleApp = {
       }));
 
       const savedBlogs = localStorage.getItem(NEPLE_STORAGE_KEYS.BLOGS);
-      this.state.blogs = savedBlogs ? JSON.parse(savedBlogs) : JSON.parse(JSON.stringify(DEFAULT_BLOGS));
+      const parsedBlogs = savedBlogs ? JSON.parse(savedBlogs) : null;
+      if (!parsedBlogs || !Array.isArray(parsedBlogs) || parsedBlogs.length === 0 || !parsedBlogs[0].contentHtml || parsedBlogs.some(b => b.id === 'blog-cung-ong-tao-chung-cu')) {
+        this.state.blogs = JSON.parse(JSON.stringify(DEFAULT_BLOGS));
+        this.saveBlogs();
+      } else {
+        this.state.blogs = parsedBlogs;
+      }
 
       const savedOrders = localStorage.getItem(NEPLE_STORAGE_KEYS.ORDERS);
       this.state.orders = savedOrders ? JSON.parse(savedOrders) : JSON.parse(JSON.stringify(DEFAULT_ORDERS));
@@ -1102,15 +1108,20 @@ const NepleApp = {
       ? 'w-[280px] sm:w-[330px] md:w-[360px] shrink-0' 
       : 'w-full';
 
+    const displayCode = blog.articleCode ? blog.articleCode.split(':')[0] : '';
+
     return `
       <article onclick="NepleApp.switchView('cam-nang'); NepleApp.openBlogArticle('${blog.id}')"
         class="paper-card rounded-2xl overflow-hidden flex flex-col justify-between p-5 sm:p-6 cursor-pointer group hover:-translate-y-1.5 transition-all duration-300 shadow-md hover:shadow-xl border border-[#ae9984]/30 select-none ${cardWidthClass}">
         <div>
-          <div class="flex items-center justify-between gap-2 mb-3">
-            <span class="px-3 py-1 rounded-full bg-[#72826f] text-white text-[11px] font-semibold">
-              ${blog.category}
-            </span>
-            ${blog.prayerText ? `<span class="px-2.5 py-0.5 rounded-full bg-[#f0b45b]/30 text-[#0d2931] text-[11px] font-bold">Có Văn Khấn</span>` : ''}
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+            <div class="flex items-center gap-1.5 flex-wrap">
+              ${displayCode ? `<span class="px-2.5 py-0.5 rounded-full bg-[#691727] text-white text-[10px] font-black uppercase">${displayCode}</span>` : ''}
+              <span class="px-3 py-1 rounded-full bg-[#72826f] text-white text-[11px] font-semibold">
+                ${blog.category}
+              </span>
+            </div>
+            ${blog.linkedPackName ? `<span class="px-2.5 py-0.5 rounded-full bg-[#f0b45b]/30 text-[#0d2931] text-[11px] font-bold">📦 ${blog.linkedPackName}</span>` : (blog.prayerText ? `<span class="px-2.5 py-0.5 rounded-full bg-[#f0b45b]/30 text-[#0d2931] text-[11px] font-bold">Có Văn Khấn</span>` : '')}
           </div>
 
           <h3 class="font-bevietnam-bold text-lg sm:text-xl text-[#0d2931] group-hover:text-[#691727] transition-colors leading-snug">
@@ -1119,6 +1130,11 @@ const NepleApp = {
           <p class="text-xs sm:text-sm text-[#0d2931]/75 mt-3 line-clamp-3 sm:line-clamp-4 leading-relaxed">
             ${blog.excerpt}
           </p>
+        </div>
+
+        <div class="mt-4 pt-3 border-t border-[#ae9984]/20 flex items-center justify-between text-xs text-[#0d2931]/60">
+          <span>⏱ ${blog.readTime || '4 phút đọc'}</span>
+          <span class="text-[#a94025] font-bold group-hover:underline">Đọc bài viết →</span>
         </div>
       </article>
     `;
@@ -1135,7 +1151,9 @@ const NepleApp = {
     const readerContainer = document.getElementById('blog-reader-mount');
     if (!listContainer || !readerContainer) return;
 
-    const categories = ['Tất cả', 'Ý Nghĩa Lễ Tết', 'Hướng Dẫn Bày Lễ Tối Giản', 'Văn Khấn Hiện Đại', 'Chuyện Nếp Nhà'];
+    const dynamicCategories = Array.from(new Set(this.state.blogs.map(b => b.category).filter(Boolean)));
+    const categories = ['Tất cả', ...dynamicCategories];
+
     const catMount = document.getElementById('blog-category-pills');
     if (catMount) {
       catMount.innerHTML = categories
@@ -1145,7 +1163,7 @@ const NepleApp = {
           <button onclick="NepleApp.setBlogCategory('${cat}')"
             class="${
               active
-                ? 'px-4 py-2 rounded-full text-xs sm:text-sm font-bold bg-[#72826f] text-white shadow-sm'
+                ? 'px-4 py-2 rounded-full text-xs sm:text-sm font-bold bg-[#0d2931] text-[#f0b45b] shadow-sm'
                 : 'px-4 py-2 rounded-full text-xs sm:text-sm font-medium bg-[#efe9e0] text-[#0d2931] hover:bg-[#72826f]/20'
             } transition">
             ${cat}
@@ -1185,7 +1203,7 @@ const NepleApp = {
   },
 
   togglePrayerFontSize() {
-    this.state.prayerFontSize = this.state.prayerFontSize === 'normal' ? 'large' : 'normal';
+    this.state.prayerFontSize = this.state.prayerFontSize === 'large' ? 'normal' : 'large';
     this.renderActiveBlogArticle();
   },
 
@@ -1206,99 +1224,153 @@ const NepleApp = {
       return;
     }
 
-    const relatedProduct = this.state.products.find(p => p.id === blog.relatedProductId) || this.state.products[6];
-    const jsonLd = {
-      '@context': 'https://schema.org',
-      '@type': 'Article',
-      headline: blog.seo?.metaTitle || blog.title,
-      description: blog.seo?.metaDescription || blog.excerpt,
-      author: { '@type': 'Organization', name: 'NEPLE (Nếp Lễ)' },
-      datePublished: blog.publishedAt,
-      mainEntityOfPage: `https://neple.vn/cam-nang/${blog.slug}`
-    };
+    const relatedProduct = this.state.products.find(p => p.id === blog.relatedProductId) || this.state.products[0];
+    const displayCode = blog.articleCode ? blog.articleCode.split(':')[0] : '';
+
+    // Auto extract headings for Table of Contents if available
+    let headings = [];
+    if (blog.contentHtml) {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(blog.contentHtml, 'text/html');
+      const hNodes = doc.querySelectorAll('h2, h3, h4');
+      headings = Array.from(hNodes).map((node, i) => ({
+        id: `blog-h-${i}`,
+        title: node.textContent.trim()
+      }));
+    } else if (blog.sections && blog.sections.length > 0) {
+      headings = blog.sections.map((sec, i) => ({
+        id: `sec-${i}`,
+        title: sec.heading
+      }));
+    }
+
+    // Inject ids into contentHtml headings if needed
+    let renderedContentHtml = blog.contentHtml || '';
+    if (renderedContentHtml) {
+      let hCount = 0;
+      renderedContentHtml = renderedContentHtml.replace(/<(h[234])(.*?)>(.*?)<\/\1>/gi, (match, tag, attrs, inner) => {
+        const id = `blog-h-${hCount++}`;
+        return `<${tag} id="${id}" class="scroll-mt-24" ${attrs}>${inner}</${tag}>`;
+      });
+    }
 
     readerContainer.classList.remove('hidden');
     readerContainer.innerHTML = `
       <div class="rounded-3xl bg-[#fffdf9] border-2 border-[#ae9984] shadow-xl p-6 sm:p-10 mb-10">
+        <!-- Top bar của bài đọc -->
         <div class="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-[#ae9984]/40">
-          <div class="flex items-center gap-2">
+          <div class="flex items-center gap-2 flex-wrap">
+            ${displayCode ? `<span class="px-2.5 py-0.5 rounded-full bg-[#691727] text-white text-[10px] font-black uppercase">${displayCode}</span>` : ''}
             <span class="px-3 py-1 rounded-full bg-[#72826f] text-white text-xs font-bold">${blog.category}</span>
-            <span class="text-xs text-[#0d2931]/60">📅 ${blog.publishedAt} • ⏱ ${blog.readTime}</span>
+            ${blog.linkedPackName ? `<span class="px-3 py-1 rounded-full bg-[#f0b45b]/30 text-[#0d2931] text-xs font-bold">📦 Pack: ${blog.linkedPackName}</span>` : ''}
+            <span class="text-xs text-[#0d2931]/60">📅 ${blog.publishedAt} • ⏱ ${blog.readTime || '4 phút đọc'}</span>
           </div>
           <button onclick="NepleApp.closeBlogArticle()" class="px-3.5 py-1.5 rounded-xl bg-[#efe9e0] hover:bg-[#0d2931] hover:text-white text-xs font-bold transition">
             ✕ Đóng bài viết
           </button>
         </div>
 
+        <!-- Tiêu đề H1 chuẩn format -->
         <h1 class="font-bevietnam-bold text-2xl sm:text-4xl text-[#0d2931] mt-5 leading-tight">
           ${blog.title}
         </h1>
-        <p class="text-sm sm:text-base text-[#691727] font-medium mt-3 leading-relaxed">
-          ${blog.excerpt}
-        </p>
 
-        <!-- Auto Table of Contents -->
-        <div class="mt-6 p-4 sm:p-5 rounded-2xl bg-[#f4efe6] border border-[#ae9984]/60">
-          <div class="text-xs font-extrabold uppercase tracking-wider text-[#0d2931] mb-2.5 flex items-center gap-2">
-            <span>📑 Mục Lục Bài Viết Tự Động (Table of Contents)</span>
+        <!-- Sapo chuẩn format -->
+        <div class="mt-4 p-4 sm:p-5 rounded-2xl bg-[#f4efe6] border-l-4 border-[#691727]">
+          <p class="text-sm sm:text-base text-[#691727] font-semibold leading-relaxed">
+            ${blog.excerpt}
+          </p>
+        </div>
+
+        <!-- Cover Image nếu có -->
+        ${
+          blog.coverImage
+            ? `
+          <div class="mt-6 rounded-2xl overflow-hidden shadow-md max-h-[460px] border border-[#ae9984]/30">
+            <img src="${blog.coverImage}" alt="${blog.title}" class="w-full h-full object-cover" />
           </div>
-          <ol class="space-y-1.5 text-xs sm:text-sm text-[#0d2931]">
+        `
+            : ''
+        }
+
+        <!-- Auto Table of Contents (Mục Lục Bài Viết) -->
+        ${
+          headings.length > 0 || blog.prayerText
+            ? `
+          <div class="mt-6 p-4 sm:p-5 rounded-2xl bg-[#f4efe6] border border-[#ae9984]/60">
+            <div class="text-xs font-extrabold uppercase tracking-wider text-[#0d2931] mb-2.5 flex items-center gap-2">
+              <span>📑 Mục Lục Bài Viết (Table of Contents)</span>
+            </div>
+            <ol class="space-y-1.5 text-xs sm:text-sm text-[#0d2931]">
+              ${headings
+                .map(
+                  h => `
+                <li>
+                  <a href="#${h.id}" onclick="event.preventDefault(); document.getElementById('${h.id}')?.scrollIntoView({behavior:'smooth'});"
+                     class="hover:text-[#a94025] hover:underline font-medium">
+                    ${h.title}
+                  </a>
+                </li>
+              `
+                )
+                .join('')}
+              ${
+                blog.prayerText
+                  ? `<li>
+                       <a href="#sec-prayer" onclick="event.preventDefault(); document.getElementById('sec-prayer')?.scrollIntoView({behavior:'smooth'});"
+                          class="text-[#691727] font-bold hover:underline">
+                         🙏 ${blog.prayerTitle || 'Bản Văn Khấn Hiện Đại Dễ Đọc'}
+                       </a>
+                     </li>`
+                  : ''
+              }
+            </ol>
+          </div>
+        `
+            : ''
+        }
+
+        <!-- Nội Dung Bài Viết (Render Rich Text HTML hoặc Sections fallback) -->
+        ${
+          renderedContentHtml
+            ? `
+          <div class="blog-rich-content mt-8">
+            ${renderedContentHtml}
+          </div>
+        `
+            : `
+          <div class="mt-8 space-y-6">
             ${(blog.sections || [])
               .map(
                 (sec, idx) => `
-              <li>
-                <a href="#sec-${idx}" onclick="event.preventDefault(); document.getElementById('sec-${idx}')?.scrollIntoView({behavior:'smooth'});"
-                   class="hover:text-[#a94025] hover:underline font-medium">
-                  ${sec.heading}
-                </a>
-              </li>
+              <div id="sec-${idx}" class="scroll-mt-24">
+                <h2 class="font-display text-xl sm:text-2xl font-bold text-[#0d2931] mb-2">${sec.heading}</h2>
+                <p class="text-sm sm:text-base text-[#0d2931]/85 leading-relaxed">${sec.content}</p>
+              </div>
             `
               )
               .join('')}
-            ${
-              blog.prayerText
-                ? `<li>
-                     <a href="#sec-prayer" onclick="event.preventDefault(); document.getElementById('sec-prayer')?.scrollIntoView({behavior:'smooth'});"
-                        class="text-[#691727] font-bold hover:underline">
-                       🙏 ${blog.prayerTitle || 'Bản Văn Khấn Hiện Đại Dễ Đọc'}
-                     </a>
-                   </li>`
-                : ''
-            }
-          </ol>
-        </div>
+          </div>
+        `
+        }
 
-        <!-- Article Body Sections -->
-        <div class="mt-8 space-y-6">
-          ${(blog.sections || [])
-            .map(
-              (sec, idx) => `
-            <div id="sec-${idx}" class="scroll-mt-24">
-              <h2 class="font-display text-xl sm:text-2xl font-bold text-[#0d2931] mb-2">${sec.heading}</h2>
-              <p class="text-sm sm:text-base text-[#0d2931]/85 leading-relaxed">${sec.content}</p>
-            </div>
-          `
-            )
-            .join('')}
-        </div>
-
-        <!-- Modern Prayer Box -->
+        <!-- Bản Văn Khấn Đi Kèm (Nếu có) -->
         ${
           blog.prayerText
             ? `
-          <div id="sec-prayer" class="mt-8 p-6 sm:p-8 rounded-2xl prayer-box scroll-mt-24">
+          <div id="sec-prayer" class="mt-10 p-6 sm:p-8 rounded-2xl prayer-box scroll-mt-24 border border-[#d5c5b0]">
             <div class="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-[#ae9984]/50">
               <div>
                 <span class="text-[11px] font-bold uppercase tracking-wider text-[#691727] block">Ấn Phẩm Văn Khấn Chuẩn Nếp Lễ</span>
-                <h3 class="font-display text-xl sm:text-2xl font-bold text-[#0d2931]">${blog.prayerTitle}</h3>
+                <h3 class="font-bevietnam-bold text-xl sm:text-2xl font-bold text-[#0d2931]">${blog.prayerTitle || 'Bản Văn Khấn Đi Kèm'}</h3>
               </div>
               <div class="flex items-center gap-2">
                 <button onclick="NepleApp.togglePrayerFontSize()" 
-                  class="px-3 py-1.5 rounded-lg bg-[#0d2931] text-[#f0b45b] text-xs font-semibold">
-                  🔍 ${this.state.prayerFontSize === 'large' ? 'Thu nhỏ chữ' : 'Phóng to chữ để đọc khi cúng'}
+                  class="px-3 py-1.5 rounded-lg bg-[#0d2931] text-[#f0b45b] text-xs font-semibold hover:bg-[#163d48] transition">
+                  🔍 ${this.state.prayerFontSize === 'large' ? 'Thu nhỏ chữ' : 'Phóng to chữ khi cúng'}
                 </button>
                 <button onclick="NepleApp.copyPrayerText('${blog.id}')" 
-                  class="px-3 py-1.5 rounded-lg bg-[#a94025] text-white text-xs font-semibold">
+                  class="px-3 py-1.5 rounded-lg bg-[#a94025] text-white text-xs font-semibold hover:bg-[#8b331c] transition">
                   📋 Sao chép văn khấn
                 </button>
               </div>
@@ -1311,21 +1383,23 @@ const NepleApp = {
             : ''
         }
 
-        <!-- In-Article Product Card -->
+        <!-- Thẻ Pack Liên Kết & CTA Mua Ngay Trong Bài Viết (Format PDF) -->
         ${
           relatedProduct
             ? `
-          <div class="mt-8 p-5 sm:p-6 rounded-2xl bg-gradient-to-r from-[#0d2931] to-[#163d48] text-[#faf7f2] border-2 border-[#f0b45b] shadow-lg">
+          <div class="mt-10 p-5 sm:p-7 rounded-2xl bg-gradient-to-r from-[#0d2931] to-[#163d48] text-[#faf7f2] border-2 border-[#f0b45b] shadow-xl">
             <div class="flex flex-col md:flex-row items-center justify-between gap-6">
-              <div>
+              <div class="space-y-1">
                 <span class="px-2.5 py-0.5 rounded-full bg-[#f0b45b] text-[#0d2931] text-[11px] font-extrabold uppercase">
-                  Thẻ gắn sản phẩm liên quan trong bài viết
+                  Gói Lễ Đồng Hành Trong Bài Viết
                 </span>
-                <h4 class="font-display text-xl sm:text-2xl font-bold text-[#f0b45b] mt-1.5">${relatedProduct.name} — ${this.formatVND(relatedProduct.price)}</h4>
-                <p class="text-xs sm:text-sm text-[#faf7f2]/85 mt-1">${relatedProduct.shortDesc}</p>
+                <h4 class="font-bevietnam-bold text-xl sm:text-2xl font-bold text-[#f0b45b] mt-1.5">
+                  ${blog.linkedPackName ? `${blog.linkedPackName} (${relatedProduct.name})` : relatedProduct.name} — ${this.formatVND(relatedProduct.price)}
+                </h4>
+                <p class="text-xs sm:text-sm text-[#faf7f2]/85">${relatedProduct.shortDesc}</p>
               </div>
               <div class="flex sm:flex-col gap-2 shrink-0 w-full sm:w-auto">
-                <button onclick="NepleApp.buyNow('${relatedProduct.id}')" class="flex-1 px-5 py-3 rounded-xl btn-terracotta text-xs sm:text-sm font-bold whitespace-nowrap">
+                <button onclick="NepleApp.buyNow('${relatedProduct.id}')" class="flex-1 px-5 py-3 rounded-xl btn-terracotta text-xs sm:text-sm font-bold whitespace-nowrap shadow-md">
                   Đặt Mua Ngay
                 </button>
                 <button onclick="NepleApp.switchView('home'); NepleApp.selectSkuDirectly('${relatedProduct.id}', true);" class="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-xs font-semibold whitespace-nowrap">
@@ -1337,6 +1411,9 @@ const NepleApp = {
         `
             : ''
         }
+      </div>
+    `;
+  },
 
         <!-- SEO Metadata & JSON-LD Schema Preview -->
         <details class="mt-6 rounded-xl bg-[#f4efe6] p-4 border border-[#ae9984]/50 text-xs">

@@ -494,176 +494,244 @@ const COMPARISON_TIERS = [
   }
 ];
 
-// 4 SEO Blog Articles for GenZ & Young Families (Section 3.3)
+// 4 SEO Blog Articles for GenZ & Young Families (Format chuẩn theo Ấn phẩm Hội Nhà Nếp)
 const DEFAULT_BLOGS = [
   {
-    id: 'blog-cung-ong-tao-chung-cu',
-    slug: 'huong-dan-cung-ong-cong-ong-tao-toi-gian-cho-gia-dinh-tre-o-chung-cu',
-    title: 'Cúng Ông Công Ông Táo Ở Chung Cư: Bày Mâm Tối Giản Trong 10 Phút Mà Vẫn Đủ Đầy Nếp Xưa',
-    category: 'Hướng Dẫn Bày Lễ Tối Giản',
-    readTime: '5 phút đọc',
-    publishedAt: '2026-01-10',
-    author: 'Ban Biên Tập Nếp Lễ',
-    excerpt: 'Ở căn hộ chung cư không tiện đốt nhiều vàng mã hay thả cá chép ra hồ? Đây là cẩm nang giúp người trẻ giữ trọn lễ Tiễn Táo ngày 23 tháng Chạp văn minh, ấm cúng và không lo báo khói.',
-    coverImage: generatePackagingSVG('single', 'CẨM NANG 23 CHẠP', 'Cúng Ông Táo Tối Giản Tại Chung Cư', '#0d2931', 'HƯỚNG DẪN BÀY LỄ', ['Tiễn Táo']),
+    id: 'blog-bai-tri-goc-an-yen-phong-tro',
+    articleCode: 'BÀI 1: BÀI TRÍ GÓC AN YÊN NƠI PHÒNG TRỌ ĐÔ THỊ',
+    category: 'Không gian sống tối giản & Nghi thức đón Tết xa nhà',
+    linkedPackName: 'Set Tiễn Táo (23 Tháng Chạp – Tem Xanh)',
     relatedProductId: 'pack-tien-tao',
-    tags: ['cúng ông táo', 'bày mâm cúng chung cư', '23 tháng chạp', 'tối giản'],
+    slug: 'bai-tri-goc-an-yen-phong-tro',
+    title: 'Căn phòng 20m² và góc nhỏ an yên: Người trẻ bài trí bàn lễ đón Tết như thế nào?',
+    readTime: '4 phút đọc',
+    publishedAt: '2026-01-10',
+    author: 'Ban Biên Tập Hội Nhà Nếp',
+    excerpt: 'Không có sập gụ tủ chè, cũng chẳng có bàn thờ gia tiên bề thế, những căn phòng trọ hay căn hộ studio của người trẻ xa quê vẫn có cách riêng để nếp nhà hiện diện thật ấm cúng giữa lòng phố thị.',
+    coverImage: generatePackagingSVG('single', 'HỘI NHÀ NẾP', 'Bài Trí Góc An Yên Phòng Trọ Đô Thị', '#0d2931', 'GÓC AN YÊN', ['Tiễn Táo']),
+    tags: ['phòng trọ', 'cúng ông táo', 'không gian tối giản', 'tết xa nhà'],
     seo: {
-      metaTitle: 'Cách Cúng Ông Công Ông Táo Ở Chung Cư Tối Giản Cho Người Trẻ | NEPLE',
-      metaDescription: 'Hướng dẫn chuẩn bị mâm cúng Ông Công Ông Táo ngày 23 tháng Chạp tại chung cư: tinh gọn, ít khói, văn minh kèm bài văn khấn hiện đại dễ đọc.',
-      keywords: 'cúng ông táo, bày mâm cúng chung cư, văn khấn ông công ông táo, lễ 23 tháng chạp tối giản'
+      metaTitle: 'Bài Trí Bàn Lễ Cúng Tết Tại Phòng Trọ Đô Thị Tinh Gọn | NEPLE',
+      metaDescription: 'Cách người trẻ bài trí góc an yên đón Tết tại phòng trọ 20m2: tinh giản, trang nghiêm, ấm cúng và trọn vẹn nếp nhà xưa.',
+      keywords: 'bài trí bàn lễ phòng trọ, cúng tết phòng trọ, cúng ông táo chung cư, góc an yên đón tết'
     },
     sections: [
       {
-        heading: '1. Vì sao người trẻ ở chung cư không cần mâm cao cỗ đầy khi cúng 23 tháng Chạp?',
-        content: 'Trong văn hóa Việt, Ông Công Ông Táo là vị thần giữ lửa ấm và ghi nhận nếp sống thiện lành của mỗi gia đình suốt một năm. Với nhịp sống hiện đại tại các căn hộ chung cư, điều cốt lõi không nằm ở mâm cỗ sát sinh cầu kỳ hay xấp tiền vàng dày cộp, mà ở sự thành tâm, gian bếp sạch sẽ và nén nhang thơm tiễn Táo Quân về trời.'
+        heading: 'Cội nguồn của phong tục khởi đầu từ sự tĩnh tại',
+        content: 'Những ngày cuối năm, khi dãy hành lang bắt đầu vắng bóng người, không gian sống của người trẻ làm việc xa nhà dường như thu lại trong vài chục mét vuông. Chúng ta thường nghĩ cúng lễ cần một không gian thật lớn, mâm cao cỗ đầy thì mới gọi là chu tất. Nhưng thực ra, cội nguồn của mọi phong tục khởi đầu từ sự tĩnh tại và lòng thành kính hướng về cội nguồn.'
       },
       {
-        heading: '2. Checklist 5 vật phẩm khô tinh gọn cho mâm lễ Ông Táo hiện đại',
-        content: 'Thay vì vội vã đi chợ từ 5 giờ sáng, bạn hoàn toàn có thể chuẩn bị một mâm lễ chay/ngọt thanh tịnh gồm: (1) Nhang trầm hương sạch ít khói để không kích hoạt chuông báo cháy chung cư; (2) Đôi nến bơ thực vật tạo ánh lửa ấm; (3) Một ấm Trà Sen Cổ Thụ thơm dịu; (4) Đĩa kẹo lạc, mứt gừng truyền thống; và (5) Bộ lễ giấy tối giản tượng trưng.'
-      },
-      {
-        heading: '3. Cúng Ông Táo ở bàn thờ hay trong bếp? Giờ nào tốt nhất?',
-        content: 'Theo các nhà nghiên cứu văn hóa, nếu căn hộ đã có bàn thờ Gia Tiên hoặc bàn thờ Thần Tài, bạn nên đặt mâm lễ tại bàn thờ chính cho trang trọng. Nếu căn hộ studio chưa lập bàn thờ, bạn có thể trải khăn sạch trên bàn ăn gần khu vực bếp, hướng về phía sáng sủa. Thời gian đẹp nhất là từ chiều ngày 22 đến trước 12h trưa ngày 23 tháng Chạp.'
+        heading: 'Dọn một góc sạch, đón một nếp lành',
+        content: 'Chỉ cần lau sạch một góc kệ sách cao ráo, một chiếc bàn làm việc xếp gọn laptop, cắm thêm nhành hoa cúc vàng tươi và chén nước trong. Đó đã là một không gian trang nghiêm đủ để bạn lắng lòng mình lại sau một năm dài bôn ba. Nghi lễ cúng Táo quân ngày 23 tháng Chạp nơi thành phố không cần cầu kỳ phóng sinh cá đỏ hay mâm cỗ linh đình. Điều quan trọng nhất là khoảnh khắc bạn gửi lời cảm ơn đến gian bếp nhỏ – nơi đã nấu cho bạn từng bữa cơm tăng ca, nuôi dưỡng bạn qua bao ngày tháng tự lập.'
       }
     ],
-    prayerTitle: 'Văn Khấn Ông Công Ông Táo Ngắn Gọn & Trang Trọng (Bản Hiện Đại)',
+    contentHtml: `<p>Những ngày cuối năm, khi dãy hành lang bắt đầu vắng bóng người, không gian sống của người trẻ làm việc xa nhà dường như thu lại trong vài chục mét vuông. Chúng ta thường nghĩ cúng lễ cần một không gian thật lớn, mâm cao cỗ đầy thì mới gọi là chu tất. Nhưng thực ra, cội nguồn của mọi phong tục khởi đầu từ sự tĩnh tại và lòng thành kính hướng về cội nguồn.</p>
+
+<h3 style="color: #691727; font-weight: 700; font-size: 1.25rem; margin-top: 1.5rem; margin-bottom: 0.75rem;">Dọn một góc sạch, đón một nếp lành</h3>
+
+<p>Chỉ cần lau sạch một góc kệ sách cao ráo, một chiếc bàn làm việc xếp gọn laptop, cắm thêm nhành hoa cúc vàng tươi và chén nước trong. Đó đã là một không gian trang nghiêm đủ để bạn lắng lòng mình lại sau một năm dài bôn ba.</p>
+
+<p>Nghi lễ cúng Táo quân ngày 23 tháng Chạp nơi thành phố không cần cầu kỳ phóng sinh cá đỏ hay mâm cỗ linh đình. Điều quan trọng nhất là khoảnh khắc bạn gửi lời cảm ơn đến gian bếp nhỏ – nơi đã nấu cho bạn từng bữa cơm tăng ca, nuôi dưỡng bạn qua bao ngày tháng tự lập.</p>
+
+<div class="callout-neple-suggest p-5 my-6 rounded-2xl bg-[#0d2931] text-[#faf7f2] border-2 border-[#f0b45b] shadow-lg">
+  <div class="flex items-center gap-2 mb-2 text-[#f0b45b] font-bold text-base">
+    <span>✨</span>
+    <h4>Gợi ý từ Hội Nhà Nếp:</h4>
+  </div>
+  <p class="text-sm leading-relaxed text-[#faf7f2]/90">
+    Để góc phòng trọ không bị ngột ngạt bởi khói hương hay lỉnh kỉnh đồ mã, bạn có thể tham khảo <strong>Set Tiễn Táo (Tem Xanh)</strong> từ NEPLE. Toàn bộ mũ áo Táo quân, hia ngựa truyền thống và sachet gạo muối may mắn được thu gọn mô-đun trong một hộp kraft mộc, đi kèm nhang trầm quế tự nhiên mỏng khói, mang lại sự ấm áp vẹn tròn mà gọn nhẹ tuyệt đối cho không gian sống hiện đại.
+  </p>
+</div>`,
+    prayerTitle: 'Văn Khấn Tiễn Táo Quân 23 Tháng Chạp (Bản Rút Gọn Trang Trọng)',
     prayerText: `Nam mô A Di Đà Phật! (3 lần)
 Kính lạy Đông Trù Tư Mệnh Táo Phủ Thần Quân!
 
 Hôm nay là ngày 23 tháng Chạp năm ...,
-Tín chủ chúng con là: .................................
-Cùng gia quyến hiện cư ngụ tại: .................................
+Tín chủ con là: .................................
+Ngụ tại: .................................
 
-Một năm cũ sắp qua, ngày lành tháng Chạp đã tới. Chúng con thành tâm sửa biện hương hoa, trà quả, phẩm vật thanh tịnh dâng lên trước án, kính tiễn Tôn Thần lên chầu Thượng Đế.
+Nhân ngày Táo Quân chầu trời, con thành tâm sửa biện hương hoa, trà quả, phẩm vật thanh tịnh dâng lên trước án, kính tiễn Tôn Thần.
+Cúi xin Tôn Thần ghi nhận lòng thành, phù hộ cho gia đạo bình an, nơi chốn trọ nhỏ luôn đượm lửa ấm và lòng an yên.
 
-Cúi xin Tôn Thần gia ân xá주 những điều còn thiếu sót của gia đình trẻ chúng con trong việc bếp núc, giữ gìn nếp nhà suốt năm qua; đồng thời ban phước lành cho gia đạo năm mới bình an, hòa thuận, lửa ấm luôn đượm, công việc hanh thông.
-
-Chúng con lễ bạc tâm thành, cúi xin Tôn Thần chứng giám!
+Cúi xin Tôn Thần chứng giám!
 Nam mô A Di Đà Phật! (3 lần)`
   },
   {
-    id: 'blog-van-khan-giao-thua-genz',
-    slug: 'van-khan-giao-thua-hien-dai-de-doc-cho-gia-dinh-tre',
-    title: 'Văn Khấn Giao Thừa Hiện Đại & Cách Bày Mâm Lễ Đêm 30 Tết Không Nặng Nề Mê Tín',
-    category: 'Văn Khấn Hiện Đại',
-    readTime: '6 phút đọc',
+    id: 'blog-nam-nay-de-con-lo-do-dan-me',
+    articleCode: 'BÀI 2: ĐỠ ĐẦN MẸ NGÀY GIÁP TẾT',
+    category: 'Trưởng thành, chia sẻ áp lực gia đình',
+    linkedPackName: 'Set Giao Thừa (Đêm 30 Tết – Tem Trắng)',
+    relatedProductId: 'pack-giao-thua',
+    slug: 'nam-nay-de-con-lo-do-dan-me',
+    title: '"Mẹ nghỉ tay đi, năm nay để con lo": Khi trưởng thành bắt đầu từ việc gánh bớt âu lo ngày Tết',
+    readTime: '5 phút đọc',
     publishedAt: '2026-01-14',
-    author: 'Ban Biên Tập Nếp Lễ',
-    excerpt: 'Đêm 30 Tết là khoảnh khắc thiêng liêng nhất chuyển giao hai năm. Lưu ngay bản văn khấn Giao Thừa thuần Việt, dễ hiểu cùng nghi thức giữ Hũ Gạo - Muối Hồng đón lộc cho tổ ấm nhỏ.',
-    coverImage: generatePackagingSVG('single', 'NGHI THỨC ĐÊM 30', 'Văn Khấn Giao Thừa & Giữ Lộc Đầu Năm', '#691727', 'VĂN KHẤN HIỆN ĐẠI', ['Giao Thừa']),
-    relatedProductId: 'combo-ven-nep',
-    tags: ['văn khấn', 'giao thừa', 'đêm 30 tết', 'muối gạo đầu năm'],
+    author: 'Ban Biên Tập Hội Nhà Nếp',
+    excerpt: 'Có những mùa Tết đi qua, ký ức đọng lại sâu nhất không phải là tiếng pháo hoa hay những bộ quần áo mới, mà là bóng lưng mẹ tất bật trong gian bếp từ tờ mờ sáng ngày 30.',
+    coverImage: generatePackagingSVG('single', 'HỘI NHÀ NẾP', 'Đỡ Đần Mẹ Ngày Giáp Tết', '#691727', 'ĐỠ ĐẦN MẸ', ['Giao Thừa']),
+    tags: ['đỡ đần mẹ', 'ngày 30 tết', 'cúng giao thừa', 'trưởng thành'],
     seo: {
-      metaTitle: 'Văn Khấn Giao Thừa Hiện Đại Ngắn Gọn Dễ Đọc Đêm 30 Tết | NEPLE',
-      metaDescription: 'Tổng hợp văn khấn Giao Thừa ngoài trời và trong nhà dành cho gia đình trẻ, giải thích ý nghĩa hũ gạo muối đêm 30 Tết chuẩn văn hóa Việt.',
-      keywords: 'văn khấn giao thừa, cúng giao thừa chung cư, văn khấn đêm 30 tết ngắn gọn, muối gạo giao thừa'
+      metaTitle: 'Mẹ Nghỉ Tay Đi Năm Nay Để Con Lo Ngày Tết | NEPLE',
+      metaDescription: 'Khi trưởng thành bắt đầu từ việc gánh bớt âu lo lễ nghi cho mẹ ngày 30 Tết. Giải pháp chuẩn bị mâm cúng Giao Thừa trọn vẹn và an yên.',
+      keywords: 'mẹ nghỉ tay đi tết để con lo, cúng giao thừa giúp mẹ, mâm cúng đêm 30 tết, nếp tết gia đình'
     },
     sections: [
       {
-        heading: '1. Ý nghĩa thực sự của lễ Trừ Tịch (Giao Thừa) dưới góc nhìn văn hóa',
-        content: '"Trừ Tịch" nghĩa là khép lại những muộn phiền của năm cũ để đón nguồn năng lượng trong lành của năm mới. Với thế hệ trẻ, lễ cúng Giao Thừa là một khoảng lặng chánh niệm: tắt bớt màn hình điện thoại, thắp nén nhang trầm, pha ấm trà hoa bưởi và gửi gắm lời chúc bình an cho những người thân yêu.'
+        heading: 'Nỗi lo toan của mẹ trong gian bếp ngày 30',
+        content: 'Ngày bé, chúng ta chỉ mong nhanh đến Tết để được nghỉ học và xòe tay nhận phong bao đỏ. Lớn lên một chút, tự mình kiếm ra đồng tiền và đối diện với những áp lực công việc, ta mới thấu hiểu: Ngày Tết của mẹ thường bắt đầu bằng danh sách chợ dài dằng dặc, nỗi lo thiếu trước hụt sau và những cơn đau lưng sau hàng giờ chuẩn bị mâm cúng Tất niên. Trưởng thành đôi khi chẳng cần những món quà đắt đỏ. Đó là khoảnh khắc bạn bước vào bếp, cầm lấy tay mẹ và nói: "Năm nay việc lễ nghi cúng kiếng, mẹ cứ để con lo phụ một tay".'
       },
       {
-        heading: '2. Nghi thức Hũ Gạo Nếp & Muối Hồng giữ lộc đêm 30 Tết',
-        content: 'Ông bà xưa có câu "Đầu năm mua muối, cuối năm mua vôi". Trong gói Giao Thừa của NEPLE, hũ gạo nếp cái hoa vàng và muối hồng được gói trong giấy dó mộc mạc. Khi cúng Giao Thừa xong, gia chủ giữ lại hũ gạo muối này nơi góc bếp hoặc bàn thờ để biểu trưng cho sự no ấm, đậm đà tình thân suốt cả năm.'
-      },
-      {
-        heading: '3. Ở chung cư không có sân thượng thì cúng Giao Thừa ngoài trời thế nào?',
-        content: 'Nếu sống tại chung cư, bạn có thể đặt một bàn nhỏ sạch sẽ hướng ra ban công thoáng gió hoặc cửa sổ lớn nhất của phòng khách để thực hiện nghi thức đón khí lành đất trời trước, sau đó thắp hương tại bàn thờ trong nhà.'
+        heading: 'Giao thừa an yên khi lòng bớt âu lo',
+        content: 'Thời khắc chuyển giao năm cũ và năm mới là giây phút thiêng liêng nhất, khi cả gia đình cùng lắng lại để cầu mong bình an. Đừng để giây phút ấy bị lấn át bởi sự mệt mỏi vì chạy đôn chạy đáo tìm mua từng món vàng mã hay nén nhang thắp ngoài trời.'
       }
     ],
-    prayerTitle: 'Văn Khấn Giao Thừa Đón Tân Niên (Dùng Cho Cả Chung Cư & Nhà Riêng)',
+    contentHtml: `<p>Ngày bé, chúng ta chỉ mong nhanh đến Tết để được nghỉ học và xòe tay nhận phong bao đỏ. Lớn lên một chút, tự mình kiếm ra đồng tiền và đối diện với những áp lực công việc, ta mới thấu hiểu: Ngày Tết của mẹ thường bắt đầu bằng danh sách chợ dài dằng dặc, nỗi lo thiếu trước hụt sau và những cơn đau lưng sau hàng giờ chuẩn bị mâm cúng Tất niên.</p>
+
+<p>Trưởng thành đôi khi chẳng cần những món quà đắt đỏ. Đó là khoảnh khắc bạn bước vào bếp, cầm lấy tay mẹ và nói: <em>"Năm nay việc lễ nghi cúng kiếng, mẹ cứ để con lo phụ một tay"</em>.</p>
+
+<h3 style="color: #691727; font-weight: 700; font-size: 1.25rem; margin-top: 1.5rem; margin-bottom: 0.75rem;">Giao thừa an yên khi lòng bớt âu lo</h3>
+
+<p>Thời khắc chuyển giao năm cũ và năm mới là giây phút thiêng liêng nhất, khi cả gia đình cùng lắng lại để cầu mong bình an. Đừng để giây phút ấy bị lấn át bởi sự mệt mỏi vì chạy đôn chạy đáo tìm mua từng món vàng mã hay nén nhang thắp ngoài trời.</p>
+
+<div class="callout-neple-suggest p-5 my-6 rounded-2xl bg-[#0d2931] text-[#faf7f2] border-2 border-[#f0b45b] shadow-lg">
+  <div class="flex items-center gap-2 mb-2 text-[#f0b45b] font-bold text-base">
+    <span>✨</span>
+    <h4>Gợi ý từ Hội Nhà Nếp:</h4>
+  </div>
+  <p class="text-sm leading-relaxed text-[#faf7f2]/90">
+    Giúp mẹ thảnh thơi trọn vẹn đêm trừ tịch với <strong>Set Giao Thừa (Tem Trắng)</strong>. NEPLE đã chuẩn bị và phân định rõ ràng 2 phần lễ: mâm cúng thiên địa ngoài trời nghinh đón quan Hành khiển mới và mâm cúng gia thần tiên tổ trong nhà. Từng cặp nến đỏ bơ thực vật, vàng mã quy chuẩn đến nén hương quế thanh khiết đều sẵn sàng, giúp bạn tự tin thay mẹ hoàn thành nghi lễ trang trọng nhất năm.
+  </p>
+</div>`,
+    prayerTitle: 'Văn Khấn Giao Thừa Đêm 30 Tết (Thiên Địa & Gia Tiên)',
     prayerText: `Nam mô A Di Đà Phật! (3 lần)
 Kính lạy Hoàng Thiên Hậu Thổ chư vị Tôn Thần,
-Kính lạy Bản cảnh Thành Hoàng, Thổ Địa, Táo Quân cùng chư vị Tôn Thần cai quản trong xứ này,
+Kính lạy Bản cảnh Thành Hoàng, Thổ Địa, Táo Quân cùng chư vị Tôn Thần,
 Kính lạy Tổ Tiên nội ngoại gia tộc họ .................
 
-Phút thiêng Giao Thừa vừa tới, năm cũ đã qua, năm mới vừa sang.
-Tín chủ chúng con là: .................................
-Ngụ tại: .................................
-
-Đêm nay đất trời giao hòa, chúng con thành tâm thắp nén tâm hương, dâng phẩm trà thanh khiết, gạo lành muối đượm cùng lễ vật tinh sạch, cảm tạ Ân Trên và Tổ Tiên đã che chở cho gia đình chúng con suốt một năm qua.
-
-Bước sang năm mới, nguyện cầu cho quốc thái dân an, gia đình nhỏ của chúng con luôn mạnh khỏe, tâm trí sáng trong, việc làm thuận lợi, giữ vẹn đạo hiếu và nếp nhà êm ấm.
+Đêm trừ tịch phút thiêng Giao Thừa vừa tới,
+Tín chủ chúng con thành tâm dâng nén tâm hương, chén trà thanh khiết, xin kính cẩn tạ ơn Ân Trên và Tiên Tổ đã che chở cho gia đình suốt một năm qua.
+Cầu mong năm mới gia đạo bình an, mẹ cha mạnh khỏe, vạn sự hanh thông, nếp nhà êm ấm.
 
 Tâm thành kính lễ, cúi xin chứng giám!
 Nam mô A Di Đà Phật! (3 lần)`
   },
   {
-    id: 'blog-y-nghia-3-ngay-le-tet',
-    slug: 'y-nghia-3-nghi-le-quan-trong-nhat-dip-tet-tien-tao-giao-thua-khai-xuan',
-    title: 'Vì Sao Chỉ Cần Chu Toàn 3 Nghi Lễ Này Là Đã Giữ Trọn "Nếp Tết" Việt Nam?',
-    category: 'Ý Nghĩa Lễ Tết',
-    readTime: '4 phút đọc',
+    id: 'blog-giai-ma-nghi-le-khai-xuan',
+    articleCode: 'BÀI 3: MÂM CỖ CÚNG & NỖI SỢ "SAI NGHI LỄ" CỦA GEN Z',
+    category: 'Hướng dẫn văn hóa, xóa bỏ nỗi sợ tâm linh',
+    linkedPackName: 'Set Khai Xuân (Mùng 1 Tết – Tem Đỏ)',
+    relatedProductId: 'pack-khai-xuan',
+    slug: 'giai-ma-nghi-le-khai-xuan',
+    title: 'Lần đầu làm chủ lễ Mùng 1: Giữ trọn lòng thành mà không sợ "cúng sai phong tục"',
+    readTime: '5 phút đọc',
     publishedAt: '2026-01-18',
-    author: 'Ban Biên Tập Nếp Lễ',
-    excerpt: 'Giữa hàng chục tục lệ Tết dễ khiến GenZ bối rối, hiểu đúng hành trình 3 cột mốc: Tiễn Táo (Khép lại) — Giao Thừa (Chuyển giao) — Khai Xuân (Khởi đầu) sẽ giúp bạn đón Tết nhẹ nhõm mà sâu sắc.',
-    coverImage: generatePackagingSVG('triple', 'HÀNH TRÌNH 3 LỄ TẾT', 'Tiễn Táo • Giao Thừa • Khai Xuân', '#0d2931', 'Ý NGHĨA LỄ TẾT', ['Tiễn Táo', 'Giao Thừa', 'Khai Xuân']),
-    relatedProductId: 'combo-tron-tet',
-    tags: ['ý nghĩa lễ tết', 'khai xuân', 'trọn tết', 'văn hóa việt'],
+    author: 'Ban Biên Tập Hội Nhà Nếp',
+    excerpt: 'Đứng trước bàn thờ gia tiên ngày đầu năm, nhiều người trẻ mang tâm lý e dè: Sợ đọc văn khấn vấp, sợ đặt sai vị trí đồ lễ, sợ sơ suất làm mất đi vượng khí đầu xuân.',
+    coverImage: generatePackagingSVG('single', 'HỘI NHÀ NẾP', 'Làm Chủ Lễ Mùng 1 Khai Xuân', '#a94025', 'KHAI XUÂN', ['Khai Xuân']),
+    tags: ['cúng mùng 1', 'văn khấn khai xuân', 'giải mã nghi lễ', 'gen z'],
     seo: {
-      metaTitle: 'Ý Nghĩa 3 Ngày Lễ Quan Trọng Nhất Dịp Tết: Tiễn Táo, Giao Thừa, Khai Xuân | NEPLE',
-      metaDescription: 'Khám phá triết lý văn hóa đằng sau 3 cột mốc lễ Tết quan trọng nhất của người Việt: 23 tháng Chạp, Đêm 30 Giao Thừa và Mùng 1 Khai Xuân.',
-      keywords: 'ý nghĩa lễ tết, cúng khai xuân mùng 1, các lễ cúng tết nguyên đán, nếp lễ tết việt'
+      metaTitle: 'Lần Đầu Làm Chủ Lễ Mùng 1: Giữ Trọn Lòng Thành Không Sợ Sai | NEPLE',
+      metaDescription: 'Giải mã nghi lễ cúng Mùng 1 Tết dành cho GenZ: không cần cầu kỳ phức tạp, khởi đầu hanh thông bằng lòng thành kính và sự tinh giản.',
+      keywords: 'cúng mùng 1 tết, văn khấn khai xuân, cúng tết cho người trẻ, nghi lễ đầu năm'
     },
     sections: [
       {
-        heading: '1. Cột mốc 1 — Tiễn Táo (23 Tháng Chạp): Nghi thức biết ơn & thu vén',
-        content: 'Ngày 23 tháng Chạp là lời nhắc dịu dàng để mỗi gia đình bắt đầu dọn dẹp lại không gian sống, lau dọn gian bếp và nhìn lại hành trình một năm đã qua với lòng biết ơn.'
+        heading: 'Tâm xuất thì Phật chứng, lễ bạc nhưng lòng thành',
+        content: 'Chúng ta sinh ra trong thời đại số, quen với sự chuẩn xác của công nghệ, nên khi đối diện với thế giới tâm linh truyền thống giàu tính biểu tượng, cảm giác lúng túng là điều khó tránh khỏi. Không ít bạn trẻ từng băn khoăn: Gà cúng quay đầu hướng nào, thắp mấy nén hương, và bài văn khấn Mùng 1 có cần học thuộc lòng từng câu từng chữ? Người xưa có câu: "Tâm xuất thì Phật chứng, lễ bạc nhưng lòng thành". Nghi lễ thờ cúng tổ tiên của người Việt bản chất là một nét đẹp văn hóa tri ân nguồn cội, không phải một bài kiểm tra chấm điểm khắt khe để phạt những lỗi nhỏ vô tình. Sự trang nghiêm không nằm ở mâm cỗ thịnh soạn hàng chục món, mà nằm ở sự kính cẩn, tề chỉnh và tâm thế hướng thiện của người thắp hương.'
       },
       {
-        heading: '2. Cột mốc 2 — Giao Thừa (Đêm 30 Tết): Khoảnh khắc tĩnh lặng chuyển giao',
-        content: 'Khi kim đồng hồ chạm 0h00, hương trầm ấm áp cùng nước tắm thảo mộc mùi già giúp gột rửa mọi bộn bề, đưa tâm thế mỗi người về sự tĩnh tại, sẵn sàng đón nhận khởi đầu mới.'
-      },
-      {
-        heading: '3. Cột mốc 3 — Khai Xuân (Sáng Mùng 1): Gieo mầm may mắn & ngọt lành',
-        content: 'Sáng Mùng 1 Tết, chén trà Shan Tuyết cổ thụ sóng sánh cùng hạt sen, táo đỏ dâng lên ông bà tổ tiên là lời chúc cho một năm mới sum vầy, vạn sự hanh thông.'
+        heading: 'Khởi đầu hanh thông bằng sự tinh giản',
+        content: 'Buổi sáng Mùng 1 Tết, sau khi thắp nén nhang thơm mời ông bà tổ tiên về ngự thụ lộc xuân, lòng người tự khắc cảm thấy an yên, nhẹ nhõm, sẵn sàng cho một năm mới đầy hy vọng.'
       }
     ],
-    prayerTitle: 'Văn Khấn Sáng Mùng 1 Tết & Khai Xuân Đắc Lộc',
+    contentHtml: `<p>Chúng ta sinh ra trong thời đại số, quen với sự chuẩn xác của công nghệ, nên khi đối diện với thế giới tâm linh truyền thống giàu tính biểu tượng, cảm giác lúng túng là điều khó tránh khỏi. Không ít bạn trẻ từng băn khoăn: Gà cúng quay đầu hướng nào, thắp mấy nén hương, và bài văn khấn Mùng 1 có cần học thuộc lòng từng câu từng chữ?</p>
+
+<p>Người xưa có câu: <em>"Tâm xuất thì Phật chứng, lễ bạc nhưng lòng thành"</em>. Nghi lễ thờ cúng tổ tiên của người Việt bản chất là một nét đẹp văn hóa tri ân nguồn cội, không phải một bài kiểm tra chấm điểm khắt khe để phạt những lỗi nhỏ vô tình. Sự trang nghiêm không nằm ở mâm cỗ thịnh soạn hàng chục món, mà nằm ở sự kính cẩn, tề chỉnh và tâm thế hướng thiện của người thắp hương.</p>
+
+<h3 style="color: #691727; font-weight: 700; font-size: 1.25rem; margin-top: 1.5rem; margin-bottom: 0.75rem;">Khởi đầu hanh thông bằng sự tinh giản</h3>
+
+<p>Buổi sáng Mùng 1 Tết, sau khi thắp nén nhang thơm mời ông bà tổ tiên về ngự thụ lộc xuân, lòng người tự khắc cảm thấy an yên, nhẹ nhõm, sẵn sàng cho một năm mới đầy hy vọng.</p>
+
+<div class="callout-neple-suggest p-5 my-6 rounded-2xl bg-[#0d2931] text-[#faf7f2] border-2 border-[#f0b45b] shadow-lg">
+  <div class="flex items-center gap-2 mb-2 text-[#f0b45b] font-bold text-base">
+    <span>✨</span>
+    <h4>Gợi ý từ Hội Nhà Nếp:</h4>
+  </div>
+  <p class="text-sm leading-relaxed text-[#faf7f2]/90">
+    Xóa bỏ hoàn toàn nỗi âu lo sắm thiếu lễ vật với <strong>Set Khai Xuân (Tem Đỏ)</strong>. Bộ lễ tích hợp đầy đủ vàng mã nghinh lộc, trà thơm, nến đỏ may mắn cùng tờ thiệp in sẵn bài văn khấn chữ to dễ đọc, giúp bạn tự tin làm chủ nghi thức mở đầu năm mới một cách chỉn chu, trọn vẹn phong tục.
+  </p>
+</div>`,
+    prayerTitle: 'Văn Khấn Sáng Mùng 1 Tết (Khai Xuân Đắc Lộc)',
     prayerText: `Nam mô A Di Đà Phật! (3 lần)
 Kính lạy Chư vị Tôn Thần, Bản gia Đông Trù Tư Mệnh Táo Phủ Thần Quân,
-Kính lạy liệt vị Gia Tiên nội ngoại.
+Kính lạy Liệt vị Gia Tiên tiền tổ nội ngoại.
 
-Hôm nay là ngày Mùng 1 tháng Giêng năm mới, nguyên đán đầu xuân.
-Tín chủ chúng con là: .................................
-Ngụ tại: .................................
+Hôm nay là ngày Mùng 1 tháng Giêng, Tết Nguyên Đán đầu xuân,
+Tín chủ con kính cẩn dâng nén tâm hương, trà thơm phẩm ngọt, kính mời Chư vị và Tiên Tổ về ngự thụ lộc xuân.
+Cầu mong năm mới khai xuân đắc lộc, gia đạo bình an, trí tuệ minh mẫn, vạn sự cát tường như ý!
 
-Nhân ngày Tân Niên cát nhật, chúng con thành tâm dâng trà quý, hương trầm, quả ngọt hạt lành lên trước án. Kính mời Chư vị Tôn Thần cùng Gia Tiên về thụ hưởng lễ vật, chứng giám lòng thành.
-
-Cầu xin năm mới gia đạo bình an, sức khỏe dồi dào, trí tuệ minh mẫn, khai xuân đắc lộc, vạn sự cát tường như ý!
+Cúi xin chứng giám!
 Nam mô A Di Đà Phật! (3 lần)`
   },
   {
-    id: 'blog-chuyen-nep-nha-mui-gia',
-    slug: 'huong-mui-gia-va-chen-tra-tet-ky-uc-nep-nha-cua-the-he-tre',
-    title: 'Hương Mùi Già Đêm 30 & Chén Trà Đầu Xuân: Khi Người Trẻ Tự Tay Giữ Ấm Nếp Nhà',
-    category: 'Chuyện Nếp Nhà',
-    readTime: '4 phút đọc',
+    id: 'blog-nghi-le-xanh-giu-nep-an-yen',
+    articleCode: 'BÀI 4: VĂN HÓA THẮP HƯƠNG & XU HƯỚNG SỐNG XANH ĐÔ THỊ',
+    category: 'Lối sống bền vững, tâm linh văn minh',
+    linkedPackName: 'Bộ sưu tập Ready-to-Ritual trọn gói (Bộ 3 Pack All-in-One)',
+    relatedProductId: 'combo-tron-tet',
+    slug: 'nghi-le-xanh-giu-nep-an-yen',
+    title: 'Hành lễ văn minh: Khi phong tục nghìn năm hòa nhịp cùng phong cách sống xanh',
+    readTime: '6 phút đọc',
     publishedAt: '2026-01-21',
-    author: 'Ban Biên Tập Nếp Lễ',
-    excerpt: 'Có một thời chúng ta nghĩ Tết là việc của mẹ, của bà. Cho đến năm đầu tiên tự đứng trước ban thờ trong căn hộ nhỏ của chính mình, ta mới hiểu "Nếp Lễ" chính là sợi dây nối dài ký ức gia đình.',
-    coverImage: generatePackagingSVG('double', 'CHUYỆN NẾP NHÀ', 'Hương Mùi Già & Chén Trà Đầu Xuân', '#72826f', 'CHUYỆN NẾP NHÀ', ['Giao Thừa', 'Khai Xuân']),
-    relatedProductId: 'combo-song-xuan',
-    tags: ['chuyện nếp nhà', 'mùi già tết', 'trà tết', 'gia đình trẻ'],
+    author: 'Ban Biên Tập Hội Nhà Nếp',
+    excerpt: 'Làm sao để vừa vẹn tròn đạo hiếu với tổ tiên, vừa bảo vệ môi trường sống và không gian sinh hoạt của các gia đình đô thị? Câu trả lời nằm ở tư duy "nghi lễ tinh gọn".',
+    coverImage: generatePackagingSVG('triple', 'HỘI NHÀ NẾP', 'Hành Lễ Văn Minh Sống Xanh', '#72826f', 'SỐNG XANH', ['Tiễn Táo', 'Giao Thừa', 'Khai Xuân']),
+    tags: ['sống xanh', 'nghi lễ văn minh', 'ít khói', 'bền vững'],
     seo: {
-      metaTitle: 'Hương Mùi Già Đêm 30 & Chuyện Giữ Nếp Nhà Của Người Trẻ | NEPLE',
-      metaDescription: 'Tản văn về ký ức nồi nước tắm mùi già chiều 30 Tết, chén trà sen đầu xuân và cách thế hệ GenZ, gia đình trẻ gìn giữ văn hóa Tết Việt theo cách tinh gọn.',
-      keywords: 'nước mùi già chiều 30 tết, chuyện nếp nhà, tết của người trẻ, trà cúng tết'
+      metaTitle: 'Hành Lễ Văn Minh: Phong Tục Nghìn Năm Cùng Phong Cách Sống Xanh | NEPLE',
+      metaDescription: 'Xu hướng thờ cúng văn minh đô thị: nhang sạch thảo mộc ít khói, hóa vàng tượng trưng, bao bì giấy kraft sinh học thân thiện môi trường.',
+      keywords: 'văn hóa thắp hương xanh, nhang sạch ít khói, cúng lễ văn minh, nếp lễ sống xanh'
     },
     sections: [
       {
-        heading: '1. Lần đầu tiên tự chuẩn bị lễ Tết ở tuổi đôi mươi, ba mươi',
-        content: 'Rất nhiều bạn trẻ chia sẻ với NEPLE rằng: khi ra ở riêng hoặc mới lập gia đình, mỗi dịp 23 tháng Chạp hay 30 Tết đều vừa háo hức vừa lúng túng. Không biết mua lễ vật ở đâu cho sạch, bày biện thế nào cho đúng mà không bị rườm rà.'
+        heading: 'Nghi lễ tinh gọn giữa không gian đô thị',
+        content: 'Hình ảnh những lò hóa vàng đỏ lửa rợp phố, những cuộn khói hương mù mịt trong căn hộ chung cư khép kín từng là nỗi trăn trở của không ít người mỗi mùa Tết. Người trẻ hiện đại trân trọng văn hóa cội nguồn, nhưng đồng thời cũng ý thức sâu sắc về sức khỏe gia đình, an toàn phòng cháy chữa cháy và việc giảm thiểu rác thải ra môi trường.'
       },
       {
-        heading: '2. Nồi nước mùi già và nén trầm sạch: Đánh thức mọi giác quan ngày Tết',
-        content: 'Chỉ cần một túi mùi già khô đun sôi trên bếp điện, hương thơm thảo mộc dịu nhẹ lan tỏa khắp căn hộ nhỏ cũng đủ khiến chiều 30 Tết trở nên trọn vẹn. Tết không nằm ở sự phô trương, Tết nằm ở cảm giác bình yên khi ta chăm chút cho tổ ấm.'
+        heading: '3 chuyển mình văn minh trong thực hành nghi lễ',
+        content: 'Hóa vàng tượng trưng, Nhang sạch ít khói từ thảo mộc tự nhiên trầm quế khuynh diệp an toàn hệ hô hấp, và Bao bì tái chế giấy kraft mộc loại bỏ khay nhựa dùng một lần.'
       }
     ],
-    prayerTitle: null,
-    prayerText: null
+    contentHtml: `<p>Hình ảnh những lò hóa vàng đỏ lửa rợp phố, những cuộn khói hương mù mịt trong căn hộ chung cư khép kín từng là nỗi trăn trở của không ít người mỗi mùa Tết. Người trẻ hiện đại trân trọng văn hóa cội nguồn, nhưng đồng thời cũng ý thức sâu sắc về sức khỏe gia đình, an toàn phòng cháy chữa cháy và việc giảm thiểu rác thải ra môi trường.</p>
+
+<p>Thực hành nghi lễ ngày nay đang dần chuyển mình theo xu hướng văn minh hơn:</p>
+
+<ul class="my-3 space-y-2 pl-4 list-disc text-sm sm:text-base leading-relaxed">
+  <li><strong>Hóa vàng tượng trưng:</strong> Đốt lượng tiền vàng vừa đủ biểu trưng cho lòng thành, tránh đốt hàng tá hình nhân, xe cộ tốn kém và ô nhiễm.</li>
+  <li><strong>Nhang sạch ít khói:</strong> Thay thế nhang tẩm hóa chất cuốn tàn bằng dòng nhang thảo mộc tự nhiên từ trầm, quế, khuynh diệp an toàn cho hệ hô hấp của người già và trẻ nhỏ.</li>
+  <li><strong>Bao bì tái chế:</strong> Sử dụng hộp giấy kraft mộc, loại bỏ các khay nhựa dùng một lần.</li>
+</ul>
+
+<p>Nếp xưa chỉ thực sự sống mãi khi nó biết thích nghi và mang lại giá trị tích cực cho cuộc sống hiện tại.</p>
+
+<div class="callout-neple-suggest p-5 my-6 rounded-2xl bg-[#0d2931] text-[#faf7f2] border-2 border-[#f0b45b] shadow-lg">
+  <div class="flex items-center gap-2 mb-2 text-[#f0b45b] font-bold text-base">
+    <span>✨</span>
+    <h4>Gợi ý từ Hội Nhà Nếp:</h4>
+  </div>
+  <p class="text-sm leading-relaxed text-[#faf7f2]/90">
+    Đón nhận phong cách sống an lành cùng <strong>Trọn bộ sưu tập Ready-to-Ritual (Đủ 3 Pack Tiễn Táo – Giao Thừa – Khai Xuân)</strong>. Toàn bộ ấn phẩm bao bì đều sử dụng chất liệu giấy kraft sinh học thân thiện môi trường, kết hợp cùng dòng nhang trầm quế cao cấp tự nhiên, đem đến một mùa Tết thảnh thơi, văn minh và thanh sạch cho mọi tổ ấm.
+  </p>
+</div>`,
+    prayerTitle: 'Lời Nguyện Cầu Bình An & Giữ Vẹn Nếp Nhà',
+    prayerText: `Nam mô A Di Đà Phật! (3 lần)
+Kính lạy Chư vị Tôn Thần, Tiên Tổ nội ngoại,
+
+Chúng con thành tâm dâng hương hoa tinh sạch, kính cẩn tri ân nguồn cội.
+Nguyện cầu cho môi trường sống an lành, muôn nhà hòa thuận, nếp xưa gìn giữ thắm tươi theo cách văn minh, thanh sạch.
+
+Cúi xin chứng giám!
+Nam mô A Di Đà Phật! (3 lần)`
   }
 ];
 

@@ -35,6 +35,113 @@
     #admin-dashboard-screen .font-bold {
       font-weight: 700 !important;
     }
+
+    /* Rich Text Editor Styling in Admin */
+    #adm-blog-editor {
+      min-height: 380px;
+      max-height: 650px;
+      overflow-y: auto;
+      outline: none;
+      font-family: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, sans-serif !important;
+      font-size: 15px;
+      line-height: 1.8;
+      color: #222222;
+      background-color: #ffffff;
+      padding: 1.25rem 1.5rem;
+      border: 1.5px solid #ae9984;
+      border-radius: 0.85rem;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.03);
+    }
+    #adm-blog-editor:focus {
+      border-color: #0d2931;
+      box-shadow: 0 0 0 3px rgba(13, 41, 49, 0.12);
+    }
+    #adm-blog-editor h2 {
+      font-size: 1.35rem;
+      font-weight: 700 !important;
+      color: #0d2931;
+      margin-top: 1.25rem;
+      margin-bottom: 0.5rem;
+    }
+    #adm-blog-editor h3 {
+      font-size: 1.18rem;
+      font-weight: 700 !important;
+      color: #0d2931;
+      margin-top: 1.15rem;
+      margin-bottom: 0.5rem;
+    }
+    #adm-blog-editor h4 {
+      font-size: 1.05rem;
+      font-weight: 700 !important;
+      color: #691727;
+      margin-top: 1rem;
+      margin-bottom: 0.4rem;
+    }
+    #adm-blog-editor p {
+      margin-bottom: 0.85rem;
+    }
+    #adm-blog-editor ul {
+      list-style-type: disc;
+      margin-left: 1.5rem;
+      margin-bottom: 0.85rem;
+    }
+    #adm-blog-editor ol {
+      list-style-type: decimal;
+      margin-left: 1.5rem;
+      margin-bottom: 0.85rem;
+    }
+    #adm-blog-editor blockquote {
+      border-left: 4px solid #f0b45b;
+      padding: 0.6rem 1rem;
+      margin: 1rem 0;
+      background: #fdfaf2;
+      font-style: italic;
+      color: #555;
+    }
+    #adm-blog-editor .nep-callout {
+      background-color: #f4efe6;
+      border-left: 5px solid #0d2931;
+      padding: 1.15rem 1.35rem;
+      border-radius: 0.85rem;
+      margin: 1.25rem 0;
+      box-shadow: 0 2px 8px rgba(13, 41, 49, 0.05);
+    }
+    #adm-blog-editor figure {
+      margin: 1.25rem 0;
+      text-align: center;
+    }
+    #adm-blog-editor figure img {
+      border-radius: 0.75rem;
+      max-width: 100%;
+      margin: 0 auto;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+    #adm-blog-editor figcaption {
+      font-size: 0.8rem;
+      color: #666;
+      margin-top: 0.4rem;
+      font-style: italic;
+    }
+    .rte-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.35rem 0.6rem;
+      font-size: 0.78rem;
+      font-weight: 700;
+      border-radius: 0.5rem;
+      background-color: #f4efe6;
+      color: #0d2931;
+      border: 1px solid #d5c5b0;
+      transition: all 0.15s ease;
+      cursor: pointer;
+      user-select: none;
+    }
+    .rte-btn:hover {
+      background-color: #0d2931;
+      color: #faf7f2;
+      border-color: #0d2931;
+    }
   </style>
 </head>
 <body class="min-h-screen flex flex-col bg-[#f4efe6] text-[#0d2931]">
@@ -144,6 +251,81 @@
     <span id="neple-toast-text"></span>
   </div>
 
+  <!-- MODAL: CHÈN ẢNH VÀO NỘI DUNG BÀI VIẾT BLOG -->
+  <div id="adm-insert-image-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+    <div class="w-full max-w-lg rounded-3xl bg-[#fffdf9] border-2 border-[#0d2931] shadow-2xl p-6 sm:p-7 space-y-4">
+      <div class="flex items-center justify-between pb-3 border-b border-[#ae9984]/40">
+        <h3 class="font-bevietnam-bold text-lg font-bold text-[#0d2931] flex items-center gap-2">
+          <span>📷 Chèn Hình Ảnh Vào Bài Viết</span>
+        </h3>
+        <button onclick="AdminPortal.closeInsertImageModal()" class="w-8 h-8 rounded-full bg-[#f4efe6] text-[#0d2931] font-bold hover:bg-[#691727] hover:text-white transition flex items-center justify-center">
+          ✕
+        </button>
+      </div>
+
+      <div class="space-y-4 text-xs sm:text-sm">
+        <!-- Cách 1: Tải ảnh từ máy tính -->
+        <div class="p-4 rounded-2xl bg-[#f4efe6] border border-[#ae9984]/60 space-y-2">
+          <label class="block font-bold text-[#0d2931]">1. Tải ảnh từ máy tính của bạn (Khuyên dùng):</label>
+          <label class="w-full py-2.5 px-4 rounded-xl bg-[#0d2931] text-[#f0b45b] font-bold text-xs flex items-center justify-center gap-2 cursor-pointer hover:bg-[#163d48] transition shadow-sm">
+            <span>📁 Chọn file ảnh từ máy (.jpg, .png, .webp)</span>
+            <input type="file" accept="image/*" class="hidden" onchange="AdminPortal.handleEditorImageFileUpload(event)" />
+          </label>
+          <div id="adm-img-file-preview" class="hidden pt-2 flex items-center gap-3">
+            <img id="adm-img-preview-thumb" src="" alt="Preview" class="w-16 h-16 object-cover rounded-xl border border-[#ae9984]" />
+            <span class="text-xs text-[#72826f] font-semibold">✓ Đã nạp ảnh thành công từ máy tính</span>
+          </div>
+        </div>
+
+        <!-- Cách 2: Dán URL ảnh từ web -->
+        <div>
+          <label class="block font-bold text-[#0d2931] mb-1">2. Hoặc dán đường dẫn ảnh trực tuyến (Image URL):</label>
+          <input type="text" id="adm-img-url-input" placeholder="https://example.com/anh-mam-co.jpg" class="w-full px-3 py-2 rounded-xl border border-[#ae9984] bg-white text-xs" />
+        </div>
+
+        <!-- Chú thích ảnh -->
+        <div>
+          <label class="block font-bold text-[#0d2931] mb-1">Chú thích hiển thị dưới ảnh (Caption - tùy chọn):</label>
+          <input type="text" id="adm-img-caption-input" placeholder="VD: Mâm cúng tối giản ngày giáp Tết..." class="w-full px-3 py-2 rounded-xl border border-[#ae9984] bg-white text-xs" />
+        </div>
+
+        <!-- Kích thước hiển thị -->
+        <div>
+          <label class="block font-bold text-[#0d2931] mb-1">Khổ ảnh hiển thị:</label>
+          <select id="adm-img-width-select" class="w-full px-3 py-2 rounded-xl border border-[#ae9984] bg-white text-xs font-semibold">
+            <option value="full">Khổ đầy đủ (Rộng 100% - Khuyên dùng)</option>
+            <option value="medium">Khổ vừa (Căn giữa 480px)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="pt-3 border-t border-[#ae9984]/40 flex items-center justify-end gap-2">
+        <button type="button" onclick="AdminPortal.closeInsertImageModal()" class="px-4 py-2.5 rounded-xl bg-[#efe9e0] hover:bg-[#ae9984]/40 text-xs font-bold text-[#0d2931] transition">
+          Hủy bỏ
+        </button>
+        <button type="button" onclick="AdminPortal.confirmInsertImage()" class="px-5 py-2.5 rounded-xl btn-terracotta text-xs font-bold shadow-md">
+          Chèn Vào Bài Viết
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: XEM TRƯỚC BÀI VIẾT (LIVE PREVIEW) -->
+  <div id="adm-blog-preview-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/70 backdrop-blur-sm">
+    <div class="w-full max-w-4xl max-h-[92vh] flex flex-col rounded-3xl bg-[#fffdf9] border-2 border-[#f0b45b] shadow-2xl overflow-hidden">
+      <div class="p-4 sm:p-5 bg-[#0d2931] text-[#faf7f2] flex items-center justify-between gap-3 shrink-0">
+        <div class="flex items-center gap-2">
+          <span class="px-2.5 py-0.5 rounded-full bg-[#f0b45b] text-[#0d2931] text-[10px] font-black uppercase">LIVE PREVIEW</span>
+          <h3 class="font-bevietnam-bold text-sm sm:text-base font-bold text-white">Xem Trước Giao Diện Khách Hàng</h3>
+        </div>
+        <button onclick="AdminPortal.closeBlogPreview()" class="px-3 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-xs font-bold text-[#faf7f2] transition">
+          ✕ Đóng
+        </button>
+      </div>
+      <div id="adm-blog-preview-body" class="p-6 sm:p-10 overflow-y-auto flex-1 bg-[#fffdf9]"></div>
+    </div>
+  </div>
+
   <script src="data.js"></script>
   <script>
     const STAFF_STORAGE_KEY = 'neple_staff_accounts_v1';
@@ -209,7 +391,13 @@
       loadData() {
         try {
           this.state.products = (JSON.parse(localStorage.getItem(NEPLE_STORAGE_KEYS.PRODUCTS)) || JSON.parse(JSON.stringify(DEFAULT_PRODUCTS))).map(p => ({ ...p, name: (p.name || '').replace(/^Pack\s+/i, '') }));
-          this.state.blogs = JSON.parse(localStorage.getItem(NEPLE_STORAGE_KEYS.BLOGS)) || JSON.parse(JSON.stringify(DEFAULT_BLOGS));
+          const storedBlogs = JSON.parse(localStorage.getItem(NEPLE_STORAGE_KEYS.BLOGS));
+          if (!storedBlogs || !Array.isArray(storedBlogs) || storedBlogs.length === 0 || !storedBlogs[0].contentHtml || storedBlogs.some(b => b.id === 'blog-cung-ong-tao-chung-cu')) {
+            this.state.blogs = JSON.parse(JSON.stringify(DEFAULT_BLOGS));
+            localStorage.setItem(NEPLE_STORAGE_KEYS.BLOGS, JSON.stringify(this.state.blogs));
+          } else {
+            this.state.blogs = storedBlogs;
+          }
           this.state.orders = JSON.parse(localStorage.getItem(NEPLE_STORAGE_KEYS.ORDERS)) || JSON.parse(JSON.stringify(DEFAULT_ORDERS));
           const parsedSettings = JSON.parse(localStorage.getItem(NEPLE_STORAGE_KEYS.SETTINGS)) || {};
           this.state.settings = {
@@ -711,67 +899,157 @@
 
         return `
           <div class="space-y-6">
-            <div class="flex flex-wrap items-center justify-between gap-3 p-4 rounded-2xl paper-card">
+            <!-- TOP BAR: THÔNG BÁO & NÚT TÁC VỤ NHANH -->
+            <div class="flex flex-wrap items-center justify-between gap-3 p-4 sm:p-5 rounded-2xl paper-card border border-[#ae9984]/40">
               <div>
-                <h4 class="font-bold text-sm text-[#0d2931]">Quản Trị Cẩm Nang Tết Chuẩn SEO</h4>
-                <p class="text-xs text-[#0d2931]/70">Chỉnh sửa bài viết, văn khấn hiện đại và từ khóa SEO Google.</p>
+                <h4 class="font-bevietnam-bold text-base font-bold text-[#0d2931] flex items-center gap-2">
+                  <span>📰 Quản Trị Cẩm Nang Tết &amp; Chuẩn Hóa Theo Tài Liệu PDF</span>
+                </h4>
+                <p class="text-xs text-[#0d2931]/75 mt-0.5">
+                  Đầy đủ format chuẩn: Mã bài, Chủ đề, Pack liên kết, Slug /hoi-nha-nep/, Tiêu đề H1, Sapo, Trình soạn thảo Rich Text &amp; chèn ảnh trực quan.
+                </p>
               </div>
-              <button onclick="AdminPortal.createNewBlogPost()" class="px-4 py-2 rounded-xl btn-terracotta text-xs font-bold">
-                + Viết Bài Cẩm Nang Mới
-              </button>
+              <div class="flex flex-wrap items-center gap-2">
+                <button type="button" onclick="AdminPortal.loadDefaultPDFBlogs()" 
+                  class="px-3.5 py-2 rounded-xl bg-[#0d2931] hover:bg-[#163d48] text-[#f0b45b] text-xs font-bold transition shadow-sm flex items-center gap-1.5">
+                  <span>↻ Nạp lại 4 bài chuẩn từ PDF</span>
+                </button>
+                <button type="button" onclick="AdminPortal.createNewBlogPost()" 
+                  class="px-4 py-2 rounded-xl btn-terracotta text-xs font-bold shadow-md flex items-center gap-1.5">
+                  <span>+ Viết Bài Cẩm Nang Mới</span>
+                </button>
+              </div>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-              <div class="lg:col-span-4 space-y-2">
-                ${this.state.blogs
-                  .map(
-                    b => `
-                  <div onclick="AdminPortal.state.editingBlogId='${b.id}'; AdminPortal.renderDashboard();"
-                    class="p-3.5 rounded-xl border cursor-pointer transition ${
-                      b.id === blog?.id ? 'bg-[#0d2931] text-[#f0b45b] border-[#0d2931]' : 'paper-card text-[#0d2931]'
-                    }">
-                    <span class="text-[10px] uppercase font-bold opacity-80">${b.category}</span>
-                    <div class="text-xs sm:text-sm font-bold line-clamp-2 mt-0.5">${b.title}</div>
-                  </div>
-                `
-                  )
-                  .join('')}
+              <!-- CỘT BÊN TRÁI: DANH SÁCH BÀI VIẾT (HIỂN THỊ ĐỦ THÔNG TIN FORMAT PDF) -->
+              <div class="lg:col-span-4 space-y-3">
+                <div class="flex items-center justify-between px-1">
+                  <span class="text-xs font-bold uppercase tracking-wider text-[#72826f]">
+                    Danh sách bài viết (${this.state.blogs.length})
+                  </span>
+                  <span class="text-[11px] text-[#0d2931]/60">Bấm bài để chỉnh sửa</span>
+                </div>
+
+                <div class="space-y-2.5 max-h-[850px] overflow-y-auto pr-1">
+                  ${this.state.blogs
+                    .map((b, idx) => {
+                      const isSelected = b.id === blog?.id;
+                      const displayCode = b.articleCode ? b.articleCode.split(':')[0] : `BÀI ${idx + 1}`;
+                      return `
+                        <div onclick="AdminPortal.selectBlogForEditing('${b.id}')"
+                          class="p-4 rounded-2xl border cursor-pointer transition select-none ${
+                            isSelected
+                              ? 'bg-[#0d2931] text-[#faf7f2] border-[#0d2931] shadow-lg ring-2 ring-[#f0b45b]'
+                              : 'paper-card text-[#0d2931] hover:border-[#ae9984] hover:shadow-md'
+                          }">
+                          <div class="flex items-center justify-between gap-2 mb-2">
+                            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wide ${
+                              isSelected ? 'bg-[#f0b45b] text-[#0d2931]' : 'bg-[#691727] text-white'
+                            }">
+                              ${displayCode}
+                            </span>
+                            <span class="text-[11px] font-bold truncate ${
+                              isSelected ? 'text-[#f0b45b]' : 'text-[#72826f]'
+                            }">
+                              ● ${b.category || 'Chưa phân loại'}
+                            </span>
+                          </div>
+
+                          <div class="text-sm font-bold line-clamp-2 leading-snug ${isSelected ? 'text-white' : 'text-[#0d2931]'}">
+                            ${b.title}
+                          </div>
+
+                          <div class="mt-2.5 pt-2 border-t text-[11px] flex items-center justify-between gap-2 ${
+                            isSelected ? 'border-white/15 text-white/80' : 'border-[#ae9984]/30 text-[#0d2931]/70'
+                          }">
+                            <span class="truncate font-semibold">
+                              📦 ${b.linkedPackName || 'Pack liên kết'}
+                            </span>
+                            <span class="text-[10px] font-mono shrink-0 opacity-80">
+                              /hoi-nha-nep/...
+                            </span>
+                          </div>
+                        </div>
+                      `;
+                    })
+                    .join('')}
+                </div>
               </div>
 
-              <div class="lg:col-span-8 p-6 rounded-2xl paper-card">
+              <!-- CỘT BÊN PHẢI: TRANG CHỈNH SỬA THEO CHUẨN FORMAT TÀI LIỆU PDF -->
+              <div class="lg:col-span-8 p-6 sm:p-7 rounded-2xl paper-card border border-[#ae9984]/40">
                 ${
                   blog
                     ? `
-                  <div class="flex items-center justify-between mb-4">
-                    <h3 class="font-bevietnam-bold text-xl font-bold text-[#0d2931]">Trình Soạn Thảo Bài Viết &amp; SEO</h3>
-                    <button onclick="AdminPortal.deleteBlogPost('${blog.id}')" class="px-3 py-1.5 rounded-lg bg-[#691727]/15 text-[#691727] text-xs font-bold hover:bg-[#691727] hover:text-white transition">
-                      Xóa bài viết
-                    </button>
-                  </div>
-                  <form onsubmit="AdminPortal.saveBlog(event, '${blog.id}')" class="space-y-3.5 text-xs sm:text-sm">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      <div>
-                        <label class="block font-bold mb-1">Tiêu đề bài viết (H1)</label>
-                        <input type="text" id="adm-blog-title" value="${blog.title}" required class="w-full px-3 py-2 rounded-xl border border-[#ae9984] bg-white" />
+                  <!-- Header của Form Chỉnh Sửa -->
+                  <div class="flex flex-wrap items-center justify-between gap-3 pb-4 mb-5 border-b border-[#ae9984]/40">
+                    <div>
+                      <div class="flex items-center gap-2">
+                        <span class="px-2.5 py-0.5 rounded-full bg-[#f0b45b] text-[#0d2931] text-[10px] font-extrabold uppercase">
+                          ${blog.articleCode ? blog.articleCode.split(':')[0] : 'ĐANG CHỈNH SỬA'}
+                        </span>
+                        <h3 class="font-bevietnam-bold text-lg sm:text-xl font-bold text-[#0d2931]">
+                          Biên Tập Nội Dung Cẩm Nang
+                        </h3>
                       </div>
+                      <p class="text-xs text-[#0d2931]/70 mt-0.5">
+                        Tất cả các trường thông tin được đồng bộ chính xác với format tài liệu PDF của NEPLE.
+                      </p>
+                    </div>
+
+                    <div class="flex items-center gap-2">
+                      <button type="button" onclick="AdminPortal.openBlogPreview('${blog.id}')"
+                        class="px-3.5 py-2 rounded-xl bg-[#0d2931] text-[#f0b45b] text-xs font-bold hover:bg-[#163d48] transition shadow-sm flex items-center gap-1.5">
+                        <span>👁 Xem trước bài viết</span>
+                      </button>
+                      <button type="button" onclick="AdminPortal.deleteBlogPost('${blog.id}')"
+                        class="px-3 py-2 rounded-xl bg-[#691727]/15 text-[#691727] text-xs font-bold hover:bg-[#691727] hover:text-white transition">
+                        Xóa bài
+                      </button>
+                    </div>
+                  </div>
+
+                  <form onsubmit="AdminPortal.saveBlog(event, '${blog.id}')" class="space-y-5 text-xs sm:text-sm">
+                    <!-- HÀNG 1: MÃ / TÊN BÀI & CHỦ ĐỀ (FORMAT PDF) -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
-                        <label class="block font-bold mb-1">Chuyên mục</label>
-                        <select id="adm-blog-cat" class="w-full px-3 py-2 rounded-xl border border-[#ae9984] bg-white">
-                          ${['Ý Nghĩa Lễ Tết', 'Hướng Dẫn Bày Lễ Tối Giản', 'Văn Khấn Hiện Đại', 'Chuyện Nếp Nhà']
-                            .map(c => `<option value="${c}" ${blog.category === c ? 'selected' : ''}>${c}</option>`)
-                            .join('')}
-                        </select>
+                        <label class="block font-bold text-[#0d2931] mb-1">
+                          Mã &amp; Tên bài (Ví dụ: BÀI 1: Bài trí góc an yên...)
+                        </label>
+                        <input type="text" id="adm-blog-code" value="${blog.articleCode || ''}" required 
+                          placeholder="BÀI 1: Tên bài viết gợi nhớ..."
+                          class="w-full px-3.5 py-2.5 rounded-xl border border-[#ae9984] bg-white font-bold text-[#0d2931] focus:outline-none focus:border-[#0d2931]" />
+                      </div>
+
+                      <div>
+                        <label class="block font-bold text-[#0d2931] mb-1">
+                          ● Chủ đề (Category)
+                        </label>
+                        <div class="relative">
+                          <input type="text" id="adm-blog-cat" list="blog-cat-list" value="${blog.category || ''}" required
+                            placeholder="Chọn hoặc nhập chủ đề..."
+                            class="w-full px-3.5 py-2.5 rounded-xl border border-[#ae9984] bg-white font-bold text-[#0d2931] focus:outline-none focus:border-[#0d2931]" />
+                          <datalist id="blog-cat-list">
+                            <option value="Lối sống đô thị &amp; Không gian sống"></option>
+                            <option value="Văn hóa gia đình &amp; Sự gắn kết"></option>
+                            <option value="Tâm linh hiện đại &amp; Nghi lễ tối giản"></option>
+                            <option value="Xu hướng bền vững &amp; Sống xanh"></option>
+                            <option value="Hướng Dẫn Bày Lễ Tối Giản"></option>
+                            <option value="Văn Khấn Hiện Đại"></option>
+                          </datalist>
+                        </div>
                       </div>
                     </div>
 
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <!-- HÀNG 2: PACK LIÊN KẾT (FORMAT PDF) -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 p-3.5 rounded-2xl bg-[#f4efe6]/80 border border-[#ae9984]/50">
                       <div>
-                        <label class="block font-bold mb-1">Slug URL</label>
-                        <input type="text" id="adm-blog-slug" value="${blog.slug}" required class="w-full px-3 py-2 rounded-xl border border-[#ae9984] bg-white" />
-                      </div>
-                      <div>
-                        <label class="block font-bold mb-1">Gắn thẻ Sản phẩm / Combo trong bài</label>
-                        <select id="adm-blog-prod" class="w-full px-3 py-2 rounded-xl border border-[#ae9984] bg-white">
+                        <label class="block font-bold text-[#0d2931] mb-1">
+                          ● Pack liên kết (Chọn gói lễ gắn nút Mua ngay):
+                        </label>
+                        <select id="adm-blog-prod" onchange="AdminPortal.handleProductLinkChange(this)"
+                          class="w-full px-3.5 py-2 rounded-xl border border-[#ae9984] bg-white font-semibold text-xs sm:text-sm text-[#0d2931]">
                           ${this.state.products
                             .map(
                               p =>
@@ -780,42 +1058,248 @@
                             .join('')}
                         </select>
                       </div>
+
+                      <div>
+                        <label class="block font-bold text-[#0d2931] mb-1">
+                          Tên hiển thị của Pack liên kết:
+                        </label>
+                        <input type="text" id="adm-blog-pack-name" value="${blog.linkedPackName || ''}" 
+                          placeholder="VD: Tiễn Táo - Khởi Tâm An"
+                          class="w-full px-3.5 py-2 rounded-xl border border-[#ae9984] bg-white font-bold text-[#a94025] text-xs sm:text-sm" />
+                      </div>
                     </div>
 
+                    <!-- HÀNG 3: ĐƯỜNG DẪN ĐỀ XUẤT (SLUG) (FORMAT PDF: /hoi-nha-nep/...) -->
                     <div>
-                      <label class="block font-bold mb-1">Tóm tắt bài viết (Excerpt)</label>
-                      <textarea id="adm-blog-excerpt" rows="2" class="w-full px-3 py-2 rounded-xl border border-[#ae9984] bg-white">${blog.excerpt}</textarea>
+                      <div class="flex items-center justify-between mb-1">
+                        <label class="block font-bold text-[#0d2931]">
+                          ● Đường dẫn đề xuất (Slug URL):
+                        </label>
+                        <button type="button" onclick="AdminPortal.generateSlugFromTitle()" 
+                          class="text-xs text-[#a94025] hover:underline font-bold">
+                          ⚡ Tự tạo Slug từ Tiêu đề H1
+                        </button>
+                      </div>
+                      <div class="flex items-center rounded-xl border border-[#ae9984] bg-white overflow-hidden shadow-inner">
+                        <span class="px-3 py-2.5 bg-[#efe9e0] text-[#0d2931] font-mono text-xs font-bold border-r border-[#ae9984] select-none">
+                          /hoi-nha-nep/
+                        </span>
+                        <input type="text" id="adm-blog-slug" 
+                          value="${(blog.slug || '').replace(/^\/?hoi-nha-nep\/?/, '')}" required 
+                          placeholder="bai-tri-goc-an-yen-noi-phong-tro-do-thi"
+                          class="flex-1 px-3 py-2 font-mono text-xs sm:text-sm bg-transparent text-[#0d2931] focus:outline-none" />
+                      </div>
                     </div>
 
+                    <!-- HÀNG 4: TIÊU ĐỀ (H1) -->
                     <div>
-                      <label class="block font-bold mb-1">Bản Văn Khấn Hiện Đại đi kèm</label>
-                      <textarea id="adm-blog-prayer" rows="4" class="w-full px-3 py-2 rounded-xl border border-[#ae9984] bg-white">${blog.prayerText || ''}</textarea>
+                      <label class="block font-bold text-[#0d2931] mb-1">
+                        Tiêu đề bài viết (H1):
+                      </label>
+                      <input type="text" id="adm-blog-title" value="${blog.title}" required 
+                        placeholder="Nhập tiêu đề H1 giàu cảm xúc, chuẩn SEO..."
+                        class="w-full px-4 py-2.5 rounded-xl border border-[#ae9984] bg-white font-bevietnam-bold text-base sm:text-lg font-bold text-[#0d2931] focus:outline-none focus:border-[#0d2931]" />
                     </div>
 
-                    <div class="p-4 rounded-xl bg-[#f4efe6] border border-[#ae9984]/60 space-y-3">
-                      <div class="font-bold text-xs uppercase tracking-wider text-[#691727]">Cấu hình SEO Thủ Công</div>
-                      <div>
-                        <label class="block text-xs font-semibold mb-1">Meta Title</label>
-                        <input type="text" id="adm-blog-mtitle" value="${blog.seo?.metaTitle || blog.title}" class="w-full px-3 py-2 rounded-lg border border-[#ae9984] bg-white" />
+                    <!-- HÀNG 5: SAPO (ĐOẠN MỞ ĐẦU) -->
+                    <div>
+                      <label class="block font-bold text-[#0d2931] mb-1">
+                        Sapo (Đoạn mở đầu dẫn dắt bài viết):
+                      </label>
+                      <textarea id="adm-blog-excerpt" rows="3" required
+                        placeholder="Đoạn văn ngắn dẫn dắt độc giả vào bài viết..."
+                        class="w-full px-3.5 py-2.5 rounded-xl border border-[#ae9984] bg-white leading-relaxed text-xs sm:text-sm text-[#0d2931] focus:outline-none focus:border-[#0d2931]">${blog.excerpt || ''}</textarea>
+                    </div>
+
+                    <!-- HÀNG 6: ẢNH BÌA BÀI VIẾT (COVER IMAGE) -->
+                    <div class="p-4 rounded-2xl bg-[#f4efe6] border border-[#ae9984]/60 space-y-3">
+                      <div class="flex items-center justify-between">
+                        <span class="font-bold text-[#0d2931] text-xs uppercase tracking-wide">
+                          Ảnh bìa bài viết (Cover Image)
+                        </span>
+                        <span class="text-[11px] text-[#72826f]">Hỗ trợ tải từ máy tính hoặc dán link URL</span>
                       </div>
-                      <div>
-                        <label class="block text-xs font-semibold mb-1">Meta Description</label>
-                        <textarea id="adm-blog-mdesc" rows="2" class="w-full px-3 py-2 rounded-lg border border-[#ae9984] bg-white">${blog.seo?.metaDescription || blog.excerpt}</textarea>
-                      </div>
-                      <div>
-                        <label class="block text-xs font-semibold mb-1">Từ khóa SEO</label>
-                        <input type="text" id="adm-blog-mkey" value="${blog.seo?.keywords || ''}" class="w-full px-3 py-2 rounded-lg border border-[#ae9984] bg-white" />
+
+                      <div class="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+                        <div class="w-32 h-20 rounded-xl overflow-hidden bg-white border border-[#ae9984] shrink-0 shadow-inner flex items-center justify-center">
+                          <img id="adm-blog-cover-preview" src="${blog.coverImage || ''}" alt="Cover Preview" class="w-full h-full object-cover" onerror="this.src='logo.png?v=2'" />
+                        </div>
+
+                        <div class="flex-1 w-full space-y-2">
+                          <input type="text" id="adm-blog-cover-input" value="${blog.coverImage || ''}"
+                            placeholder="Dán link ảnh bìa (URL) hoặc tải ảnh bên dưới..."
+                            oninput="document.getElementById('adm-blog-cover-preview').src = this.value"
+                            class="w-full px-3 py-2 rounded-xl border border-[#ae9984] bg-white text-xs" />
+
+                          <div class="flex flex-wrap gap-2">
+                            <label class="px-3.5 py-2 rounded-xl bg-[#0d2931] text-[#f0b45b] text-xs font-bold cursor-pointer hover:bg-[#163d48] transition shadow-sm">
+                              <span>📁 Tải ảnh từ máy tính</span>
+                              <input type="file" accept="image/*" class="hidden" onchange="AdminPortal.handleCoverImageUpload(event)" />
+                            </label>
+                            <button type="button" onclick="AdminPortal.setDefaultCoverImage()"
+                              class="px-3 py-2 rounded-xl bg-white border border-[#ae9984] text-xs font-bold text-[#0d2931] hover:bg-[#efe9e0] transition">
+                              🖼 Dùng ảnh bìa hộp lễ mặc định
+                            </button>
+                          </div>
+                        </div>
                       </div>
                     </div>
 
-                    <div class="pt-2 flex justify-end">
-                      <button type="submit" class="px-6 py-3 rounded-xl btn-terracotta font-bold text-sm shadow-md">
-                        Lưu Bài Viết &amp; Đồng Bộ
+                    <!-- HÀNG 7: [TÍNH NĂNG MỚI] TRÌNH SOẠN THẢO VĂN BẢN PHONG PHÚ (RICH TEXT EDITOR) & CHÈN ẢNH -->
+                    <div class="space-y-2">
+                      <div class="flex flex-wrap items-center justify-between gap-2">
+                        <label class="font-bold text-[#0d2931] flex items-center gap-2">
+                          <span>📝 Nội Dung Bài Viết (Rich Text Editor)</span>
+                          <span class="text-[11px] font-normal text-[#72826f]">(Hỗ trợ in đậm, in nghiêng, cỡ chữ, màu sắc, chèn ảnh, khối gợi ý)</span>
+                        </label>
+                        <div class="flex items-center gap-2">
+                          <button type="button" id="adm-btn-toggle-html" onclick="AdminPortal.toggleHtmlSourceMode()"
+                            class="px-2.5 py-1 rounded-lg bg-[#efe9e0] hover:bg-[#0d2931] hover:text-[#f0b45b] text-[11px] font-bold text-[#0d2931] transition">
+                            &lt;/&gt; Xem Mã HTML
+                          </button>
+                        </div>
+                      </div>
+
+                      <!-- THANH CÔNG CỤ TOOLBAR SOẠN THẢO VĂN BẢN -->
+                      <div class="p-2 rounded-t-xl bg-[#efe9e0] border-t border-l border-r border-[#ae9984] flex flex-wrap items-center gap-1.5 text-xs">
+                        <!-- Chọn định dạng Heading / Paragraph -->
+                        <select onchange="AdminPortal.formatBlock(this.value); this.selectedIndex=0;" class="px-2.5 py-1.5 rounded-lg bg-white border border-[#ae9984] text-xs font-bold text-[#0d2931] cursor-pointer" title="Định dạng đoạn">
+                          <option value="">-- Kiểu văn bản --</option>
+                          <option value="p">Đoạn văn (Normal P)</option>
+                          <option value="h2">Tiêu đề lớn (H2)</option>
+                          <option value="h3">Tiêu đề vừa (H3)</option>
+                          <option value="h4">Tiêu đề nhỏ (H4)</option>
+                          <option value="blockquote">Trích dẫn (Quote)</option>
+                        </select>
+
+                        <!-- Chọn cỡ chữ -->
+                        <select onchange="AdminPortal.changeFontSize(this.value); this.selectedIndex=0;" class="px-2.5 py-1.5 rounded-lg bg-white border border-[#ae9984] text-xs font-bold text-[#0d2931] cursor-pointer" title="Cỡ chữ">
+                          <option value="">-- Cỡ chữ --</option>
+                          <option value="13px">13px (Chữ nhỏ)</option>
+                          <option value="15px">15px (Chuẩn)</option>
+                          <option value="18px">18px (Chữ vừa)</option>
+                          <option value="22px">22px (Chữ to)</option>
+                          <option value="26px">26px (Tiêu đề lớn)</option>
+                        </select>
+
+                        <div class="w-px h-5 bg-[#ae9984]/50 mx-0.5"></div>
+
+                        <!-- Định dạng kiểu chữ: In đậm, In nghiêng, Gạch chân, Gạch ngang -->
+                        <button type="button" onclick="AdminPortal.execEditorCmd('bold')" class="rte-btn font-extrabold" title="In đậm (Ctrl+B)">B</button>
+                        <button type="button" onclick="AdminPortal.execEditorCmd('italic')" class="rte-btn italic font-serif" title="In nghiêng (Ctrl+I)">I</button>
+                        <button type="button" onclick="AdminPortal.execEditorCmd('underline')" class="rte-btn underline" title="Gạch chân (Ctrl+U)">U</button>
+                        <button type="button" onclick="AdminPortal.execEditorCmd('strikeThrough')" class="rte-btn line-through" title="Gạch ngang">S</button>
+
+                        <div class="w-px h-5 bg-[#ae9984]/50 mx-0.5"></div>
+
+                        <!-- Chọn màu chữ thương hiệu -->
+                        <select onchange="AdminPortal.changeTextColor(this.value); this.selectedIndex=0;" class="px-2 py-1.5 rounded-lg bg-white border border-[#ae9984] text-xs font-bold text-[#0d2931] cursor-pointer" title="Màu chữ">
+                          <option value="">🎨 Màu chữ</option>
+                          <option value="#222222" style="color: #222222;">■ Đen xám (#222222)</option>
+                          <option value="#691727" style="color: #691727;">■ Đỏ bầm NEPLE (#691727)</option>
+                          <option value="#0d2931" style="color: #0d2931;">■ Xanh sẫm NEPLE (#0d2931)</option>
+                          <option value="#f0b45b" style="color: #d18a1a;">■ Vàng cam NEPLE (#f0b45b)</option>
+                          <option value="#a94025" style="color: #a94025;">■ Cam đất (#a94025)</option>
+                          <option value="#72826f" style="color: #72826f;">■ Xanh rêu (#72826f)</option>
+                        </select>
+
+                        <div class="w-px h-5 bg-[#ae9984]/50 mx-0.5"></div>
+
+                        <!-- Danh sách -->
+                        <button type="button" onclick="AdminPortal.execEditorCmd('insertUnorderedList')" class="rte-btn" title="Danh sách gạch đầu dòng">• Danh sách</button>
+                        <button type="button" onclick="AdminPortal.execEditorCmd('insertOrderedList')" class="rte-btn" title="Danh sách số thứ tự">1. Danh sách</button>
+
+                        <div class="w-px h-5 bg-[#ae9984]/50 mx-0.5"></div>
+
+                        <!-- Căn lề -->
+                        <button type="button" onclick="AdminPortal.execEditorCmd('justifyLeft')" class="rte-btn" title="Căn trái">Trái</button>
+                        <button type="button" onclick="AdminPortal.execEditorCmd('justifyCenter')" class="rte-btn" title="Căn giữa">Giữa</button>
+                        <button type="button" onclick="AdminPortal.execEditorCmd('justifyRight')" class="rte-btn" title="Căn phải">Phải</button>
+
+                        <div class="w-px h-5 bg-[#ae9984]/50 mx-0.5"></div>
+
+                        <!-- Chèn liên kết -->
+                        <button type="button" onclick="AdminPortal.insertLink()" class="rte-btn" title="Chèn liên kết link">🔗 Link</button>
+
+                        <!-- [YÊU CẦU 2]: NÚT CHÈN ẢNH VÀO NỘI DUNG -->
+                        <button type="button" onclick="AdminPortal.openInsertImageModal()" 
+                          class="rte-btn bg-[#0d2931] text-[#f0b45b] border-[#0d2931] hover:bg-[#163d48] font-bold shadow-sm" title="Chèn ảnh từ máy tính hoặc link URL">
+                          📷 + Chèn ảnh
+                        </button>
+
+                        <!-- [YÊU CẦU 1]: NÚT CHÈN KHUNG GỢI Ý TỪ HỘI NHÀ NẾP CHUẨN FORMAT PDF -->
+                        <button type="button" onclick="AdminPortal.insertNepleCallout()" 
+                          class="rte-btn bg-[#f0b45b]/30 text-[#0d2931] border-[#f0b45b] hover:bg-[#f0b45b] font-bold" title="Chèn khung 'Gợi ý từ Hội Nhà Nếp'">
+                          ✨ + Khung "Gợi ý Hội Nhà Nếp"
+                        </button>
+                      </div>
+
+                      <!-- VÙNG SOẠN THẢO CONTENTEDITABLE & MÃ NGUỒN HTML -->
+                      <div id="adm-blog-editor" contenteditable="true" spellcheck="false" class="rounded-b-xl">
+                        ${blog.contentHtml || (blog.sections ? blog.sections.map(s => `<h3>${s.heading}</h3><p>${s.content}</p>`).join('') : '<p>Bắt đầu nhập nội dung bài viết...</p>')}
+                      </div>
+
+                      <textarea id="adm-blog-html-source" class="hidden w-full h-[450px] p-4 font-mono text-xs bg-slate-900 text-amber-200 rounded-b-xl border border-[#ae9984] focus:outline-none leading-relaxed"></textarea>
+                    </div>
+
+                    <!-- HÀNG 8: BẢN VĂN KHẤN HIỆN ĐẠI ĐI KÈM (NẾU CÓ) -->
+                    <details class="p-4 rounded-2xl bg-[#efe9e0]/80 border border-[#ae9984]/60 group">
+                      <summary class="font-bold text-xs uppercase tracking-wide text-[#691727] cursor-pointer flex items-center justify-between select-none">
+                        <span>🙏 Bản Văn Khấn Hiện Đại Đi Kèm (Tùy chọn)</span>
+                        <span class="text-[11px] font-normal text-[#0d2931]/70 group-open:rotate-180 transition">▼ Mở rộng</span>
+                      </summary>
+                      <div class="mt-3 space-y-3 pt-3 border-t border-[#ae9984]/30">
+                        <div>
+                          <label class="block font-bold text-xs text-[#0d2931] mb-1">Tiêu đề bài văn khấn</label>
+                          <input type="text" id="adm-blog-prayer-title" value="${blog.prayerTitle || ''}" 
+                            placeholder="VD: Văn Khấn Táo Quân Đơn Giản Cho Người Trẻ"
+                            class="w-full px-3 py-2 rounded-lg border border-[#ae9984] bg-white text-xs font-bold text-[#0d2931]" />
+                        </div>
+                        <div>
+                          <label class="block font-bold text-xs text-[#0d2931] mb-1">Nội dung bài khấn</label>
+                          <textarea id="adm-blog-prayer" rows="5" 
+                            placeholder="Nhập toàn văn bài văn khấn..."
+                            class="w-full px-3 py-2 rounded-lg border border-[#ae9984] bg-white font-sans text-xs leading-relaxed text-[#0d2931]">${blog.prayerText || ''}</textarea>
+                        </div>
+                      </div>
+                    </details>
+
+                    <!-- HÀNG 9: CẤU HÌNH SEO GOOGLE -->
+                    <details class="p-4 rounded-2xl bg-[#f4efe6] border border-[#ae9984]/60 group">
+                      <summary class="font-bold text-xs uppercase tracking-wide text-[#0d2931] cursor-pointer flex items-center justify-between select-none">
+                        <span>🔍 Cấu Hình SEO Google (Meta Title, Description, Keywords)</span>
+                        <span class="text-[11px] font-normal text-[#0d2931]/70 group-open:rotate-180 transition">▼ Mở rộng</span>
+                      </summary>
+                      <div class="mt-3 space-y-3 pt-3 border-t border-[#ae9984]/30">
+                        <div>
+                          <label class="block text-xs font-semibold mb-1">Meta Title</label>
+                          <input type="text" id="adm-blog-mtitle" value="${blog.seo?.metaTitle || blog.title}" class="w-full px-3 py-2 rounded-lg border border-[#ae9984] bg-white text-xs" />
+                        </div>
+                        <div>
+                          <label class="block text-xs font-semibold mb-1">Meta Description</label>
+                          <textarea id="adm-blog-mdesc" rows="2" class="w-full px-3 py-2 rounded-lg border border-[#ae9984] bg-white text-xs leading-relaxed">${blog.seo?.metaDescription || blog.excerpt || ''}</textarea>
+                        </div>
+                        <div>
+                          <label class="block text-xs font-semibold mb-1">Từ khóa SEO (Keywords, phân cách bằng dấu phẩy)</label>
+                          <input type="text" id="adm-blog-mkey" value="${blog.seo?.keywords || ''}" class="w-full px-3 py-2 rounded-lg border border-[#ae9984] bg-white text-xs" />
+                        </div>
+                      </div>
+                    </details>
+
+                    <!-- CHÂN FORM: NÚT LƯU & XEM TRƯỚC -->
+                    <div class="pt-4 border-t border-[#ae9984]/40 flex flex-wrap items-center justify-between gap-3">
+                      <button type="button" onclick="AdminPortal.openBlogPreview('${blog.id}')"
+                        class="px-4 py-3 rounded-xl bg-[#0d2931] text-[#f0b45b] font-bold text-xs sm:text-sm hover:bg-[#163d48] transition shadow-sm flex items-center gap-2">
+                        <span>👁 Xem trước bài viết</span>
+                      </button>
+
+                      <button type="submit" class="px-7 py-3 rounded-xl btn-terracotta font-bold text-sm shadow-lg flex items-center gap-2">
+                        <span>💾 Lưu Bài Viết &amp; Đồng Bộ Ra Trang Khách</span>
                       </button>
                     </div>
                   </form>
                 `
-                    : ''
+                    : '<div class="p-8 text-center text-[#0d2931]/60">Vui lòng chọn hoặc tạo mới một bài viết cẩm nang.</div>'
                 }
               </div>
             </div>
@@ -823,66 +1307,388 @@
         `;
       },
 
+      selectBlogForEditing(blogId) {
+        this.state.editingBlogId = blogId;
+        this.renderDashboard();
+      },
+
+      handleProductLinkChange(selectEl) {
+        const selectedProd = this.state.products.find(p => p.id === selectEl.value);
+        if (selectedProd) {
+          const packInput = document.getElementById('adm-blog-pack-name');
+          if (packInput) packInput.value = selectedProd.name;
+        }
+      },
+
+      execEditorCmd(cmd, value = null) {
+        const editor = document.getElementById('adm-blog-editor');
+        if (!editor) return;
+        editor.focus();
+        document.execCommand(cmd, false, value);
+      },
+
+      formatBlock(tag) {
+        if (!tag) return;
+        const editor = document.getElementById('adm-blog-editor');
+        if (!editor) return;
+        editor.focus();
+        document.execCommand('formatBlock', false, tag);
+      },
+
+      changeFontSize(sizePx) {
+        if (!sizePx) return;
+        const editor = document.getElementById('adm-blog-editor');
+        if (!editor) return;
+        editor.focus();
+        const sel = window.getSelection();
+        if (!sel || sel.rangeCount === 0 || sel.isCollapsed) {
+          return;
+        }
+        const range = sel.getRangeAt(0);
+        const span = document.createElement('span');
+        span.style.fontSize = sizePx;
+        span.appendChild(range.extractContents());
+        range.insertNode(span);
+        sel.removeAllRanges();
+        const newRange = document.createRange();
+        newRange.selectNodeContents(span);
+        sel.addRange(newRange);
+      },
+
+      changeTextColor(colorHex) {
+        if (!colorHex) return;
+        const editor = document.getElementById('adm-blog-editor');
+        if (!editor) return;
+        editor.focus();
+        document.execCommand('foreColor', false, colorHex);
+      },
+
+      insertLink() {
+        const url = prompt('Nhập địa chỉ URL cần liên kết:', 'https://');
+        if (url && url.trim() && url !== 'https://') {
+          this.execEditorCmd('createLink', url.trim());
+        }
+      },
+
+      insertNepleCallout() {
+        const editor = document.getElementById('adm-blog-editor');
+        if (!editor) return;
+        editor.focus();
+        const calloutHtml = `
+          <div class="nep-callout" style="margin: 1.5rem 0; padding: 1.25rem 1.5rem; border-radius: 1rem; background-color: #f4efe6; border-left: 5px solid #0d2931; box-shadow: 0 2px 8px rgba(13,41,49,0.06);">
+            <div style="font-weight: 700; color: #0d2931; margin-bottom: 0.5rem; font-size: 0.95rem; display: flex; align-items: center; gap: 0.5rem;">
+              <span>💡 Gợi ý từ Hội Nhà Nếp:</span>
+            </div>
+            <p style="margin: 0; color: #333333; font-size: 0.9rem; line-height: 1.65;">
+              Nhập lời khuyên, mẹo nhỏ bài trí không gian hoặc gợi ý chọn hộp lễ tại đây...
+            </p>
+          </div>
+          <p><br></p>
+        `;
+        document.execCommand('insertHTML', false, calloutHtml);
+      },
+
+      openInsertImageModal() {
+        const sel = window.getSelection();
+        if (sel && sel.rangeCount > 0) {
+          this._savedEditorRange = sel.getRangeAt(0).cloneRange();
+        }
+        const modal = document.getElementById('adm-insert-image-modal');
+        if (modal) modal.classList.remove('hidden');
+      },
+
+      closeInsertImageModal() {
+        const modal = document.getElementById('adm-insert-image-modal');
+        if (modal) modal.classList.add('hidden');
+      },
+
+      handleEditorImageFileUpload(event) {
+        const file = event.target.files?.[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = () => {
+          const urlInput = document.getElementById('adm-img-url-input');
+          const previewBox = document.getElementById('adm-img-file-preview');
+          const previewThumb = document.getElementById('adm-img-preview-thumb');
+          if (urlInput) urlInput.value = reader.result;
+          if (previewBox && previewThumb) {
+            previewThumb.src = reader.result;
+            previewBox.classList.remove('hidden');
+          }
+          this.showToast('Đã nạp file ảnh thành công!');
+        };
+        reader.readAsDataURL(file);
+      },
+
+      confirmInsertImage() {
+        const url = document.getElementById('adm-img-url-input')?.value.trim();
+        const caption = document.getElementById('adm-img-caption-input')?.value.trim();
+        const widthMode = document.getElementById('adm-img-width-select')?.value || 'full';
+
+        if (!url) {
+          alert('Vui lòng chọn file ảnh từ máy tính hoặc dán đường dẫn ảnh (URL)!');
+          return;
+        }
+
+        const widthStyle = widthMode === 'full' ? 'width: 100%; max-width: 720px;' : 'max-width: 480px;';
+        const figureHtml = `
+          <figure style="margin: 1.5rem auto; text-align: center; max-width: 100%;">
+            <img src="${url}" alt="${caption || 'Hình ảnh bài viết NEPLE'}" style="${widthStyle} height: auto; border-radius: 0.85rem; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin: 0 auto; display: block;" />
+            ${caption ? `<figcaption style="font-size: 0.82rem; color: #72826f; margin-top: 0.5rem; font-style: italic; line-height: 1.4;">${caption}</figcaption>` : ''}
+          </figure>
+          <p><br></p>
+        `;
+
+        this.closeInsertImageModal();
+        const editor = document.getElementById('adm-blog-editor');
+        if (editor) {
+          editor.focus();
+          if (this._savedEditorRange) {
+            const sel = window.getSelection();
+            sel.removeAllRanges();
+            sel.addRange(this._savedEditorRange);
+          }
+          document.execCommand('insertHTML', false, figureHtml);
+        }
+
+        // Reset modal inputs
+        if (document.getElementById('adm-img-url-input')) document.getElementById('adm-img-url-input').value = '';
+        if (document.getElementById('adm-img-caption-input')) document.getElementById('adm-img-caption-input').value = '';
+        if (document.getElementById('adm-img-file-preview')) document.getElementById('adm-img-file-preview').classList.add('hidden');
+        this.showToast('Đã chèn ảnh vào nội dung bài viết!');
+      },
+
+      handleCoverImageUpload(event) {
+        const file = event.target.files?.[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = () => {
+          const input = document.getElementById('adm-blog-cover-input');
+          const preview = document.getElementById('adm-blog-cover-preview');
+          if (input) input.value = reader.result;
+          if (preview) preview.src = reader.result;
+          this.showToast('Đã nạp ảnh bìa bài viết mới!');
+        };
+        reader.readAsDataURL(file);
+      },
+
+      setDefaultCoverImage() {
+        const input = document.getElementById('adm-blog-cover-input');
+        const preview = document.getElementById('adm-blog-cover-preview');
+        const defaultImg = generatePackagingSVG('single', 'CẨM NANG NẾP LỄ', 'NEPLE Gifting', '#0d2931', 'CẨM NANG TẾT', ['Nếp Lễ']);
+        if (input) input.value = defaultImg;
+        if (preview) preview.src = defaultImg;
+        this.showToast('Đã đặt lại ảnh bìa bao bì mặc định!');
+      },
+
+      toggleHtmlSourceMode() {
+        const editor = document.getElementById('adm-blog-editor');
+        const source = document.getElementById('adm-blog-html-source');
+        const btn = document.getElementById('adm-btn-toggle-html');
+        if (!editor || !source) return;
+
+        if (source.classList.contains('hidden')) {
+          source.value = editor.innerHTML;
+          editor.classList.add('hidden');
+          source.classList.remove('hidden');
+          if (btn) btn.innerHTML = '📝 Chuyển Trực Quan';
+        } else {
+          editor.innerHTML = source.value;
+          source.classList.add('hidden');
+          editor.classList.remove('hidden');
+          if (btn) btn.innerHTML = '&lt;/&gt; Xem Mã HTML';
+        }
+      },
+
+      generateSlugFromTitle() {
+        const title = document.getElementById('adm-blog-title')?.value || '';
+        if (!title) return;
+        const slug = title
+          .toLowerCase()
+          .normalize('NFD')
+          .replace(/[\u0300-\u036f]/g, '')
+          .replace(/[đĐ]/g, 'd')
+          .replace(/[^a-z0-9\s-]/g, '')
+          .trim()
+          .replace(/\s+/g, '-');
+        const slugInput = document.getElementById('adm-blog-slug');
+        if (slugInput) slugInput.value = slug;
+        this.showToast('Đã tự động tạo Slug từ Tiêu đề H1!');
+      },
+
+      openBlogPreview(blogId) {
+        const blog = this.state.blogs.find(b => b.id === blogId) || this.state.blogs[0];
+        if (!blog) return;
+
+        const currentTitle = document.getElementById('adm-blog-title')?.value || blog.title;
+        const currentCategory = document.getElementById('adm-blog-cat')?.value || blog.category;
+        const currentExcerpt = document.getElementById('adm-blog-excerpt')?.value || blog.excerpt;
+        const currentCover = document.getElementById('adm-blog-cover-input')?.value || blog.coverImage;
+        const currentPackName = document.getElementById('adm-blog-pack-name')?.value || blog.linkedPackName;
+        const currentPrayerTitle = document.getElementById('adm-blog-prayer-title')?.value || blog.prayerTitle;
+        const currentPrayer = document.getElementById('adm-blog-prayer')?.value || blog.prayerText;
+
+        let currentHtml = blog.contentHtml;
+        const editor = document.getElementById('adm-blog-editor');
+        const source = document.getElementById('adm-blog-html-source');
+        if (source && !source.classList.contains('hidden')) {
+          currentHtml = source.value;
+        } else if (editor) {
+          currentHtml = editor.innerHTML;
+        }
+
+        const modal = document.getElementById('adm-blog-preview-modal');
+        const body = document.getElementById('adm-blog-preview-body');
+        if (!modal || !body) return;
+
+        body.innerHTML = `
+          <div class="space-y-6 text-[#0d2931]">
+            <div class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-[#ae9984]/30">
+              <div class="flex items-center gap-2">
+                <span class="px-3 py-1 rounded-full bg-[#0d2931] text-[#f0b45b] text-xs font-bold">${currentCategory}</span>
+                ${currentPackName ? `<span class="px-3 py-1 rounded-full bg-[#f0b45b]/30 text-[#0d2931] text-xs font-bold">📦 ${currentPackName}</span>` : ''}
+              </div>
+              <span class="text-xs text-[#0d2931]/60">📅 ${blog.publishedAt} • ⏱ ${blog.readTime || '4 phút đọc'}</span>
+            </div>
+
+            <h1 class="font-bevietnam-bold text-2xl sm:text-3xl font-extrabold text-[#0d2931] leading-tight">
+              ${currentTitle}
+            </h1>
+
+            <div class="p-4 rounded-xl bg-[#f4efe6] border-l-4 border-[#691727] text-sm text-[#691727] font-semibold leading-relaxed">
+              ${currentExcerpt}
+            </div>
+
+            ${
+              currentCover
+                ? `<div class="rounded-2xl overflow-hidden shadow-md max-h-[400px]">
+                     <img src="${currentCover}" alt="Cover" class="w-full h-full object-cover" />
+                   </div>`
+                : ''
+            }
+
+            <div class="blog-rich-content text-sm sm:text-base leading-relaxed text-[#222222]">
+              ${currentHtml || ''}
+            </div>
+
+            ${
+              currentPrayer
+                ? `
+              <div class="p-6 rounded-2xl bg-[#efe9e0] border border-[#ae9984] space-y-2">
+                <h4 class="font-bold text-[#691727] text-base">🙏 ${currentPrayerTitle || 'Bản Văn Khấn Đi Kèm'}</h4>
+                <pre class="whitespace-pre-wrap font-sans text-xs sm:text-sm text-[#0d2931] leading-relaxed">${currentPrayer}</pre>
+              </div>
+            `
+                : ''
+            }
+          </div>
+        `;
+        modal.classList.remove('hidden');
+      },
+
+      closeBlogPreview() {
+        const modal = document.getElementById('adm-blog-preview-modal');
+        if (modal) modal.classList.add('hidden');
+      },
+
+      loadDefaultPDFBlogs() {
+        if (!confirm('Khôi phục lại toàn bộ 4 bài viết chuẩn từ tài liệu PDF? Mọi sửa đổi trước đó sẽ được làm mới.')) return;
+        this.state.blogs = JSON.parse(JSON.stringify(DEFAULT_BLOGS));
+        this.state.editingBlogId = this.state.blogs[0].id;
+        this.saveAllToStorage();
+        this.logAudit('Nạp lại 4 bài viết chuẩn từ tài liệu PDF');
+        this.renderDashboard();
+        this.showToast('Đã nạp lại 4 bài viết chuẩn từ tài liệu PDF thành công!');
+      },
+
       createNewBlogPost() {
+        const newNum = this.state.blogs.length + 1;
         const newId = 'blog-' + Date.now();
         const newBlog = {
           id: newId,
-          slug: 'bai-viet-cam-nang-nep-le-' + Date.now(),
-          title: 'Bài Viết Cẩm Nang Nếp Lễ Mới',
-          category: 'Hướng Dẫn Bày Lễ Tối Giản',
+          articleCode: `BÀI ${newNum}: Bài viết cẩm nang mới`,
+          slug: 'bai-viet-cam-nang-moi-' + Date.now(),
+          title: 'Tiêu đề bài viết cẩm nang Nếp Lễ mới',
+          category: 'Lối sống đô thị & Không gian sống',
+          linkedPackName: 'Tiễn Táo - Khởi Tâm An',
+          relatedProductId: 'pack-tien-tao',
           readTime: '4 phút đọc',
           publishedAt: new Date().toISOString().slice(0, 10),
-          author: this.state.currentUser.name,
-          excerpt: 'Hướng dẫn chuẩn bị mâm lễ Tết tinh gọn, hiện đại dành cho gia đình trẻ.',
-          coverImage: generatePackagingSVG('single', 'CẨM NANG NẾP LỄ', 'Bài Viết Văn Hóa Tết Mới', '#0d2931', 'CẨM NANG MỚI', ['Nếp Lễ']),
-          relatedProductId: 'combo-tron-tet',
-          tags: ['nếp lễ', 'cẩm nang tết'],
+          author: this.state.currentUser ? this.state.currentUser.name : 'Ban Biên Tập NEPLE',
+          excerpt: 'Sapo mở đầu giới thiệu bài viết cẩm nang Tết ấm áp, tinh gọn cho người trẻ.',
+          coverImage: generatePackagingSVG('single', 'CẨM NANG NẾP LỄ', 'Bài viết mới', '#0d2931', 'CẨM NANG', ['Nếp Lễ']),
+          contentHtml: `
+            <h3>1. Đặt vấn đề và cảm hứng nếp xưa</h3>
+            <p>Nội dung đoạn mở đầu giới thiệu về chủ đề...</p>
+            <div class="nep-callout" style="margin: 1.5rem 0; padding: 1.25rem 1.5rem; border-radius: 1rem; background-color: #f4efe6; border-left: 5px solid #0d2931; box-shadow: 0 2px 8px rgba(13,41,49,0.06);">
+              <div style="font-weight: 700; color: #0d2931; margin-bottom: 0.5rem; font-size: 0.95rem; display: flex; align-items: center; gap: 0.5rem;">
+                <span>💡 Gợi ý từ Hội Nhà Nếp:</span>
+              </div>
+              <p style="margin: 0; color: #333333; font-size: 0.9rem; line-height: 1.65;">
+                Gợi ý giải pháp hoặc mẹo nhỏ dành cho độc giả...
+              </p>
+            </div>
+            <p>Nội dung phần kết luận và hướng dẫn thực hành...</p>
+          `,
+          prayerTitle: 'Văn Khấn Tham Khảo',
+          prayerText: '',
           seo: {
-            metaTitle: 'Bài Viết Cẩm Nang Nếp Lễ Mới | NEPLE',
-            metaDescription: 'Hướng dẫn chuẩn bị mâm lễ Tết tinh gọn, hiện đại dành cho gia đình trẻ.',
-            keywords: 'nếp lễ, cẩm nang tết'
-          },
-          sections: [
-            {
-              heading: '1. Tinh thần giữ trọn nếp xưa theo cách tối giản hiện đại',
-              content: 'Nội dung chi tiết hướng dẫn người trẻ chuẩn bị lễ Tết trang trọng, ấm cúng.'
-            }
-          ],
-          prayerTitle: 'Văn Khấn Hiện Đại Tham Khảo',
-          prayerText: 'Nam mô A Di Đà Phật! (3 lần)...'
+            metaTitle: 'Tiêu đề bài viết cẩm nang Nếp Lễ mới | NEPLE',
+            metaDescription: 'Sapo mở đầu giới thiệu bài viết cẩm nang Tết ấm áp, tinh gọn cho người trẻ.',
+            keywords: 'nếp lễ, cẩm nang tết, tết tối giản'
+          }
         };
         this.state.blogs.unshift(newBlog);
         this.state.editingBlogId = newId;
         this.saveAllToStorage();
         this.logAudit(`Tạo bài viết Blog mới "${newBlog.title}"`);
         this.renderDashboard();
-        this.showToast('Đã tạo bài viết mới!');
+        this.showToast('Đã tạo bài viết mới! Hãy biên tập nội dung bên phải.');
       },
 
       saveBlog(e, blogId) {
         e.preventDefault();
         const blog = this.state.blogs.find(b => b.id === blogId);
         if (!blog) return;
+
+        blog.articleCode = document.getElementById('adm-blog-code')?.value.trim() || blog.articleCode || 'BÀI MỚI';
         blog.title = document.getElementById('adm-blog-title').value.trim();
-        blog.category = document.getElementById('adm-blog-cat').value;
-        blog.slug = document.getElementById('adm-blog-slug').value.trim();
+        blog.category = document.getElementById('adm-blog-cat').value.trim();
+        blog.linkedPackName = document.getElementById('adm-blog-pack-name')?.value.trim() || '';
         blog.relatedProductId = document.getElementById('adm-blog-prod').value;
+        blog.slug = document.getElementById('adm-blog-slug').value.trim().replace(/^\/+/, '');
         blog.excerpt = document.getElementById('adm-blog-excerpt').value.trim();
-        blog.prayerText = document.getElementById('adm-blog-prayer').value.trim();
+        blog.coverImage = document.getElementById('adm-blog-cover-input')?.value.trim() || blog.coverImage;
+
+        // Lưu nội dung từ Editor trực quan hoặc ô mã nguồn HTML
+        const editor = document.getElementById('adm-blog-editor');
+        const source = document.getElementById('adm-blog-html-source');
+        if (source && !source.classList.contains('hidden')) {
+          blog.contentHtml = source.value;
+        } else if (editor) {
+          blog.contentHtml = editor.innerHTML;
+        }
+
+        // Văn khấn đi kèm
+        blog.prayerTitle = document.getElementById('adm-blog-prayer-title')?.value.trim() || '';
+        blog.prayerText = document.getElementById('adm-blog-prayer')?.value.trim() || '';
+
+        // Cấu hình SEO
         blog.seo = {
-          metaTitle: document.getElementById('adm-blog-mtitle').value.trim(),
-          metaDescription: document.getElementById('adm-blog-mdesc').value.trim(),
-          keywords: document.getElementById('adm-blog-mkey').value.trim()
+          metaTitle: document.getElementById('adm-blog-mtitle')?.value.trim() || blog.title,
+          metaDescription: document.getElementById('adm-blog-mdesc')?.value.trim() || blog.excerpt,
+          keywords: document.getElementById('adm-blog-mkey')?.value.trim() || ''
         };
+
         this.saveAllToStorage();
         this.logAudit(`Cập nhật bài viết Blog "${blog.title}"`);
         this.renderDashboard();
-        this.showToast('Đã lưu bài viết và đồng bộ ra trang Khách hàng!');
+        this.showToast('Đã lưu bài viết và đồng bộ ra trang Khách hàng thành công!');
       },
 
       deleteBlogPost(blogId) {
         if (this.state.blogs.length <= 1) {
-          this.showToast('Cần giữ lại ít nhất 1 bài viết!');
+          this.showToast('Cần giữ lại ít nhất 1 bài viết cẩm nang!');
           return;
         }
         if (!confirm('Bạn có chắc muốn xóa bài viết này?')) return;
