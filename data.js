@@ -536,7 +536,7 @@ const DEFAULT_BLOGS = [
 <div class="callout-neple-suggest p-5 my-6 rounded-2xl bg-[#0d2931] text-[#faf7f2] border-2 border-[#f0b45b] shadow-lg">
   <div class="flex items-center gap-2 mb-2 text-[#f0b45b] font-bold text-base">
     <span>✨</span>
-    <h4>Gợi ý từ Hội Nhà Nếp:</h4>
+    <h4 style="color: #ffffff !important; margin: 0;" class="text-white">Gợi ý từ Hội Nhà Nếp:</h4>
   </div>
   <p class="text-sm leading-relaxed text-[#faf7f2]/90">
     Để góc phòng trọ không bị ngột ngạt bởi khói hương hay lỉnh kỉnh đồ mã, bạn có thể tham khảo <strong>Set Tiễn Táo (Tem Xanh)</strong> từ NEPLE. Toàn bộ mũ áo Táo quân, hia ngựa truyền thống và sachet gạo muối may mắn được thu gọn mô-đun trong một hộp kraft mộc, đi kèm nhang trầm quế tự nhiên mỏng khói, mang lại sự ấm áp vẹn tròn mà gọn nhẹ tuyệt đối cho không gian sống hiện đại.
@@ -596,7 +596,7 @@ Nam mô A Di Đà Phật! (3 lần)`
 <div class="callout-neple-suggest p-5 my-6 rounded-2xl bg-[#0d2931] text-[#faf7f2] border-2 border-[#f0b45b] shadow-lg">
   <div class="flex items-center gap-2 mb-2 text-[#f0b45b] font-bold text-base">
     <span>✨</span>
-    <h4>Gợi ý từ Hội Nhà Nếp:</h4>
+    <h4 style="color: #ffffff !important; margin: 0;" class="text-white">Gợi ý từ Hội Nhà Nếp:</h4>
   </div>
   <p class="text-sm leading-relaxed text-[#faf7f2]/90">
     Giúp mẹ thảnh thơi trọn vẹn đêm trừ tịch với <strong>Set Giao Thừa (Tem Trắng)</strong>. NEPLE đã chuẩn bị và phân định rõ ràng 2 phần lễ: mâm cúng thiên địa ngoài trời nghinh đón quan Hành khiển mới và mâm cúng gia thần tiên tổ trong nhà. Từng cặp nến đỏ bơ thực vật, vàng mã quy chuẩn đến nén hương quế thanh khiết đều sẵn sàng, giúp bạn tự tin thay mẹ hoàn thành nghi lễ trang trọng nhất năm.
@@ -655,7 +655,7 @@ Nam mô A Di Đà Phật! (3 lần)`
 <div class="callout-neple-suggest p-5 my-6 rounded-2xl bg-[#0d2931] text-[#faf7f2] border-2 border-[#f0b45b] shadow-lg">
   <div class="flex items-center gap-2 mb-2 text-[#f0b45b] font-bold text-base">
     <span>✨</span>
-    <h4>Gợi ý từ Hội Nhà Nếp:</h4>
+    <h4 style="color: #ffffff !important; margin: 0;" class="text-white">Gợi ý từ Hội Nhà Nếp:</h4>
   </div>
   <p class="text-sm leading-relaxed text-[#faf7f2]/90">
     Xóa bỏ hoàn toàn nỗi âu lo sắm thiếu lễ vật với <strong>Set Khai Xuân (Tem Đỏ)</strong>. Bộ lễ tích hợp đầy đủ vàng mã nghinh lộc, trà thơm, nến đỏ may mắn cùng tờ thiệp in sẵn bài văn khấn chữ to dễ đọc, giúp bạn tự tin làm chủ nghi thức mở đầu năm mới một cách chỉn chu, trọn vẹn phong tục.
@@ -717,7 +717,7 @@ Nam mô A Di Đà Phật! (3 lần)`
 <div class="callout-neple-suggest p-5 my-6 rounded-2xl bg-[#0d2931] text-[#faf7f2] border-2 border-[#f0b45b] shadow-lg">
   <div class="flex items-center gap-2 mb-2 text-[#f0b45b] font-bold text-base">
     <span>✨</span>
-    <h4>Gợi ý từ Hội Nhà Nếp:</h4>
+    <h4 style="color: #ffffff !important; margin: 0;" class="text-white">Gợi ý từ Hội Nhà Nếp:</h4>
   </div>
   <p class="text-sm leading-relaxed text-[#faf7f2]/90">
     Đón nhận phong cách sống an lành cùng <strong>Trọn bộ sưu tập Ready-to-Ritual (Đủ 3 Pack Tiễn Táo – Giao Thừa – Khai Xuân)</strong>. Toàn bộ ấn phẩm bao bì đều sử dụng chất liệu giấy kraft sinh học thân thiện môi trường, kết hợp cùng dòng nhang trầm quế cao cấp tự nhiên, đem đến một mùa Tết thảnh thơi, văn minh và thanh sạch cho mọi tổ ấm.

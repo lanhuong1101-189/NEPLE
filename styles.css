@@ -423,6 +423,31 @@ h1, h2, h3, .font-display {
   box-shadow: 0 2px 10px rgba(13, 41, 49, 0.05);
 }
 
+.blog-rich-content .callout-neple-suggest,
+.callout-neple-suggest {
+  background-color: #0d2931 !important;
+  color: #faf7f2 !important;
+  border: 2px solid #f0b45b !important;
+  border-radius: 1rem;
+}
+
+.blog-rich-content .callout-neple-suggest h4,
+.callout-neple-suggest h4,
+.callout-neple-suggest .flex h4,
+#adm-blog-editor .callout-neple-suggest h4 {
+  color: #ffffff !important;
+  margin: 0 !important;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.blog-rich-content .callout-neple-suggest p,
+.callout-neple-suggest p,
+#adm-blog-editor .callout-neple-suggest p {
+  color: #faf7f2 !important;
+  margin-bottom: 0 !important;
+}
+
 .blog-rich-content figure {
   margin: 1.75rem auto;
   text-align: center;

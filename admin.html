@@ -77,6 +77,11 @@
       margin-top: 1rem;
       margin-bottom: 0.4rem;
     }
+    #adm-blog-editor .callout-neple-suggest h4,
+    #adm-blog-editor .callout-neple-suggest .flex h4 {
+      color: #ffffff !important;
+      margin: 0 !important;
+    }
     #adm-blog-editor p {
       margin-bottom: 0.85rem;
     }
@@ -396,15 +401,19 @@
             this.state.blogs = JSON.parse(JSON.stringify(DEFAULT_BLOGS));
             localStorage.setItem(NEPLE_STORAGE_KEYS.BLOGS, JSON.stringify(this.state.blogs));
           } else {
-            let hasSvg = false;
+            let hasChanges = false;
             storedBlogs.forEach(b => {
               if (typeof b.coverImage === 'string' && b.coverImage.startsWith('data:image/svg+xml')) {
                 b.coverImage = '';
-                hasSvg = true;
+                hasChanges = true;
+              }
+              if (typeof b.contentHtml === 'string' && b.contentHtml.includes('<h4>Gợi ý từ Hội Nhà Nếp:</h4>')) {
+                b.contentHtml = b.contentHtml.replaceAll('<h4>Gợi ý từ Hội Nhà Nếp:</h4>', '<h4 style="color: #ffffff !important; margin: 0;" class="text-white">Gợi ý từ Hội Nhà Nếp:</h4>');
+                hasChanges = true;
               }
             });
             this.state.blogs = storedBlogs;
-            if (hasSvg) {
+            if (hasChanges) {
               localStorage.setItem(NEPLE_STORAGE_KEYS.BLOGS, JSON.stringify(this.state.blogs));
             }
           }
@@ -1386,11 +1395,12 @@
         if (!editor) return;
         editor.focus();
         const calloutHtml = `
-          <div class="nep-callout" style="margin: 1.5rem 0; padding: 1.25rem 1.5rem; border-radius: 1rem; background-color: #f4efe6; border-left: 5px solid #0d2931; box-shadow: 0 2px 8px rgba(13,41,49,0.06);">
-            <div style="font-weight: 700; color: #0d2931; margin-bottom: 0.5rem; font-size: 0.95rem; display: flex; align-items: center; gap: 0.5rem;">
-              <span>💡 Gợi ý từ Hội Nhà Nếp:</span>
+          <div class="callout-neple-suggest p-5 my-6 rounded-2xl bg-[#0d2931] text-[#faf7f2] border-2 border-[#f0b45b] shadow-lg" style="margin: 1.5rem 0; padding: 1.25rem 1.5rem; border-radius: 1rem; background-color: #0d2931; color: #faf7f2; border: 2px solid #f0b45b; box-shadow: 0 4px 14px rgba(13,41,49,0.15);">
+            <div style="font-weight: 700; color: #f0b45b; margin-bottom: 0.5rem; font-size: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+              <span>✨</span>
+              <h4 style="color: #ffffff !important; margin: 0; font-size: 1rem; font-weight: 700;" class="text-white">Gợi ý từ Hội Nhà Nếp:</h4>
             </div>
-            <p style="margin: 0; color: #333333; font-size: 0.9rem; line-height: 1.65;">
+            <p style="margin: 0; color: #faf7f2; font-size: 0.9rem; line-height: 1.65;">
               Nhập lời khuyên, mẹo nhỏ bài trí không gian hoặc gợi ý chọn hộp lễ tại đây...
             </p>
           </div>

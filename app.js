@@ -55,15 +55,19 @@ const NepleApp = {
         this.state.blogs = JSON.parse(JSON.stringify(DEFAULT_BLOGS));
         this.saveBlogs();
       } else {
-        let hasSvg = false;
+        let hasChanges = false;
         parsedBlogs.forEach(b => {
           if (typeof b.coverImage === 'string' && b.coverImage.startsWith('data:image/svg+xml')) {
             b.coverImage = '';
-            hasSvg = true;
+            hasChanges = true;
+          }
+          if (typeof b.contentHtml === 'string' && b.contentHtml.includes('<h4>Gợi ý từ Hội Nhà Nếp:</h4>')) {
+            b.contentHtml = b.contentHtml.replaceAll('<h4>Gợi ý từ Hội Nhà Nếp:</h4>', '<h4 style="color: #ffffff !important; margin: 0;" class="text-white">Gợi ý từ Hội Nhà Nếp:</h4>');
+            hasChanges = true;
           }
         });
         this.state.blogs = parsedBlogs;
-        if (hasSvg) {
+        if (hasChanges) {
           this.saveBlogs();
         }
       }
