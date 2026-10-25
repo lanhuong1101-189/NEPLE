@@ -508,7 +508,7 @@ const DEFAULT_BLOGS = [
     publishedAt: '2026-01-10',
     author: 'Ban Biên Tập Hội Nhà Nếp',
     excerpt: 'Không có sập gụ tủ chè, cũng chẳng có bàn thờ gia tiên bề thế, những căn phòng trọ hay căn hộ studio của người trẻ xa quê vẫn có cách riêng để nếp nhà hiện diện thật ấm cúng giữa lòng phố thị.',
-    coverImage: generatePackagingSVG('single', 'HỘI NHÀ NẾP', 'Bài Trí Góc An Yên Phòng Trọ Đô Thị', '#0d2931', 'GÓC AN YÊN', ['Tiễn Táo']),
+    coverImage: '',
     tags: ['phòng trọ', 'cúng ông táo', 'không gian tối giản', 'tết xa nhà'],
     seo: {
       metaTitle: 'Bài Trí Bàn Lễ Cúng Tết Tại Phòng Trọ Đô Thị Tinh Gọn | NEPLE',
@@ -568,7 +568,7 @@ Nam mô A Di Đà Phật! (3 lần)`
     publishedAt: '2026-01-14',
     author: 'Ban Biên Tập Hội Nhà Nếp',
     excerpt: 'Có những mùa Tết đi qua, ký ức đọng lại sâu nhất không phải là tiếng pháo hoa hay những bộ quần áo mới, mà là bóng lưng mẹ tất bật trong gian bếp từ tờ mờ sáng ngày 30.',
-    coverImage: generatePackagingSVG('single', 'HỘI NHÀ NẾP', 'Đỡ Đần Mẹ Ngày Giáp Tết', '#691727', 'ĐỠ ĐẦN MẸ', ['Giao Thừa']),
+    coverImage: '',
     tags: ['đỡ đần mẹ', 'ngày 30 tết', 'cúng giao thừa', 'trưởng thành'],
     seo: {
       metaTitle: 'Mẹ Nghỉ Tay Đi Năm Nay Để Con Lo Ngày Tết | NEPLE',
@@ -627,7 +627,7 @@ Nam mô A Di Đà Phật! (3 lần)`
     publishedAt: '2026-01-18',
     author: 'Ban Biên Tập Hội Nhà Nếp',
     excerpt: 'Đứng trước bàn thờ gia tiên ngày đầu năm, nhiều người trẻ mang tâm lý e dè: Sợ đọc văn khấn vấp, sợ đặt sai vị trí đồ lễ, sợ sơ suất làm mất đi vượng khí đầu xuân.',
-    coverImage: generatePackagingSVG('single', 'HỘI NHÀ NẾP', 'Làm Chủ Lễ Mùng 1 Khai Xuân', '#a94025', 'KHAI XUÂN', ['Khai Xuân']),
+    coverImage: '',
     tags: ['cúng mùng 1', 'văn khấn khai xuân', 'giải mã nghi lễ', 'gen z'],
     seo: {
       metaTitle: 'Lần Đầu Làm Chủ Lễ Mùng 1: Giữ Trọn Lòng Thành Không Sợ Sai | NEPLE',
@@ -685,7 +685,7 @@ Nam mô A Di Đà Phật! (3 lần)`
     publishedAt: '2026-01-21',
     author: 'Ban Biên Tập Hội Nhà Nếp',
     excerpt: 'Làm sao để vừa vẹn tròn đạo hiếu với tổ tiên, vừa bảo vệ môi trường sống và không gian sinh hoạt của các gia đình đô thị? Câu trả lời nằm ở tư duy "nghi lễ tinh gọn".',
-    coverImage: generatePackagingSVG('triple', 'HỘI NHÀ NẾP', 'Hành Lễ Văn Minh Sống Xanh', '#72826f', 'SỐNG XANH', ['Tiễn Táo', 'Giao Thừa', 'Khai Xuân']),
+    coverImage: '',
     tags: ['sống xanh', 'nghi lễ văn minh', 'ít khói', 'bền vững'],
     seo: {
       metaTitle: 'Hành Lễ Văn Minh: Phong Tục Nghìn Năm Cùng Phong Cách Sống Xanh | NEPLE',

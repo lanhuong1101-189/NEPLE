@@ -55,7 +55,17 @@ const NepleApp = {
         this.state.blogs = JSON.parse(JSON.stringify(DEFAULT_BLOGS));
         this.saveBlogs();
       } else {
+        let hasSvg = false;
+        parsedBlogs.forEach(b => {
+          if (typeof b.coverImage === 'string' && b.coverImage.startsWith('data:image/svg+xml')) {
+            b.coverImage = '';
+            hasSvg = true;
+          }
+        });
         this.state.blogs = parsedBlogs;
+        if (hasSvg) {
+          this.saveBlogs();
+        }
       }
 
       const savedOrders = localStorage.getItem(NEPLE_STORAGE_KEYS.ORDERS);
@@ -1290,7 +1300,7 @@ const NepleApp = {
 
         <!-- Cover Image nếu có -->
         ${
-          blog.coverImage
+          blog.coverImage && blog.coverImage.trim() !== ''
             ? `
           <div class="mt-6 rounded-2xl overflow-hidden shadow-md max-h-[460px] border border-[#ae9984]/30">
             <img src="${blog.coverImage}" alt="${blog.title}" class="w-full h-full object-cover" />
@@ -2866,7 +2876,7 @@ const NepleApp = {
       publishedAt: new Date().toISOString().slice(0, 10),
       author: 'Ban Biên Tập Nếp Lễ',
       excerpt: 'Hướng dẫn chuẩn bị mâm lễ Tết tinh gọn, hiện đại dành cho gia đình trẻ.',
-      coverImage: generatePackagingSVG('single', 'CẨM NANG NẾP LỄ', 'Bài Viết Văn Hóa Tết Mới', '#0d2931', 'CẨM NANG MỚI', ['Nếp Lễ']),
+      coverImage: '',
       relatedProductId: 'combo-tron-tet',
       tags: ['nếp lễ', 'cẩm nang tết'],
       seo: {

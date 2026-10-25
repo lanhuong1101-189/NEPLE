@@ -396,7 +396,17 @@
             this.state.blogs = JSON.parse(JSON.stringify(DEFAULT_BLOGS));
             localStorage.setItem(NEPLE_STORAGE_KEYS.BLOGS, JSON.stringify(this.state.blogs));
           } else {
+            let hasSvg = false;
+            storedBlogs.forEach(b => {
+              if (typeof b.coverImage === 'string' && b.coverImage.startsWith('data:image/svg+xml')) {
+                b.coverImage = '';
+                hasSvg = true;
+              }
+            });
             this.state.blogs = storedBlogs;
+            if (hasSvg) {
+              localStorage.setItem(NEPLE_STORAGE_KEYS.BLOGS, JSON.stringify(this.state.blogs));
+            }
           }
           this.state.orders = JSON.parse(localStorage.getItem(NEPLE_STORAGE_KEYS.ORDERS)) || JSON.parse(JSON.stringify(DEFAULT_ORDERS));
           const parsedSettings = JSON.parse(localStorage.getItem(NEPLE_STORAGE_KEYS.SETTINGS)) || {};
@@ -1122,13 +1132,14 @@
 
                       <div class="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
                         <div class="w-32 h-20 rounded-xl overflow-hidden bg-white border border-[#ae9984] shrink-0 shadow-inner flex items-center justify-center">
-                          <img id="adm-blog-cover-preview" src="${blog.coverImage || ''}" alt="Cover Preview" class="w-full h-full object-cover" onerror="this.src='logo.png?v=2'" />
+                          <img id="adm-blog-cover-preview" src="${blog.coverImage || ''}" alt="Cover Preview" class="w-full h-full object-cover ${(blog.coverImage && blog.coverImage.trim()) ? '' : 'hidden'}" />
+                          <span id="adm-blog-cover-placeholder" class="text-[11px] text-[#ae9984] text-center px-2 font-medium ${(blog.coverImage && blog.coverImage.trim()) ? 'hidden' : ''}">Chưa có ảnh bìa</span>
                         </div>
 
                         <div class="flex-1 w-full space-y-2">
                           <input type="text" id="adm-blog-cover-input" value="${blog.coverImage || ''}"
-                            placeholder="Dán link ảnh bìa (URL) hoặc tải ảnh bên dưới..."
-                            oninput="document.getElementById('adm-blog-cover-preview').src = this.value"
+                            placeholder="Dán link ảnh bìa (URL) hoặc tải ảnh bên dưới (Để trống nếu không dùng ảnh)..."
+                            oninput="AdminPortal.updateCoverPreview(this.value)"
                             class="w-full px-3 py-2 rounded-xl border border-[#ae9984] bg-white text-xs" />
 
                           <div class="flex flex-wrap gap-2">
@@ -1136,9 +1147,9 @@
                               <span>📁 Tải ảnh từ máy tính</span>
                               <input type="file" accept="image/*" class="hidden" onchange="AdminPortal.handleCoverImageUpload(event)" />
                             </label>
-                            <button type="button" onclick="AdminPortal.setDefaultCoverImage()"
-                              class="px-3 py-2 rounded-xl bg-white border border-[#ae9984] text-xs font-bold text-[#0d2931] hover:bg-[#efe9e0] transition">
-                              🖼 Dùng ảnh bìa hộp lễ mặc định
+                            <button type="button" onclick="AdminPortal.clearCoverImage()"
+                              class="px-3 py-2 rounded-xl bg-white border border-red-300 text-xs font-bold text-red-600 hover:bg-red-50 transition">
+                              ✕ Xóa ảnh bìa (Không dùng ảnh)
                             </button>
                           </div>
                         </div>
@@ -1458,27 +1469,41 @@
         this.showToast('Đã chèn ảnh vào nội dung bài viết!');
       },
 
+      updateCoverPreview(val) {
+        const preview = document.getElementById('adm-blog-cover-preview');
+        const placeholder = document.getElementById('adm-blog-cover-placeholder');
+        const trimmed = (val || '').trim();
+        if (preview && placeholder) {
+          if (trimmed) {
+            preview.src = trimmed;
+            preview.classList.remove('hidden');
+            placeholder.classList.add('hidden');
+          } else {
+            preview.src = '';
+            preview.classList.add('hidden');
+            placeholder.classList.remove('hidden');
+          }
+        }
+      },
+
       handleCoverImageUpload(event) {
         const file = event.target.files?.[0];
         if (!file) return;
         const reader = new FileReader();
         reader.onload = () => {
           const input = document.getElementById('adm-blog-cover-input');
-          const preview = document.getElementById('adm-blog-cover-preview');
           if (input) input.value = reader.result;
-          if (preview) preview.src = reader.result;
+          this.updateCoverPreview(reader.result);
           this.showToast('Đã nạp ảnh bìa bài viết mới!');
         };
         reader.readAsDataURL(file);
       },
 
-      setDefaultCoverImage() {
+      clearCoverImage() {
         const input = document.getElementById('adm-blog-cover-input');
-        const preview = document.getElementById('adm-blog-cover-preview');
-        const defaultImg = generatePackagingSVG('single', 'CẨM NANG NẾP LỄ', 'NEPLE Gifting', '#0d2931', 'CẨM NANG TẾT', ['Nếp Lễ']);
-        if (input) input.value = defaultImg;
-        if (preview) preview.src = defaultImg;
-        this.showToast('Đã đặt lại ảnh bìa bao bì mặc định!');
+        if (input) input.value = '';
+        this.updateCoverPreview('');
+        this.showToast('Đã xóa ảnh bìa (Không dùng ảnh)!');
       },
 
       toggleHtmlSourceMode() {
@@ -1523,7 +1548,9 @@
         const currentTitle = document.getElementById('adm-blog-title')?.value || blog.title;
         const currentCategory = document.getElementById('adm-blog-cat')?.value || blog.category;
         const currentExcerpt = document.getElementById('adm-blog-excerpt')?.value || blog.excerpt;
-        const currentCover = document.getElementById('adm-blog-cover-input')?.value || blog.coverImage;
+        const currentCover = (document.getElementById('adm-blog-cover-input')?.value !== undefined
+          ? document.getElementById('adm-blog-cover-input').value
+          : (blog.coverImage || '')).trim();
         const currentPackName = document.getElementById('adm-blog-pack-name')?.value || blog.linkedPackName;
         const currentPrayerTitle = document.getElementById('adm-blog-prayer-title')?.value || blog.prayerTitle;
         const currentPrayer = document.getElementById('adm-blog-prayer')?.value || blog.prayerText;
@@ -1615,7 +1642,7 @@
           publishedAt: new Date().toISOString().slice(0, 10),
           author: this.state.currentUser ? this.state.currentUser.name : 'Ban Biên Tập NEPLE',
           excerpt: 'Sapo mở đầu giới thiệu bài viết cẩm nang Tết ấm áp, tinh gọn cho người trẻ.',
-          coverImage: generatePackagingSVG('single', 'CẨM NANG NẾP LỄ', 'Bài viết mới', '#0d2931', 'CẨM NANG', ['Nếp Lễ']),
+          coverImage: '',
           contentHtml: `
             <h3>1. Đặt vấn đề và cảm hứng nếp xưa</h3>
             <p>Nội dung đoạn mở đầu giới thiệu về chủ đề...</p>
@@ -1657,7 +1684,8 @@
         blog.relatedProductId = document.getElementById('adm-blog-prod').value;
         blog.slug = document.getElementById('adm-blog-slug').value.trim().replace(/^\/+/, '');
         blog.excerpt = document.getElementById('adm-blog-excerpt').value.trim();
-        blog.coverImage = document.getElementById('adm-blog-cover-input')?.value.trim() || blog.coverImage;
+        const coverInput = document.getElementById('adm-blog-cover-input');
+        blog.coverImage = coverInput ? coverInput.value.trim() : (blog.coverImage || '');
 
         // Lưu nội dung từ Editor trực quan hoặc ô mã nguồn HTML
         const editor = document.getElementById('adm-blog-editor');
