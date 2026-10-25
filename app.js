@@ -1108,20 +1108,15 @@ const NepleApp = {
       ? 'w-[280px] sm:w-[330px] md:w-[360px] shrink-0' 
       : 'w-full';
 
-    const displayCode = blog.articleCode ? blog.articleCode.split(':')[0] : '';
-
     return `
       <article onclick="NepleApp.switchView('cam-nang'); NepleApp.openBlogArticle('${blog.id}')"
         class="paper-card rounded-2xl overflow-hidden flex flex-col justify-between p-5 sm:p-6 cursor-pointer group hover:-translate-y-1.5 transition-all duration-300 shadow-md hover:shadow-xl border border-[#ae9984]/30 select-none ${cardWidthClass}">
         <div>
-          <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
-            <div class="flex items-center gap-1.5 flex-wrap">
-              ${displayCode ? `<span class="px-2.5 py-0.5 rounded-full bg-[#691727] text-white text-[10px] font-black uppercase">${displayCode}</span>` : ''}
-              <span class="px-3 py-1 rounded-full bg-[#72826f] text-white text-[11px] font-semibold">
-                ${blog.category}
-              </span>
-            </div>
-            ${blog.linkedPackName ? `<span class="px-2.5 py-0.5 rounded-full bg-[#f0b45b]/30 text-[#0d2931] text-[11px] font-bold">📦 ${blog.linkedPackName}</span>` : (blog.prayerText ? `<span class="px-2.5 py-0.5 rounded-full bg-[#f0b45b]/30 text-[#0d2931] text-[11px] font-bold">Có Văn Khấn</span>` : '')}
+          <div class="flex items-center justify-between gap-2 mb-3">
+            <span class="px-3 py-1 rounded-full bg-[#72826f] text-white text-[11px] font-semibold">
+              ${blog.category}
+            </span>
+            ${blog.prayerText ? `<span class="px-2.5 py-0.5 rounded-full bg-[#f0b45b]/30 text-[#0d2931] text-[11px] font-bold">Có Văn Khấn</span>` : ''}
           </div>
 
           <h3 class="font-bevietnam-bold text-lg sm:text-xl text-[#0d2931] group-hover:text-[#691727] transition-colors leading-snug">
@@ -1225,7 +1220,6 @@ const NepleApp = {
     }
 
     const relatedProduct = this.state.products.find(p => p.id === blog.relatedProductId) || this.state.products[0];
-    const displayCode = blog.articleCode ? blog.articleCode.split(':')[0] : '';
 
     // Auto extract headings for Table of Contents if available
     let headings = [];
@@ -1260,9 +1254,7 @@ const NepleApp = {
         <!-- Top bar của bài đọc -->
         <div class="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-[#ae9984]/40">
           <div class="flex items-center gap-2 flex-wrap">
-            ${displayCode ? `<span class="px-2.5 py-0.5 rounded-full bg-[#691727] text-white text-[10px] font-black uppercase">${displayCode}</span>` : ''}
             <span class="px-3 py-1 rounded-full bg-[#72826f] text-white text-xs font-bold">${blog.category}</span>
-            ${blog.linkedPackName ? `<span class="px-3 py-1 rounded-full bg-[#f0b45b]/30 text-[#0d2931] text-xs font-bold">📦 Pack: ${blog.linkedPackName}</span>` : ''}
             <span class="text-xs text-[#0d2931]/60">📅 ${blog.publishedAt} • ⏱ ${blog.readTime || '4 phút đọc'}</span>
           </div>
           <button onclick="NepleApp.closeBlogArticle()" class="px-3.5 py-1.5 rounded-xl bg-[#efe9e0] hover:bg-[#0d2931] hover:text-white text-xs font-bold transition">
