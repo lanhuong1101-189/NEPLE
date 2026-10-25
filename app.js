@@ -1411,9 +1411,6 @@ const NepleApp = {
         `
             : ''
         }
-      </div>
-    `;
-  },
 
         <!-- SEO Metadata & JSON-LD Schema Preview -->
         <details class="mt-6 rounded-xl bg-[#f4efe6] p-4 border border-[#ae9984]/50 text-xs">
