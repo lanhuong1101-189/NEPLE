@@ -1066,7 +1066,7 @@ const NepleApp = {
                   ${matchedBlogs
                     .map(
                       b => `
-                    <div onclick="NepleApp.switchView('cam-nang'); NepleApp.openBlogArticle('${b.id}'); document.getElementById('${resultContainerId}').classList.add('hidden');"
+                    <div onclick="NepleApp.openBlogArticle('${b.id}'); document.getElementById('${resultContainerId}').classList.add('hidden');"
                          class="p-2.5 rounded-xl bg-[#faf7f2] hover:bg-[#efe9e0] border border-[#ae9984]/40 cursor-pointer transition">
                       <span class="inline-block px-2 py-0.5 rounded bg-[#72826f] text-white text-[10px] font-semibold mb-1">${b.category}</span>
                       <div class="text-xs sm:text-sm font-bold text-[#0d2931] line-clamp-1">${b.title}</div>
@@ -1109,7 +1109,7 @@ const NepleApp = {
       : 'w-full';
 
     return `
-      <article onclick="NepleApp.switchView('cam-nang'); NepleApp.openBlogArticle('${blog.id}')"
+      <article onclick="NepleApp.openBlogArticle('${blog.id}')"
         class="paper-card rounded-2xl overflow-hidden flex flex-col justify-between p-5 sm:p-6 cursor-pointer group hover:-translate-y-1.5 transition-all duration-300 shadow-md hover:shadow-xl border border-[#ae9984]/30 select-none ${cardWidthClass}">
         <div>
           <div class="flex items-center justify-between gap-2 mb-3">
@@ -1183,11 +1183,16 @@ const NepleApp = {
 
   openBlogArticle(blogId) {
     this.state.activeBlogId = blogId;
+    if (this.state.activeView !== 'cam-nang') {
+      this.switchView('cam-nang', false);
+    }
     this.renderActiveBlogArticle();
     const reader = document.getElementById('blog-reader-mount');
     if (reader) {
       reader.classList.remove('hidden');
-      setTimeout(() => reader.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+      setTimeout(() => {
+        reader.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 80);
     }
   },
 
@@ -1220,6 +1225,15 @@ const NepleApp = {
     }
 
     const relatedProduct = this.state.products.find(p => p.id === blog.relatedProductId) || this.state.products[0];
+    const jsonLd = {
+      '@context': 'https://schema.org',
+      '@type': 'Article',
+      headline: blog.seo?.metaTitle || blog.title,
+      description: blog.seo?.metaDescription || blog.excerpt,
+      author: { '@type': 'Organization', name: 'NEPLE (Nếp Lễ)' },
+      datePublished: blog.publishedAt,
+      mainEntityOfPage: `https://neple.vn/cam-nang/${blog.slug}`
+    };
 
     // Auto extract headings for Table of Contents if available
     let headings = [];
