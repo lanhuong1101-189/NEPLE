@@ -42,12 +42,39 @@ const NepleApp = {
   loadState() {
     try {
       const savedProducts = localStorage.getItem(NEPLE_STORAGE_KEYS.PRODUCTS);
-      this.state.products = (savedProducts ? JSON.parse(savedProducts) : JSON.parse(JSON.stringify(DEFAULT_PRODUCTS))).map(p => ({
-        ...p,
-        name: (p.name || '').replace(/^Pack\s+/i, ''),
-        image: typeof p.image === 'string' && p.image.startsWith('data:image/svg+xml') ? p.image.replace(/PACK%20/gi, '') : p.image,
-        gifts: (p.gifts || []).map(g => g.replace(/^[🎁✨💡👑★•\s]+/u, ''))
-      }));
+      const defaultCosts = {
+        'pack-tien-tao': 85000,
+        'pack-giao-thua': 65000,
+        'pack-khai-xuan': 60000,
+        'combo-ven-nep': 105000,
+        'combo-song-xuan': 80000,
+        'combo-mo-tet': 95000,
+        'combo-tron-tet': 145000
+      };
+      const defaultStocks = {
+        'pack-tien-tao': { stock: 45, imp: 60, exp: 15 },
+        'pack-giao-thua': { stock: 38, imp: 50, exp: 12 },
+        'pack-khai-xuan': { stock: 42, imp: 55, exp: 13 },
+        'combo-ven-nep': { stock: 28, imp: 40, exp: 12 },
+        'combo-song-xuan': { stock: 25, imp: 35, exp: 10 },
+        'combo-mo-tet': { stock: 22, imp: 32, exp: 10 },
+        'combo-tron-tet': { stock: 32, imp: 50, exp: 18 }
+      };
+
+      this.state.products = (savedProducts ? JSON.parse(savedProducts) : JSON.parse(JSON.stringify(DEFAULT_PRODUCTS))).map(p => {
+        const defS = defaultStocks[p.id] || { stock: 30, imp: 40, exp: 10 };
+        return {
+          ...p,
+          name: (p.name || '').replace(/^Pack\s+/i, ''),
+          costPrice: p.costPrice !== undefined ? Number(p.costPrice) : (defaultCosts[p.id] || 80000),
+          stockQuantity: p.stockQuantity !== undefined ? Number(p.stockQuantity) : defS.stock,
+          totalImported: p.totalImported !== undefined ? Number(p.totalImported) : defS.imp,
+          totalExported: p.totalExported !== undefined ? Number(p.totalExported) : defS.exp,
+          minAlert: p.minAlert !== undefined ? Number(p.minAlert) : 10,
+          image: typeof p.image === 'string' && p.image.startsWith('data:image/svg+xml') ? p.image.replace(/PACK%20/gi, '') : p.image,
+          gifts: (p.gifts || []).map(g => g.replace(/^[🎁✨💡👑★•\s]+/u, ''))
+        };
+      });
 
       const savedBlogs = localStorage.getItem(NEPLE_STORAGE_KEYS.BLOGS);
       const parsedBlogs = savedBlogs ? JSON.parse(savedBlogs) : null;
@@ -2119,6 +2146,40 @@ const NepleApp = {
     // Save order immediately so Admin has full order + QR payment info
     this.state.orders.unshift(newOrder);
     this.saveOrders();
+
+    // Tự động trừ tồn kho và ghi nhật ký xuất kho
+    if (Array.isArray(this.state.products)) {
+      let productsChanged = false;
+      const invLogsKey = 'neple_inventory_logs_v1';
+      const invLogs = JSON.parse(localStorage.getItem(invLogsKey) || '[]');
+      (newOrder.items || []).forEach(item => {
+        const prod = this.state.products.find(p => p.id === item.id);
+        if (prod) {
+          const buyQty = Number(item.qty || 1);
+          prod.stockQuantity = Math.max(0, (prod.stockQuantity !== undefined ? prod.stockQuantity : 50) - buyQty);
+          prod.totalExported = (prod.totalExported || 0) + buyQty;
+          productsChanged = true;
+          invLogs.unshift({
+            id: 'log-' + Date.now() + '-' + Math.floor(Math.random() * 1000),
+            time: new Date().toLocaleString('vi-VN'),
+            type: 'EXPORT_ORDER',
+            skuId: prod.id,
+            skuName: prod.name,
+            qty: buyQty,
+            costPrice: prod.costPrice || 0,
+            totalCost: (prod.costPrice || 0) * buyQty,
+            note: `Xuất tự động cho đơn hàng ${newOrder.id} (${newOrder.customerName})`,
+            actor: 'Khách mua qua Web'
+          });
+        }
+      });
+      if (productsChanged) {
+        this.saveProducts();
+        try {
+          localStorage.setItem(invLogsKey, JSON.stringify(invLogs.slice(0, 100)));
+        } catch (e) {}
+      }
+    }
 
     // Đồng bộ đơn hàng mới tức thì lên Google Sheets nếu đã cấu hình
     if (this.state.settings?.googleSheets?.syncUrl) {

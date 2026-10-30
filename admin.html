@@ -331,6 +331,81 @@
     </div>
   </div>
 
+  <!-- MODAL: GIAO DỊCH KHO & DÒNG VỐN (NHẬP / XUẤT / ĐIỀU CHỈNH) -->
+  <div id="adm-stock-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/75 backdrop-blur-sm">
+    <div class="w-full max-w-lg rounded-3xl bg-[#fffdf9] border-2 border-[#f0b45b] shadow-2xl overflow-hidden animate-fade-in">
+      <div class="p-4 sm:p-5 bg-[#0d2931] text-[#faf7f2] flex items-center justify-between gap-3">
+        <div class="flex items-center gap-2">
+          <span id="adm-stock-modal-badge" class="px-2.5 py-0.5 rounded-full bg-[#f0b45b] text-[#0d2931] text-[10px] font-black uppercase">KHO &amp; VỐN</span>
+          <h3 id="adm-stock-modal-title" class="font-bevietnam-bold text-base sm:text-lg font-bold text-white">Phiếu Giao Dịch Kho</h3>
+        </div>
+        <button onclick="AdminPortal.closeStockModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-[#691727] hover:text-white transition flex items-center justify-center text-xs">✕</button>
+      </div>
+
+      <form id="adm-stock-form" onsubmit="AdminPortal.submitStockTransaction(event)" class="p-5 sm:p-6 space-y-4 text-xs sm:text-sm">
+        <input type="hidden" id="adm-stock-type" value="IMPORT" />
+
+        <!-- Tab chọn loại giao dịch trong modal nếu mở chung -->
+        <div class="grid grid-cols-3 gap-1.5 p-1 rounded-xl bg-[#efe9e0] border border-[#ae9984]">
+          <button type="button" onclick="AdminPortal.switchStockModalType('IMPORT')" id="adm-btn-tab-import" class="py-1.5 px-2 rounded-lg text-xs font-bold transition text-center bg-[#0d2931] text-[#f0b45b]">
+            📥 Nhập Hàng
+          </button>
+          <button type="button" onclick="AdminPortal.switchStockModalType('EXPORT_MANUAL')" id="adm-btn-tab-export" class="py-1.5 px-2 rounded-lg text-xs font-bold transition text-center text-[#0d2931] hover:bg-white/60">
+            📤 Xuất Mẫu/Hủy
+          </button>
+          <button type="button" onclick="AdminPortal.switchStockModalType('ADJUST_COST')" id="adm-btn-tab-cost" class="py-1.5 px-2 rounded-lg text-xs font-bold transition text-center text-[#0d2931] hover:bg-white/60">
+            ✏️ Sửa Vốn/Báo Động
+          </button>
+        </div>
+
+        <!-- Chọn SKU -->
+        <div>
+          <label class="block font-bold text-[#0d2931] mb-1">Hộp Lễ Thao Tác (1 trong 7 SKU):</label>
+          <select id="adm-stock-sku-select" onchange="AdminPortal.onStockProductSelectChange()" required class="w-full px-3.5 py-2.5 rounded-xl border border-[#ae9984] bg-white text-xs sm:text-sm font-semibold text-[#0d2931]">
+            <!-- Render dynamically -->
+          </select>
+          <div id="adm-stock-current-info" class="mt-1 text-[11px] text-[#72826f] font-medium"></div>
+        </div>
+
+        <!-- Trường số lượng biến động (ẩn khi chỉ sửa vốn) -->
+        <div id="adm-stock-field-qty">
+          <label id="adm-stock-label-qty" class="block font-bold text-[#0d2931] mb-1">Số lượng hộp nhập thêm (+):</label>
+          <input type="number" id="adm-stock-input-qty" min="1" step="1" value="10" class="w-full px-3.5 py-2.5 rounded-xl border border-[#ae9984] bg-white text-xs sm:text-sm font-bold text-[#0d2931]" />
+          <p id="adm-stock-hint-qty" class="text-[11px] text-[#0d2931]/60 mt-1">Cộng dồn vào số lượng tồn kho thực tế.</p>
+        </div>
+
+        <!-- Trường giá vốn nhập (hiện khi nhập hoặc sửa vốn) -->
+        <div id="adm-stock-field-cost">
+          <label class="block font-bold text-[#0d2931] mb-1">Đơn Giá Vốn Sản Xuất/Nhập (VNĐ / Hộp):</label>
+          <input type="number" id="adm-stock-input-cost" min="0" step="1000" class="w-full px-3.5 py-2.5 rounded-xl border border-[#ae9984] bg-white text-xs sm:text-sm font-bold text-[#691727]" />
+          <p class="text-[11px] text-[#0d2931]/60 mt-1">Dùng để tính tổng vốn nhập và lợi nhuận gộp.</p>
+        </div>
+
+        <!-- Trường định mức cảnh báo tối thiểu (hiện khi sửa vốn & cảnh báo) -->
+        <div id="adm-stock-field-alert" class="hidden">
+          <label class="block font-bold text-[#0d2931] mb-1">Định Mức Tồn Tối Thiểu Để Báo Động (Hộp):</label>
+          <input type="number" id="adm-stock-input-alert" min="1" step="1" value="10" class="w-full px-3.5 py-2.5 rounded-xl border border-[#ae9984] bg-white text-xs sm:text-sm" />
+          <p class="text-[11px] text-[#0d2931]/60 mt-1">Khi tồn kho dưới hoặc bằng số này, hệ thống sẽ hiện cảnh báo màu vàng.</p>
+        </div>
+
+        <!-- Lý do / Ghi chú -->
+        <div>
+          <label id="adm-stock-label-note" class="block font-bold text-[#0d2931] mb-1">Ghi Chú Đợt Giao Dịch:</label>
+          <input type="text" id="adm-stock-input-note" placeholder="VD: Xưởng giao lô 02 - 50 hộp, giấy dó hoàn thiện" class="w-full px-3.5 py-2.5 rounded-xl border border-[#ae9984] bg-white text-xs sm:text-sm" />
+        </div>
+
+        <div class="flex items-center justify-end gap-2 pt-3 border-t border-[#ae9984]/30">
+          <button type="button" onclick="AdminPortal.closeStockModal()" class="px-4 py-2.5 rounded-xl bg-[#efe9e0] hover:bg-[#ae9984]/30 text-xs font-bold text-[#0d2931] transition">
+            Hủy Bỏ
+          </button>
+          <button type="submit" id="adm-stock-btn-submit" class="px-5 py-2.5 rounded-xl bg-[#0d2931] hover:bg-[#163d48] text-[#f0b45b] text-xs font-bold transition shadow-md">
+            Xác Nhận Lưu Giao Dịch
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <script src="data.js"></script>
   <script>
     const STAFF_STORAGE_KEY = 'neple_staff_accounts_v1';
@@ -345,16 +420,16 @@
         password: 'Neple@2026',
         role: 'SUPER_ADMIN',
         roleLabel: 'Super Admin (Toàn quyền)',
-        allowedTabs: ['orders', 'products', 'blogs', 'settings', 'staff', 'optimize']
+        allowedTabs: ['orders', 'inventory', 'products', 'blogs', 'settings', 'staff', 'optimize']
       },
       {
         id: 'staff-2',
-        name: 'Chuyên Viên Vận Hành Đơn Hàng',
+        name: 'Chuyên Viên Vận Hành & Kho',
         email: 'vanhanh@neple.vn',
         password: 'Vanhanh@2026',
         role: 'OPERATIONS',
-        roleLabel: 'Nhân viên Vận hành',
-        allowedTabs: ['orders']
+        roleLabel: 'Nhân viên Vận hành & Kho',
+        allowedTabs: ['orders', 'inventory']
       },
       {
         id: 'staff-3',
@@ -378,7 +453,9 @@
         orders: [],
         settings: {},
         staffList: [],
-        auditLogs: []
+        auditLogs: [],
+        inventoryLogs: [],
+        inventoryFilter: 'ALL'
       },
 
       init() {
@@ -395,7 +472,38 @@
 
       loadData() {
         try {
-          this.state.products = (JSON.parse(localStorage.getItem(NEPLE_STORAGE_KEYS.PRODUCTS)) || JSON.parse(JSON.stringify(DEFAULT_PRODUCTS))).map(p => ({ ...p, name: (p.name || '').replace(/^Pack\s+/i, '') }));
+          const defaultCosts = {
+            'pack-tien-tao': 85000,
+            'pack-giao-thua': 65000,
+            'pack-khai-xuan': 60000,
+            'combo-ven-nep': 105000,
+            'combo-song-xuan': 80000,
+            'combo-mo-tet': 95000,
+            'combo-tron-tet': 145000
+          };
+          const defaultStocks = {
+            'pack-tien-tao': { stock: 45, imp: 60, exp: 15 },
+            'pack-giao-thua': { stock: 38, imp: 50, exp: 12 },
+            'pack-khai-xuan': { stock: 42, imp: 55, exp: 13 },
+            'combo-ven-nep': { stock: 28, imp: 40, exp: 12 },
+            'combo-song-xuan': { stock: 25, imp: 35, exp: 10 },
+            'combo-mo-tet': { stock: 22, imp: 32, exp: 10 },
+            'combo-tron-tet': { stock: 32, imp: 50, exp: 18 }
+          };
+
+          this.state.products = (JSON.parse(localStorage.getItem(NEPLE_STORAGE_KEYS.PRODUCTS)) || JSON.parse(JSON.stringify(DEFAULT_PRODUCTS))).map(p => {
+            const defS = defaultStocks[p.id] || { stock: 30, imp: 40, exp: 10 };
+            return {
+              ...p,
+              name: (p.name || '').replace(/^Pack\s+/i, ''),
+              costPrice: p.costPrice !== undefined ? Number(p.costPrice) : (defaultCosts[p.id] || 80000),
+              stockQuantity: p.stockQuantity !== undefined ? Number(p.stockQuantity) : defS.stock,
+              totalImported: p.totalImported !== undefined ? Number(p.totalImported) : defS.imp,
+              totalExported: p.totalExported !== undefined ? Number(p.totalExported) : defS.exp,
+              minAlert: p.minAlert !== undefined ? Number(p.minAlert) : 10
+            };
+          });
+
           const storedBlogs = JSON.parse(localStorage.getItem(NEPLE_STORAGE_KEYS.BLOGS));
           if (!storedBlogs || !Array.isArray(storedBlogs) || storedBlogs.length === 0 || !storedBlogs[0].contentHtml || storedBlogs.some(b => b.id === 'blog-cung-ong-tao-chung-cu')) {
             this.state.blogs = JSON.parse(JSON.stringify(DEFAULT_BLOGS));
@@ -438,12 +546,29 @@
           this.state.staffList = (JSON.parse(localStorage.getItem(STAFF_STORAGE_KEY)) || JSON.parse(JSON.stringify(DEFAULT_STAFF_ACCOUNTS))).map(st => {
             if (st.role === 'SUPER_ADMIN' || (st.allowedTabs && st.allowedTabs.includes('settings'))) {
               if (!st.allowedTabs.includes('optimize')) st.allowedTabs.push('optimize');
+              if (!st.allowedTabs.includes('inventory')) st.allowedTabs.push('inventory');
+            }
+            if (st.role === 'OPERATIONS') {
+              if (!st.allowedTabs.includes('inventory')) st.allowedTabs.push('inventory');
             }
             return st;
           });
           this.state.auditLogs = JSON.parse(localStorage.getItem(AUDIT_STORAGE_KEY)) || [
             { time: new Date().toLocaleString('vi-VN'), actor: 'Hệ thống', action: 'Khởi tạo cổng quản trị nội bộ NEPLE' }
           ];
+
+          const defaultInvLogs = [
+            { id: 'log-1', time: '2026-01-10 08:30', type: 'IMPORT', skuId: 'pack-tien-tao', skuName: 'Tiễn Táo (23 Chạp)', qty: 60, costPrice: 85000, totalCost: 5100000, note: 'Khởi tạo lô 01 xưởng giấy dó & thảo mộc', actor: 'Hệ thống' },
+            { id: 'log-2', time: '2026-01-10 09:00', type: 'IMPORT', skuId: 'pack-giao-thua', skuName: 'Giao Thừa (Đêm 30)', qty: 50, costPrice: 65000, totalCost: 3250000, note: 'Khởi tạo lô 01 xưởng giấy dó & thảo mộc', actor: 'Hệ thống' },
+            { id: 'log-3', time: '2026-01-10 09:30', type: 'IMPORT', skuId: 'pack-khai-xuan', skuName: 'Khai Xuân (Mùng 1)', qty: 55, costPrice: 60000, totalCost: 3300000, note: 'Khởi tạo lô 01 xưởng giấy dó & thảo mộc', actor: 'Hệ thống' },
+            { id: 'log-4', time: '2026-01-11 10:00', type: 'IMPORT', skuId: 'combo-ven-nep', skuName: 'Combo Vạn Nếp [1+2]', qty: 40, costPrice: 105000, totalCost: 4200000, note: 'Đóng hộp đôi 2 ngăn hoàn thiện lô 01', actor: 'Hệ thống' },
+            { id: 'log-5', time: '2026-01-11 10:30', type: 'IMPORT', skuId: 'combo-song-xuan', skuName: 'Combo Song Xuân [2+3]', qty: 35, costPrice: 80000, totalCost: 2800000, note: 'Đóng hộp đôi 2 ngăn hoàn thiện lô 01', actor: 'Hệ thống' },
+            { id: 'log-6', time: '2026-01-11 11:00', type: 'IMPORT', skuId: 'combo-mo-tet', skuName: 'Combo Mở Tết [1+3]', qty: 32, costPrice: 95000, totalCost: 3040000, note: 'Đóng hộp đôi 2 ngăn hoàn thiện lô 01', actor: 'Hệ thống' },
+            { id: 'log-7', time: '2026-01-11 11:30', type: 'IMPORT', skuId: 'combo-tron-tet', skuName: 'Combo Trọn Tết [1+2+3]', qty: 50, costPrice: 145000, totalCost: 7250000, note: 'Đóng Hộp Quà Lớn Đặc Biệt 3 ngăn', actor: 'Hệ thống' },
+            { id: 'log-8', time: '2026-01-15 14:20', type: 'EXPORT_ORDER', skuId: 'pack-tien-tao', skuName: 'Tiễn Táo (23 Chạp)', qty: 15, costPrice: 85000, totalCost: 1275000, note: 'Xuất tự động cho các đơn hàng đầu mùa', actor: 'Khách mua qua Web' },
+            { id: 'log-9', time: '2026-01-15 15:00', type: 'EXPORT_ORDER', skuId: 'combo-tron-tet', skuName: 'Combo Trọn Tết [1+2+3]', qty: 18, costPrice: 145000, totalCost: 2610000, note: 'Xuất tự động cho các đơn hàng đặt sớm', actor: 'Khách mua qua Web' }
+          ];
+          this.state.inventoryLogs = JSON.parse(localStorage.getItem(NEPLE_STORAGE_KEYS.INVENTORY_LOGS || 'neple_inventory_logs_v1')) || defaultInvLogs;
         } catch (e) {
           this.state.products = JSON.parse(JSON.stringify(DEFAULT_PRODUCTS));
           this.state.blogs = JSON.parse(JSON.stringify(DEFAULT_BLOGS));
@@ -451,6 +576,7 @@
           this.state.settings = JSON.parse(JSON.stringify(DEFAULT_SETTINGS));
           this.state.staffList = JSON.parse(JSON.stringify(DEFAULT_STAFF_ACCOUNTS));
           this.state.auditLogs = [];
+          this.state.inventoryLogs = [];
         }
       },
 
@@ -460,6 +586,9 @@
         localStorage.setItem(NEPLE_STORAGE_KEYS.ORDERS, JSON.stringify(this.state.orders));
         localStorage.setItem(NEPLE_STORAGE_KEYS.SETTINGS, JSON.stringify(this.state.settings));
         localStorage.setItem(STAFF_STORAGE_KEY, JSON.stringify(this.state.staffList));
+        localStorage.setItem(AUDIT_STORAGE_KEY, JSON.stringify(this.state.auditLogs));
+        localStorage.setItem(NEPLE_STORAGE_KEYS.INVENTORY_LOGS || 'neple_inventory_logs_v1', JSON.stringify(this.state.inventoryLogs));
+      },
       },
 
       logAudit(actionText) {
@@ -496,6 +625,10 @@
             if (matched) {
               if (matched.role === 'SUPER_ADMIN' || (matched.allowedTabs && matched.allowedTabs.includes('settings'))) {
                 if (!matched.allowedTabs.includes('optimize')) matched.allowedTabs.push('optimize');
+                if (!matched.allowedTabs.includes('inventory')) matched.allowedTabs.push('inventory');
+              }
+              if (matched.role === 'OPERATIONS') {
+                if (!matched.allowedTabs.includes('inventory')) matched.allowedTabs.push('inventory');
               }
               this.state.currentUser = matched;
               this.state.activeTab = matched.allowedTabs[0] || 'orders';
@@ -526,6 +659,10 @@
         errBox.classList.add('hidden');
         if (staff.role === 'SUPER_ADMIN' || (staff.allowedTabs && staff.allowedTabs.includes('settings'))) {
           if (!staff.allowedTabs.includes('optimize')) staff.allowedTabs.push('optimize');
+          if (!staff.allowedTabs.includes('inventory')) staff.allowedTabs.push('inventory');
+        }
+        if (staff.role === 'OPERATIONS') {
+          if (!staff.allowedTabs.includes('inventory')) staff.allowedTabs.push('inventory');
         }
         this.state.currentUser = staff;
         this.state.activeTab = staff.allowedTabs[0] || 'orders';
@@ -573,10 +710,19 @@
           if (!this.state.currentUser.allowedTabs.includes('optimize')) {
             this.state.currentUser.allowedTabs.push('optimize');
           }
+          if (!this.state.currentUser.allowedTabs.includes('inventory')) {
+            this.state.currentUser.allowedTabs.push('inventory');
+          }
+        }
+        if (this.state.currentUser.role === 'OPERATIONS') {
+          if (!this.state.currentUser.allowedTabs.includes('inventory')) {
+            this.state.currentUser.allowedTabs.push('inventory');
+          }
         }
 
         const allTabs = [
           { id: 'orders', label: 'Theo dõi đơn hàng' },
+          { id: 'inventory', label: 'Quản lý kho & vốn' },
           { id: 'products', label: 'Quản lí danh mục sản phẩm' },
           { id: 'blogs', label: 'Quản lí nội dung Blog' },
           { id: 'settings', label: 'Cài đặt thanh toán' },
@@ -606,6 +752,7 @@
 
         let bodyHTML = '';
         if (this.state.activeTab === 'orders') bodyHTML = this.renderOrdersTab();
+        else if (this.state.activeTab === 'inventory') bodyHTML = this.renderInventoryTab();
         else if (this.state.activeTab === 'products') bodyHTML = this.renderProductsTab();
         else if (this.state.activeTab === 'blogs') bodyHTML = this.renderBlogsTab();
         else if (this.state.activeTab === 'settings') bodyHTML = this.renderSettingsTab();
@@ -616,7 +763,7 @@
       },
 
       renderOrdersTab() {
-        const stages = ['Đã tiếp nhận', 'Đang đóng gói hộp lễ', 'Đang giao hàng', 'Hoàn thành'];
+        const stages = ['Đã tiếp nhận', 'Đang đóng gói hộp lễ', 'Đang giao hàng', 'Hoàn thành', 'Đã hủy'];
         const totalRevenue = this.state.orders.reduce((sum, o) => sum + Number(o.total || 0), 0);
 
         return `
@@ -703,7 +850,34 @@
       updateOrderStatus(orderId, newStatus) {
         const order = this.state.orders.find(o => o.id === orderId);
         if (!order) return;
+        const oldStatus = order.status;
         order.status = newStatus;
+
+        // Nếu hủy đơn hàng và chưa từng hoàn tồn kho -> Tự động hoàn lại số lượng vào kho
+        if (newStatus === 'Đã hủy' && !order._stockRestored) {
+          (order.items || []).forEach(item => {
+            const prod = this.state.products.find(p => p.id === item.id);
+            if (prod) {
+              const qty = Number(item.qty || 1);
+              prod.stockQuantity = (prod.stockQuantity || 0) + qty;
+              prod.totalExported = Math.max(0, (prod.totalExported || 0) - qty);
+              this.state.inventoryLogs.unshift({
+                id: 'log-' + Date.now() + '-' + Math.floor(Math.random() * 1000),
+                time: new Date().toLocaleString('vi-VN'),
+                type: 'RESTORE_CANCELLED',
+                skuId: prod.id,
+                skuName: prod.name,
+                qty: qty,
+                costPrice: prod.costPrice || 0,
+                totalCost: (prod.costPrice || 0) * qty,
+                note: `Hoàn kho do hủy đơn hàng ${order.id} (${order.customerName})`,
+                actor: this.state.currentUser ? this.state.currentUser.name : 'Quản Trị Viên'
+              });
+            }
+          });
+          order._stockRestored = true;
+        }
+
         this.saveAllToStorage();
         this.logAudit(`Cập nhật trạng thái đơn ${orderId} sang "${newStatus}"`);
         this.showToast(`Đã cập nhật đơn ${orderId} → "${newStatus}"`);
@@ -756,6 +930,533 @@
         );
         navigator.clipboard?.writeText([headers.join('\t'), ...rows].join('\n'));
         this.showToast('Đã copy bảng! Bạn có thể bấm Ctrl+V trực tiếp vào Google Sheets.');
+      },
+
+      // ====================================================================
+      // PHÂN HỆ QUẢN LÝ TỒN KHO & DÒNG VỐN (7 SKU ĐƠN LẺ)
+      // ====================================================================
+      renderInventoryTab() {
+        const products = this.state.products || [];
+
+        // KPI Calculations
+        const totalCapitalImported = products.reduce((sum, p) => sum + (Number(p.totalImported || 0) * Number(p.costPrice || 0)), 0);
+        const totalStockValue = products.reduce((sum, p) => sum + (Number(p.stockQuantity || 0) * Number(p.costPrice || 0)), 0);
+        const totalStockBoxes = products.reduce((sum, p) => sum + Number(p.stockQuantity || 0), 0);
+        const totalImportedBoxes = products.reduce((sum, p) => sum + Number(p.totalImported || 0), 0);
+        const totalExportedBoxes = products.reduce((sum, p) => sum + Number(p.totalExported || 0), 0);
+
+        const validOrders = (this.state.orders || []).filter(o => o.status !== 'Đã hủy');
+        const totalRevenue = validOrders.reduce((sum, o) => sum + Number(o.total || 0), 0);
+        const totalCOGS = products.reduce((sum, p) => sum + (Number(p.totalExported || 0) * Number(p.costPrice || 0)), 0);
+        const grossProfit = totalRevenue - totalCOGS;
+        const profitMargin = totalRevenue > 0 ? ((grossProfit / totalRevenue) * 100).toFixed(1) : '0';
+
+        // Filter logs
+        const filter = this.state.inventoryFilter || 'ALL';
+        const allLogs = this.state.inventoryLogs || [];
+        const filteredLogs = allLogs.filter(l => {
+          if (filter === 'IMPORT') return l.type === 'IMPORT';
+          if (filter === 'EXPORT_ORDER') return l.type === 'EXPORT_ORDER';
+          if (filter === 'EXPORT_MANUAL') return l.type === 'EXPORT_MANUAL' || l.type === 'RESTORE_CANCELLED' || l.type === 'ADJUST_COST';
+          return true;
+        });
+
+        return `
+          <div class="space-y-6">
+            <!-- 1. BẢNG ĐIỀU KHIỂN KPI TÀI CHÍNH & TỒN KHO -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div class="p-4 sm:p-5 rounded-2xl paper-card border-l-4 border-[#0d2931] shadow-sm">
+                <span class="text-xs text-[#72826f] font-bold uppercase tracking-wider block">1. Tổng Vốn Đã Nhập</span>
+                <div class="text-xl sm:text-2xl font-extrabold text-[#0d2931] mt-1.5">${this.formatVND(totalCapitalImported)}</div>
+                <div class="text-[11px] text-[#0d2931]/70 mt-1 flex items-center justify-between">
+                  <span>Tổng nhập: <strong>${totalImportedBoxes} hộp</strong></span>
+                  <span class="text-[#72826f]">7 SKU</span>
+                </div>
+              </div>
+
+              <div class="p-4 sm:p-5 rounded-2xl paper-card border-l-4 border-[#f0b45b] shadow-sm">
+                <span class="text-xs text-[#72826f] font-bold uppercase tracking-wider block">2. Giá Trị Tồn Kho Thực Tế</span>
+                <div class="text-xl sm:text-2xl font-extrabold text-[#a94025] mt-1.5">${this.formatVND(totalStockValue)}</div>
+                <div class="text-[11px] text-[#0d2931]/70 mt-1 flex items-center justify-between">
+                  <span>Còn trong kho: <strong class="text-[#691727] font-bold">${totalStockBoxes} hộp</strong></span>
+                  <span class="text-amber-700">Vốn đang giữ</span>
+                </div>
+              </div>
+
+              <div class="p-4 sm:p-5 rounded-2xl paper-card border-l-4 border-[#72826f] shadow-sm">
+                <span class="text-xs text-[#72826f] font-bold uppercase tracking-wider block">3. Doanh Thu Xuất Bán</span>
+                <div class="text-xl sm:text-2xl font-extrabold text-[#0d2931] mt-1.5">${this.formatVND(totalRevenue)}</div>
+                <div class="text-[11px] text-[#0d2931]/70 mt-1 flex items-center justify-between">
+                  <span>Đã bán: <strong>${totalExportedBoxes} hộp</strong></span>
+                  <span class="text-emerald-700">${validOrders.length} đơn hợp lệ</span>
+                </div>
+              </div>
+
+              <div class="p-4 sm:p-5 rounded-2xl paper-card border-l-4 border-[#691727] shadow-sm">
+                <span class="text-xs text-[#72826f] font-bold uppercase tracking-wider block">4. Lợi Nhuận Gộp Ước Tính</span>
+                <div class="text-xl sm:text-2xl font-extrabold text-emerald-800 mt-1.5">${this.formatVND(grossProfit)}</div>
+                <div class="text-[11px] text-[#0d2931]/70 mt-1 flex items-center justify-between">
+                  <span>Biên lãi gộp: <strong class="text-emerald-700 font-bold">${profitMargin}%</strong></span>
+                  <span class="text-[#72826f]">Doanh thu - Vốn xuất</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 2. BẢNG 7 SKU ĐƠN LẺ & CÔNG CỤ NHẬP XUẤT -->
+            <div class="p-5 sm:p-6 rounded-2xl paper-card space-y-4">
+              <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 pb-3 border-b border-[#ae9984]/30">
+                <div>
+                  <h3 class="font-bevietnam-bold text-lg sm:text-xl font-bold text-[#0d2931]">
+                    Danh Mục 7 SKU Đơn Lẻ: Nhập – Xuất – Giá Vốn
+                  </h3>
+                  <p class="text-xs text-[#0d2931]/70 mt-0.5">
+                    Quản lý định mức từng hộp lễ độc lập. Tự động trừ tồn kho khi phát sinh đơn hàng mới.
+                  </p>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                  <button onclick="AdminPortal.openStockModal('IMPORT')" class="px-3.5 py-2 rounded-xl bg-[#0d2931] text-[#f0b45b] text-xs font-bold hover:bg-[#163d48] transition shadow-sm flex items-center gap-1.5">
+                    <span>📥</span> + Nhập Kho Đợt Mới
+                  </button>
+                  <button onclick="AdminPortal.openStockModal('EXPORT_MANUAL')" class="px-3.5 py-2 rounded-xl bg-white border border-red-300 text-red-700 text-xs font-bold hover:bg-red-50 transition shadow-sm flex items-center gap-1.5">
+                    <span>📤</span> - Xuất Kho Thủ Công
+                  </button>
+                  <button onclick="AdminPortal.openStockModal('ADJUST_COST')" class="px-3 py-2 rounded-xl bg-white border border-[#ae9984] text-[#0d2931] text-xs font-bold hover:bg-[#efe9e0] transition shadow-sm flex items-center gap-1.5">
+                    <span>✏️</span> Sửa Vốn &amp; Báo Động
+                  </button>
+                  <button onclick="AdminPortal.exportInventoryCSV()" class="px-3.5 py-2 rounded-xl bg-[#72826f] text-white text-xs font-bold hover:bg-[#5e6c5c] transition shadow-sm flex items-center gap-1.5">
+                    <span>⬇</span> Xuất Excel/CSV
+                  </button>
+                </div>
+              </div>
+
+              <!-- Table 7 SKUs -->
+              <div class="overflow-x-auto rounded-xl border border-[#ae9984]">
+                <table class="w-full text-left text-xs sm:text-sm">
+                  <thead class="bg-[#0d2931] text-[#f0b45b] font-bold uppercase text-[11px] tracking-wider select-none">
+                    <tr>
+                      <th class="p-3 whitespace-nowrap">Mã SKU</th>
+                      <th class="p-3 whitespace-nowrap">Hộp Lễ</th>
+                      <th class="p-3 text-right whitespace-nowrap">Giá Vốn Nhập</th>
+                      <th class="p-3 text-right whitespace-nowrap">Giá Bán Niêm Yết</th>
+                      <th class="p-3 text-right whitespace-nowrap">Lãi Gộp / Hộp</th>
+                      <th class="p-3 text-center whitespace-nowrap">Tổng Nhập</th>
+                      <th class="p-3 text-center whitespace-nowrap">Đã Xuất Bán</th>
+                      <th class="p-3 text-center whitespace-nowrap">Tồn Kho</th>
+                      <th class="p-3 text-center whitespace-nowrap">Trạng Thái</th>
+                      <th class="p-3 text-right whitespace-nowrap">Giá Trị Tồn</th>
+                      <th class="p-3 text-center whitespace-nowrap">Thao Tác</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-[#ae9984]/30 bg-white text-[#0d2931]">
+                    ${products.map((p, idx) => {
+                      const cost = Number(p.costPrice || 0);
+                      const price = Number(p.price || 0);
+                      const profit = price - cost;
+                      const marginPct = price > 0 ? ((profit / price) * 100).toFixed(0) : 0;
+                      const stock = Number(p.stockQuantity || 0);
+                      const minAlert = Number(p.minAlert || 10);
+                      const stockVal = stock * cost;
+
+                      let statusBadge = '';
+                      if (stock === 0) {
+                        statusBadge = '<span class="px-2 py-0.5 rounded-full bg-red-100 text-red-700 text-[10px] font-extrabold whitespace-nowrap">🔴 Cháy hàng (0)</span>';
+                      } else if (stock <= minAlert) {
+                        statusBadge = `<span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 text-[10px] font-extrabold whitespace-nowrap">🟡 Sắp hết (${stock}/${minAlert})</span>`;
+                      } else {
+                        statusBadge = `<span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-extrabold whitespace-nowrap">🟢 Sẵn hàng (${stock})</span>`;
+                      }
+
+                      const tierBadge = p.tier === 'triple'
+                        ? '<span class="px-1.5 py-0.5 rounded bg-[#f0b45b] text-[#0d2931] text-[9px] font-black uppercase">Combo 3</span>'
+                        : (p.tier === 'double'
+                          ? '<span class="px-1.5 py-0.5 rounded bg-[#691727] text-white text-[9px] font-bold uppercase">Hộp Đôi</span>'
+                          : '<span class="px-1.5 py-0.5 rounded bg-[#72826f] text-white text-[9px] font-bold uppercase">Hộp Đơn</span>');
+
+                      return `
+                        <tr class="hover:bg-[#faf7f2] transition">
+                          <td class="p-3 font-mono font-bold text-xs text-[#0d2931]/80 whitespace-nowrap">
+                            ${p.sku || `SKU-0${idx + 1}`}
+                          </td>
+                          <td class="p-3">
+                            <div class="flex items-center gap-2">
+                              ${tierBadge}
+                              <strong class="text-xs sm:text-sm font-bold text-[#0d2931]">${p.name}</strong>
+                            </div>
+                            <div class="text-[11px] text-[#0d2931]/60 line-clamp-1 mt-0.5">${p.subtitle || ''}</div>
+                          </td>
+                          <td class="p-3 text-right font-bold text-[#691727] whitespace-nowrap">
+                            ${this.formatVND(cost)}
+                          </td>
+                          <td class="p-3 text-right font-bold text-[#0d2931] whitespace-nowrap">
+                            ${this.formatVND(price)}
+                          </td>
+                          <td class="p-3 text-right whitespace-nowrap">
+                            <span class="font-bold text-emerald-800">${this.formatVND(profit)}</span>
+                            <span class="block text-[10px] text-emerald-600 font-bold">+${marginPct}%</span>
+                          </td>
+                          <td class="p-3 text-center font-bold whitespace-nowrap">${p.totalImported || 0}</td>
+                          <td class="p-3 text-center font-bold text-[#691727] whitespace-nowrap">${p.totalExported || 0}</td>
+                          <td class="p-3 text-center whitespace-nowrap">
+                            <span class="text-sm font-extrabold ${stock <= minAlert ? 'text-amber-700' : 'text-[#0d2931]'}">${stock}</span>
+                          </td>
+                          <td class="p-3 text-center whitespace-nowrap">${statusBadge}</td>
+                          <td class="p-3 text-right font-extrabold text-[#a94025] whitespace-nowrap">
+                            ${this.formatVND(stockVal)}
+                          </td>
+                          <td class="p-3 text-center whitespace-nowrap">
+                            <div class="inline-flex items-center gap-1">
+                              <button onclick="AdminPortal.openStockModal('IMPORT', '${p.id}')" class="px-2 py-1 rounded bg-[#0d2931] hover:bg-[#163d48] text-[#f0b45b] text-[10px] font-bold transition shadow-xs" title="Nhập thêm hàng cho SKU này">
+                                + Nhập
+                              </button>
+                              <button onclick="AdminPortal.openStockModal('EXPORT_MANUAL', '${p.id}')" class="px-2 py-1 rounded bg-white hover:bg-red-50 text-red-600 border border-red-200 text-[10px] font-bold transition" title="Xuất kho mẫu/hỏng">
+                                - Xuất
+                              </button>
+                              <button onclick="AdminPortal.openStockModal('ADJUST_COST', '${p.id}')" class="px-1.5 py-1 rounded bg-white hover:bg-[#efe9e0] text-[#0d2931] border border-[#ae9984] text-[10px] font-bold transition" title="Sửa giá vốn &amp; định mức">
+                                ✏️
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      `;
+                    }).join('')}
+                  </tbody>
+                  <tfoot class="bg-[#efe9e0] font-bold text-xs text-[#0d2931]">
+                    <tr>
+                      <td colspan="5" class="p-3.5 text-right font-extrabold uppercase">Tổng Cộng Toàn Bộ (7 SKU):</td>
+                      <td class="p-3 text-center font-extrabold text-[#0d2931]">${totalImportedBoxes}</td>
+                      <td class="p-3 text-center font-extrabold text-[#691727]">${totalExportedBoxes}</td>
+                      <td class="p-3 text-center font-extrabold text-[#0d2931]">${totalStockBoxes}</td>
+                      <td class="p-3 text-center">—</td>
+                      <td class="p-3 text-right font-extrabold text-[#a94025]">${this.formatVND(totalStockValue)}</td>
+                      <td class="p-3"></td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+            </div>
+
+            <!-- 3. NHẬT KÝ GIAO DỊCH NHẬP - XUẤT KHO (AUDIT LOGS) -->
+            <div class="p-5 sm:p-6 rounded-2xl paper-card space-y-4">
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                  <h4 class="font-bevietnam-bold text-base sm:text-lg font-bold text-[#0d2931]">
+                    Nhật Ký Nhập – Xuất Kho Thời Gian Thực
+                  </h4>
+                  <p class="text-xs text-[#0d2931]/70 mt-0.5">
+                    Ghi lại mọi biến động kho: Nhập lô xưởng, xuất bán theo đơn hàng, xuất mẫu ngoại giao hoặc hoàn kho khi hủy đơn.
+                  </p>
+                </div>
+                <!-- Bộ lọc giao dịch -->
+                <div class="flex flex-wrap gap-1.5">
+                  <button onclick="AdminPortal.setInventoryFilter('ALL')" class="px-3 py-1.5 rounded-lg text-xs font-bold transition ${filter === 'ALL' ? 'bg-[#0d2931] text-[#f0b45b]' : 'bg-white border border-[#ae9984] text-[#0d2931] hover:bg-[#efe9e0]'}">
+                    Tất cả (${allLogs.length})
+                  </button>
+                  <button onclick="AdminPortal.setInventoryFilter('IMPORT')" class="px-3 py-1.5 rounded-lg text-xs font-bold transition ${filter === 'IMPORT' ? 'bg-[#0d2931] text-[#f0b45b]' : 'bg-white border border-[#ae9984] text-[#0d2931] hover:bg-[#efe9e0]'}">
+                    📥 Nhập kho (${allLogs.filter(l => l.type === 'IMPORT').length})
+                  </button>
+                  <button onclick="AdminPortal.setInventoryFilter('EXPORT_ORDER')" class="px-3 py-1.5 rounded-lg text-xs font-bold transition ${filter === 'EXPORT_ORDER' ? 'bg-[#0d2931] text-[#f0b45b]' : 'bg-white border border-[#ae9984] text-[#0d2931] hover:bg-[#efe9e0]'}">
+                    📤 Xuất theo đơn (${allLogs.filter(l => l.type === 'EXPORT_ORDER').length})
+                  </button>
+                  <button onclick="AdminPortal.setInventoryFilter('EXPORT_MANUAL')" class="px-3 py-1.5 rounded-lg text-xs font-bold transition ${filter === 'EXPORT_MANUAL' ? 'bg-[#0d2931] text-[#f0b45b]' : 'bg-white border border-[#ae9984] text-[#0d2931] hover:bg-[#efe9e0]'}">
+                    📋 Mẫu / Hủy / Sửa (${allLogs.filter(l => l.type === 'EXPORT_MANUAL' || l.type === 'RESTORE_CANCELLED' || l.type === 'ADJUST_COST').length})
+                  </button>
+                </div>
+              </div>
+
+              <div class="overflow-x-auto rounded-xl border border-[#ae9984]/60 max-h-[380px] overflow-y-auto">
+                <table class="w-full text-left text-xs">
+                  <thead class="bg-[#f4efe6] text-[#0d2931] font-bold uppercase text-[10px] tracking-wider sticky top-0 z-10 border-b border-[#ae9984]">
+                    <tr>
+                      <th class="p-2.5">Thời Gian</th>
+                      <th class="p-2.5">Loại Giao Dịch</th>
+                      <th class="p-2.5">Hộp Lễ (SKU)</th>
+                      <th class="p-2.5 text-center">Biến Động</th>
+                      <th class="p-2.5 text-right">Đơn Giá Vốn</th>
+                      <th class="p-2.5 text-right">Tổng Tiền Vốn</th>
+                      <th class="p-2.5">Nội Dung / Ghi Chú</th>
+                      <th class="p-2.5">Người Thao Tác</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-[#ae9984]/20 bg-white">
+                    ${filteredLogs.length === 0 ? `
+                      <tr>
+                        <td colspan="8" class="p-6 text-center text-[#0d2931]/60 italic">Chưa có giao dịch kho nào trong danh mục này.</td>
+                      </tr>
+                    ` : filteredLogs.map(l => {
+                      let typeBadge = '';
+                      let qtyDisplay = '';
+                      if (l.type === 'IMPORT') {
+                        typeBadge = '<span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-extrabold text-[10px]">📥 Nhập Kho</span>';
+                        qtyDisplay = `<strong class="text-emerald-700">+${l.qty} hộp</strong>`;
+                      } else if (l.type === 'EXPORT_ORDER') {
+                        typeBadge = '<span class="px-2 py-0.5 rounded-full bg-blue-100 text-blue-800 font-bold text-[10px]">📤 Xuất Đơn Hàng</span>';
+                        qtyDisplay = `<strong class="text-blue-700">-${l.qty} hộp</strong>`;
+                      } else if (l.type === 'EXPORT_MANUAL') {
+                        typeBadge = '<span class="px-2 py-0.5 rounded-full bg-red-100 text-red-800 font-bold text-[10px]">📋 Xuất Thủ Công</span>';
+                        qtyDisplay = `<strong class="text-red-700">-${l.qty} hộp</strong>`;
+                      } else if (l.type === 'RESTORE_CANCELLED') {
+                        typeBadge = '<span class="px-2 py-0.5 rounded-full bg-purple-100 text-purple-800 font-bold text-[10px]">🔄 Hoàn Hủy Đơn</span>';
+                        qtyDisplay = `<strong class="text-purple-700">+${l.qty} hộp</strong>`;
+                      } else {
+                        typeBadge = '<span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 font-bold text-[10px]">✏️ Sửa Định Mức</span>';
+                        qtyDisplay = '<span class="text-[#0d2931]/60">—</span>';
+                      }
+
+                      return `
+                        <tr class="hover:bg-[#faf7f2] transition">
+                          <td class="p-2.5 font-mono text-[11px] text-[#0d2931]/75 whitespace-nowrap">${l.time}</td>
+                          <td class="p-2.5 whitespace-nowrap">${typeBadge}</td>
+                          <td class="p-2.5 font-bold text-[#0d2931] whitespace-nowrap">${l.skuName}</td>
+                          <td class="p-2.5 text-center whitespace-nowrap">${qtyDisplay}</td>
+                          <td class="p-2.5 text-right font-medium text-[#691727] whitespace-nowrap">${l.costPrice ? this.formatVND(l.costPrice) : '—'}</td>
+                          <td class="p-2.5 text-right font-extrabold text-[#0d2931] whitespace-nowrap">${l.totalCost ? this.formatVND(l.totalCost) : '—'}</td>
+                          <td class="p-2.5 text-[#0d2931]/80 max-w-xs truncate">${l.note || ''}</td>
+                          <td class="p-2.5 text-[11px] text-[#72826f] font-semibold whitespace-nowrap">${l.actor || 'Hệ thống'}</td>
+                        </tr>
+                      `;
+                    }).join('')}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        `;
+      },
+
+      setInventoryFilter(filterType) {
+        this.state.inventoryFilter = filterType;
+        this.renderDashboard();
+      },
+
+      openStockModal(mode = 'IMPORT', targetProductId = null) {
+        const modal = document.getElementById('adm-stock-modal');
+        if (!modal) return;
+
+        const select = document.getElementById('adm-stock-sku-select');
+        if (select) {
+          select.innerHTML = this.state.products.map(p => `
+            <option value="${p.id}" ${targetProductId === p.id ? 'selected' : ''}>
+              ${p.name} (${p.sku || p.id}) — Tồn: ${p.stockQuantity || 0} hộp | Vốn: ${this.formatVND(p.costPrice || 0)}
+            </option>
+          `).join('');
+        }
+
+        this.switchStockModalType(mode);
+        this.onStockProductSelectChange();
+        modal.classList.remove('hidden');
+      },
+
+      closeStockModal() {
+        const modal = document.getElementById('adm-stock-modal');
+        if (modal) modal.classList.add('hidden');
+      },
+
+      switchStockModalType(mode) {
+        const typeInp = document.getElementById('adm-stock-type');
+        if (typeInp) typeInp.value = mode;
+
+        const title = document.getElementById('adm-stock-modal-title');
+        const badge = document.getElementById('adm-stock-modal-badge');
+        const fieldQty = document.getElementById('adm-stock-field-qty');
+        const labelQty = document.getElementById('adm-stock-label-qty');
+        const hintQty = document.getElementById('adm-stock-hint-qty');
+        const fieldCost = document.getElementById('adm-stock-field-cost');
+        const fieldAlert = document.getElementById('adm-stock-field-alert');
+        const btnSubmit = document.getElementById('adm-stock-btn-submit');
+
+        const tabImport = document.getElementById('adm-btn-tab-import');
+        const tabExport = document.getElementById('adm-btn-tab-export');
+        const tabCost = document.getElementById('adm-btn-tab-cost');
+
+        [tabImport, tabExport, tabCost].forEach(b => {
+          if (b) {
+            b.className = 'py-1.5 px-2 rounded-lg text-xs font-bold transition text-center text-[#0d2931] hover:bg-white/60';
+          }
+        });
+
+        if (mode === 'IMPORT') {
+          if (tabImport) tabImport.className = 'py-1.5 px-2 rounded-lg text-xs font-bold transition text-center bg-[#0d2931] text-[#f0b45b] shadow-xs';
+          if (badge) badge.textContent = 'NHẬP KHO';
+          if (title) title.textContent = '📥 Phiếu Nhập Thêm Hàng Lễ';
+          if (fieldQty) fieldQty.classList.remove('hidden');
+          if (labelQty) labelQty.textContent = 'Số lượng hộp nhập thêm (+):';
+          if (hintQty) hintQty.textContent = 'Cộng dồn vào số lượng tồn kho thực tế.';
+          if (fieldCost) fieldCost.classList.remove('hidden');
+          if (fieldAlert) fieldAlert.classList.add('hidden');
+          if (btnSubmit) btnSubmit.innerHTML = 'Xác Nhận Nhập Kho';
+          const noteInp = document.getElementById('adm-stock-input-note');
+          if (noteInp) noteInp.placeholder = 'VD: Xưởng bàn giao lô mới 50 hộp, giấy dó đóng gói';
+        } else if (mode === 'EXPORT_MANUAL') {
+          if (tabExport) tabExport.className = 'py-1.5 px-2 rounded-lg text-xs font-bold transition text-center bg-[#691727] text-white shadow-xs';
+          if (badge) badge.textContent = 'XUẤT KHO';
+          if (title) title.textContent = '📤 Phiếu Xuất Kho Thủ Công (Mẫu / Hỏng / Biếu Tặng)';
+          if (fieldQty) fieldQty.classList.remove('hidden');
+          if (labelQty) labelQty.textContent = 'Số lượng hộp xuất kho (-):';
+          if (hintQty) hintQty.textContent = 'Trừ trực tiếp khỏi tồn kho (không qua đơn hàng web).';
+          if (fieldCost) fieldCost.classList.add('hidden');
+          if (fieldAlert) fieldAlert.classList.add('hidden');
+          if (btnSubmit) btnSubmit.innerHTML = 'Xác Nhận Xuất Kho';
+          const noteInp = document.getElementById('adm-stock-input-note');
+          if (noteInp) noteInp.placeholder = 'VD: Gửi mẫu chụp ảnh review KOL / Hộp móp lỗi vận chuyển';
+        } else if (mode === 'ADJUST_COST') {
+          if (tabCost) tabCost.className = 'py-1.5 px-2 rounded-lg text-xs font-bold transition text-center bg-[#f0b45b] text-[#0d2931] shadow-xs';
+          if (badge) badge.textContent = 'SỬA VỐN & ĐỊNH MỨC';
+          if (title) title.textContent = '✏️ Điều Chỉnh Giá Vốn & Định Mức Báo Động';
+          if (fieldQty) fieldQty.classList.add('hidden');
+          if (fieldCost) fieldCost.classList.remove('hidden');
+          if (fieldAlert) fieldAlert.classList.remove('hidden');
+          if (btnSubmit) btnSubmit.innerHTML = 'Lưu Cấu Hình SKU';
+          const noteInp = document.getElementById('adm-stock-input-note');
+          if (noteInp) noteInp.placeholder = 'VD: Cập nhật giá vốn nguyên vật liệu trầm nến đợt 2';
+        }
+      },
+
+      onStockProductSelectChange() {
+        const select = document.getElementById('adm-stock-sku-select');
+        const infoDiv = document.getElementById('adm-stock-current-info');
+        const costInput = document.getElementById('adm-stock-input-cost');
+        const alertInput = document.getElementById('adm-stock-input-alert');
+
+        if (!select) return;
+        const prod = this.state.products.find(p => p.id === select.value);
+        if (!prod) return;
+
+        if (infoDiv) {
+          infoDiv.innerHTML = `Hiện tại: Tồn kho <strong>${prod.stockQuantity || 0} hộp</strong> • Giá vốn: <strong class="text-[#691727]">${this.formatVND(prod.costPrice || 0)}</strong> • Giá bán: <strong>${this.formatVND(prod.price)}</strong>`;
+        }
+        if (costInput) costInput.value = prod.costPrice || 0;
+        if (alertInput) alertInput.value = prod.minAlert || 10;
+      },
+
+      submitStockTransaction(e) {
+        e.preventDefault();
+        const type = document.getElementById('adm-stock-type').value;
+        const prodId = document.getElementById('adm-stock-sku-select').value;
+        const qty = parseInt(document.getElementById('adm-stock-input-qty').value, 10) || 0;
+        const cost = parseInt(document.getElementById('adm-stock-input-cost').value, 10) || 0;
+        const minAlert = parseInt(document.getElementById('adm-stock-input-alert').value, 10) || 10;
+        const note = document.getElementById('adm-stock-input-note').value.trim();
+
+        const prod = this.state.products.find(p => p.id === prodId);
+        if (!prod) {
+          this.showToast('Không tìm thấy hộp lễ đã chọn!');
+          return;
+        }
+
+        const now = new Date().toLocaleString('vi-VN');
+        const actor = this.state.currentUser ? this.state.currentUser.name : 'Quản Trị Viên';
+
+        if (type === 'IMPORT') {
+          if (qty <= 0) {
+            this.showToast('Số lượng nhập phải lớn hơn 0!');
+            return;
+          }
+          prod.stockQuantity = (prod.stockQuantity || 0) + qty;
+          prod.totalImported = (prod.totalImported || 0) + qty;
+          if (cost > 0) prod.costPrice = cost;
+
+          this.state.inventoryLogs.unshift({
+            id: 'log-' + Date.now(),
+            time: now,
+            type: 'IMPORT',
+            skuId: prod.id,
+            skuName: prod.name,
+            qty: qty,
+            costPrice: prod.costPrice,
+            totalCost: prod.costPrice * qty,
+            note: note || `Nhập thêm ${qty} hộp lễ từ xưởng`,
+            actor
+          });
+          this.showToast(`Đã nhập +${qty} hộp "${prod.name}" thành công!`);
+          this.logAudit(`Nhập kho +${qty} hộp "${prod.name}" (Vốn ${this.formatVND(prod.costPrice)})`);
+        } else if (type === 'EXPORT_MANUAL') {
+          if (qty <= 0) {
+            this.showToast('Số lượng xuất phải lớn hơn 0!');
+            return;
+          }
+          if (qty > (prod.stockQuantity || 0)) {
+            if (!confirm(`Kho hiện chỉ còn ${prod.stockQuantity || 0} hộp. Bạn có chắc chắn muốn xuất vượt quá tồn kho?`)) return;
+          }
+          prod.stockQuantity = Math.max(0, (prod.stockQuantity || 0) - qty);
+          prod.totalExported = (prod.totalExported || 0) + qty;
+
+          this.state.inventoryLogs.unshift({
+            id: 'log-' + Date.now(),
+            time: now,
+            type: 'EXPORT_MANUAL',
+            skuId: prod.id,
+            skuName: prod.name,
+            qty: qty,
+            costPrice: prod.costPrice,
+            totalCost: (prod.costPrice || 0) * qty,
+            note: note || `Xuất thủ công ${qty} hộp (${actor})`,
+            actor
+          });
+          this.showToast(`Đã xuất -${qty} hộp "${prod.name}" thành công!`);
+          this.logAudit(`Xuất kho thủ công -${qty} hộp "${prod.name}"`);
+        } else if (type === 'ADJUST_COST') {
+          const oldCost = prod.costPrice;
+          prod.costPrice = cost;
+          prod.minAlert = minAlert;
+
+          this.state.inventoryLogs.unshift({
+            id: 'log-' + Date.now(),
+            time: now,
+            type: 'ADJUST_COST',
+            skuId: prod.id,
+            skuName: prod.name,
+            qty: 0,
+            costPrice: cost,
+            totalCost: 0,
+            note: note || `Điều chỉnh giá vốn từ ${this.formatVND(oldCost)} → ${this.formatVND(cost)} (Báo động: ≤${minAlert} hộp)`,
+            actor
+          });
+          this.showToast(`Đã cập nhật giá vốn & cảnh báo cho "${prod.name}"!`);
+          this.logAudit(`Điều chỉnh giá vốn "${prod.name}" sang ${this.formatVND(cost)}`);
+        }
+
+        this.saveAllToStorage();
+        this.closeStockModal();
+        this.renderDashboard();
+      },
+
+      exportInventoryCSV() {
+        const headers = ['Mã SKU', 'Tên Hộp Lễ', 'Phân Loại', 'Giá Vốn (VNĐ)', 'Giá Bán Niêm Yết (VNĐ)', 'Lãi Gộp / Hộp (VNĐ)', 'Tỷ Suất Lãi Gộp (%)', 'Tổng Nhập (Hộp)', 'Đã Xuất / Bán (Hộp)', 'Tồn Kho Thực Tế (Hộp)', 'Giá Trị Tồn Kho (VNĐ)', 'Trạng Thái'];
+        const rows = this.state.products.map(p => {
+          const cost = Number(p.costPrice || 0);
+          const price = Number(p.price || 0);
+          const profit = price - cost;
+          const margin = price > 0 ? ((profit / price) * 100).toFixed(1) + '%' : '0%';
+          const stock = Number(p.stockQuantity || 0);
+          const minAlert = Number(p.minAlert || 10);
+          const status = stock === 0 ? 'Hết hàng' : (stock <= minAlert ? 'Sắp hết' : 'Sẵn hàng');
+          const tier = p.tier === 'triple' ? 'Combo 3 Lễ' : (p.tier === 'double' ? 'Combo 2 Lễ' : 'Hộp Đơn');
+          return [
+            `"${p.sku || p.id}"`,
+            `"${p.name}"`,
+            `"${tier}"`,
+            cost,
+            price,
+            profit,
+            `"${margin}"`,
+            p.totalImported || 0,
+            p.totalExported || 0,
+            stock,
+            stock * cost,
+            `"${status}"`
+          ].join(',');
+        });
+        const csvContent = '\uFEFF' + [headers.join(','), ...rows].join('\r\n');
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `NEPLE_Bao_Cao_Ton_Kho_Va_Von_${new Date().toISOString().slice(0, 10)}.csv`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        this.showToast('Đã tải xuống file Báo Cáo Tồn Kho & Dòng Vốn (CSV UTF-8)!');
       },
 
       renderProductsTab() {
@@ -2277,8 +2978,8 @@
         }
 
         const roleConfig = {
-          SUPER_ADMIN: { label: 'Super Admin (Toàn quyền)', tabs: ['orders', 'products', 'blogs', 'settings', 'staff', 'optimize'] },
-          OPERATIONS: { label: 'Nhân viên Vận hành', tabs: ['orders'] },
+          SUPER_ADMIN: { label: 'Super Admin (Toàn quyền)', tabs: ['orders', 'inventory', 'products', 'blogs', 'settings', 'staff', 'optimize'] },
+          OPERATIONS: { label: 'Nhân viên Vận hành & Kho', tabs: ['orders', 'inventory'] },
           CONTENT: { label: 'Biên tập viên SEO', tabs: ['blogs'] }
         }[role];
 
