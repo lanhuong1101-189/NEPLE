@@ -1432,19 +1432,6 @@ const NepleApp = {
             : ''
         }
 
-        <!-- SEO Metadata & JSON-LD Schema Preview -->
-        <details class="mt-6 rounded-xl bg-[#f4efe6] p-4 border border-[#ae9984]/50 text-xs">
-          <summary class="font-bold text-[#0d2931] cursor-pointer">
-            🔍 Xem Cấu Trúc Chuẩn SEO Google &amp; JSON-LD Schema Của Bài Viết
-          </summary>
-          <div class="mt-3 space-y-1.5 text-[#0d2931]/80">
-            <div><strong>URL Slug:</strong> <code>/cam-nang/${blog.slug}</code></div>
-            <div><strong>Meta Title:</strong> ${blog.seo?.metaTitle || blog.title}</div>
-            <div><strong>Meta Description:</strong> ${blog.seo?.metaDescription || blog.excerpt}</div>
-            <div><strong>Keywords:</strong> ${blog.seo?.keywords || (blog.tags || []).join(', ')}</div>
-            <pre class="mt-2 p-2.5 rounded bg-[#0d2931] text-[#f0b45b] overflow-x-auto text-[11px]">${JSON.stringify(jsonLd, null, 2)}</pre>
-          </div>
-        </details>
       </div>
     `;
   },
